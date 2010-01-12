@@ -167,7 +167,7 @@ namespace HtmlTags
 
         public string ToCompacted()
         {
-            return ToString(null).Replace("\r\n", string.Empty);
+            return ToString(null).Replace(Environment.NewLine, string.Empty);
         }
 
 
