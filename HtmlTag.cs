@@ -9,8 +9,8 @@ namespace HtmlTags
     public class HtmlTag
     {
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
-        private readonly List<string> _cssClasses = new List<string>();
-        private readonly Cache<string, string> _customStyles = new Cache<string, string>();
+        private readonly HashSet<string> _cssClasses = new HashSet<string>();
+        private readonly IDictionary<string, string> _customStyles = new Dictionary<string, string>();
 
         private readonly Cache<string, string> _htmlAttributes =
             new Cache<string, string>(
@@ -61,7 +61,7 @@ namespace HtmlTags
             _children.Insert(0, tag);
         }
 
-        public HtmlTag Add(string tag, params string[] classes)
+        public HtmlTag Add(string tag)
         {
             string[] tags = tag.ToDelimitedArray('/');
             HtmlTag element = this;
@@ -73,7 +73,6 @@ namespace HtmlTags
                 element = child;
             });
 
-            element.AddClasses(classes);
             return element;
         }
 
@@ -143,7 +142,7 @@ namespace HtmlTags
         }
 
 
-        public HtmlTag With(Action<HtmlTag> action)
+        public HtmlTag Modify(Action<HtmlTag> action)
         {
             action(this);
             return this;
@@ -158,7 +157,6 @@ namespace HtmlTags
         public string ToString(string tab)
         {
             var html = new HtmlTextWriter(new StringWriter(), tab);
-            html.Indent = 2;
 
             writeHtml(html);
 
@@ -179,13 +177,13 @@ namespace HtmlTags
 
             if (_cssClasses.Count > 0 || _metaData.Count > 0)
             {
-                string classAttribute = toClassArray().Join(" ");
+                var classAttribute = toClassArray().Join(" ");
                 html.AddAttribute("class", classAttribute);
             }
 
             if (_customStyles.Count > 0)
             {
-                string attValue = _customStyles.Inner
+                var attValue = _customStyles
                     .Select(x => x.Key + ":" + x.Value)
                     .ToArray().Join(";");
 
@@ -208,8 +206,8 @@ namespace HtmlTags
         {
             if (_metaData.Count == 0) return _cssClasses.ToArray();
 
-            string metaDataClass = JsonUtil.ToUnsafeJson(_metaData.Inner).Replace('"', '\'');
-            return _cssClasses.ToArray().Union(new[] {metaDataClass}).ToArray();
+            var metaDataClass = JsonUtil.ToUnsafeJson(_metaData.Inner);
+            return _cssClasses.Concat(new[] {metaDataClass}).ToArray();
         }
 
         public HtmlTag Attr(string attribute, object value)
@@ -236,12 +234,9 @@ namespace HtmlTags
 
         public HtmlTag AddClass(string className)
         {
-            className = className.Replace(" ", string.Empty);
+            if (className.Contains(" ")) throw new ArgumentException("CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(className), "className");
 
-            if (!_cssClasses.Contains(className))
-            {
-                _cssClasses.Add(className);
-            }
+            _cssClasses.Add(className);
 
             return this;
         }

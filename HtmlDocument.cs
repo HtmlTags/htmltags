@@ -67,9 +67,9 @@ namespace HtmlTags
             }
         }
 
-        public HtmlTag Add(string tagName, params string[] classes)
+        public HtmlTag Add(string tagName)
         {
-            _last = Current.Add(tagName, classes);
+            _last = Current.Add(tagName);
             return _last;
         }
 

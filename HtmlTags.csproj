@@ -59,10 +59,9 @@
     <Compile Include="DLTag.cs" />
     <Compile Include="HtmlDocument.cs" />
     <Compile Include="HtmlTag.cs" />
-    <Compile Include="JsonUtl.cs" />
+    <Compile Include="JsonUtil.cs" />
     <Compile Include="LinkTag.cs" />
     <Compile Include="SelectTag.cs" />
-    <Compile Include="SelfClosingHtmlWriter.cs" />
     <Compile Include="SharedExtensions.cs" />
     <Compile Include="TableTag.cs" />
     <Compile Include="TextboxTag.cs" />
