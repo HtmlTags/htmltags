@@ -125,6 +125,14 @@ namespace HtmlTags
             return this;
         }
 
+        public HtmlTag MetaData<T>(string key, Action<T> configure) where T : class
+        {
+            var value = (T)_metaData[key];
+            configure(value);
+
+            return this;
+        }
+
         public object MetaData(string key)
         {
             return _metaData[key];
@@ -281,6 +289,12 @@ namespace HtmlTags
         public bool IsInputElement()
         {
             return _tag == "input" || _tag == "select";
+        }
+
+        public void ReplaceChildren(params HtmlTag[] tags)
+        {
+            Children.Clear();
+            tags.Each(t => Children.Add(t));
         }
     }
 
