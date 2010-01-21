@@ -6,7 +6,12 @@ using System.Web.UI;
 
 namespace HtmlTags
 {
-    public class HtmlTag
+    public interface ITagSource
+    {
+        IEnumerable<HtmlTag> AllTags();
+    }
+
+    public class HtmlTag : ITagSource
     {
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
@@ -33,6 +38,23 @@ namespace HtmlTags
         }
 
         public IList<HtmlTag> Children { get { return _children; } }
+
+        IEnumerable<HtmlTag> ITagSource.AllTags()
+        {
+            yield return this;
+        }
+
+        public HtmlTag AddChildren(ITagSource tags)
+        {
+            _children.AddRange(tags.AllTags());
+            return this;
+        }
+
+        public HtmlTag AddChildren(IEnumerable<HtmlTag> tags)
+        {
+            _children.AddRange(tags);
+            return this;
+        }
 
         public string TagName()
         {
