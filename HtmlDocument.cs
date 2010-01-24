@@ -13,17 +13,20 @@ namespace HtmlTags
         private readonly Stack<HtmlTag> _currentStack = new Stack<HtmlTag>();
         private readonly HtmlTag _head;
         private readonly HtmlTag _title;
-        private readonly HtmlTag _top = new HtmlTag("html");
+        private readonly HtmlTag _top = new HtmlTag("html").Attr("xmlns", "http://www.w3.org/1999/xhtml");
         private HtmlTag _last;
 
         public HtmlDocument()
         {
+            DocType =
+                "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
             _head = _top.Add("head");
             _title = _head.Add("title");
             _body = _top.Add("body");
             _last = _body;
         }
 
+        public string DocType { get; set; }
         public string Title { get { return _title.Text(); } set { _title.Text(value); } }
         public HtmlTag Current { get { return _currentStack.Count == 0 ? _body : _currentStack.Peek(); } }
         public HtmlTag Last { get { return _last; } }
@@ -97,7 +100,7 @@ namespace HtmlTags
 
         public string ToCompacted()
         {
-            string returnValue = _top.ToCompacted();
+            string returnValue = DocType + Environment.NewLine + _top.ToCompacted();
             return substitute(returnValue);
         }
 
@@ -113,7 +116,7 @@ namespace HtmlTags
 
         public override string ToString()
         {
-            string value = _top.ToString();
+            string value = DocType + Environment.NewLine + _top.ToString();
             return substitute(value);
         }
 
