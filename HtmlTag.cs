@@ -25,6 +25,7 @@ namespace HtmlTags
         private string _innerText = string.Empty;
         private bool _isVisible = true;
         private string _tag;
+        private bool _ignoreClosingTag;
 
         public HtmlTag(string tag)
         {
@@ -36,6 +37,8 @@ namespace HtmlTags
         {
             configure(this);
         }
+
+        public HtmlTag Next { get; set; }
 
         public IList<HtmlTag> Children { get { return _children; } }
 
@@ -181,7 +184,7 @@ namespace HtmlTags
 
         public override string ToString()
         {
-            return ToString("  ");
+            return ToString("  ").Replace(Environment.NewLine, string.Empty);
         }
 
         public string ToString(string tab)
@@ -229,7 +232,12 @@ namespace HtmlTags
 
             _children.Each(x => x.writeHtml(html));
 
-            html.RenderEndTag();
+            if (!_ignoreClosingTag)
+            {
+                html.RenderEndTag();
+            }
+
+            if (Next != null) Next.writeHtml(html);
         }
 
         private string[] toClassArray()
@@ -317,6 +325,12 @@ namespace HtmlTags
         {
             Children.Clear();
             tags.Each(t => Children.Add(t));
+        }
+
+        public HtmlTag NoClosingTag()
+        {
+            _ignoreClosingTag = true;
+            return this;
         }
     }
 
