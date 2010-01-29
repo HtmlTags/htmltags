@@ -100,7 +100,7 @@ namespace HtmlTags
 
         public string ToCompacted()
         {
-            string returnValue = DocType + Environment.NewLine + _top.ToCompacted();
+            string returnValue = DocType + Environment.NewLine + _top;
             return substitute(returnValue);
         }
 

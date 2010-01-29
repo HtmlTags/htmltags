@@ -184,23 +184,14 @@ namespace HtmlTags
 
         public override string ToString()
         {
-            return ToString("  ").Replace(Environment.NewLine, string.Empty);
+            return ToString(new HtmlTextWriter(new StringWriter(), string.Empty){NewLine = string.Empty});
         }
 
-        public string ToString(string tab)
+        public string ToString(HtmlTextWriter html)
         {
-            var html = new HtmlTextWriter(new StringWriter(), tab);
-
             writeHtml(html);
-
             return html.InnerWriter.ToString();
         }
-
-        public string ToCompacted()
-        {
-            return ToString(null).Replace(Environment.NewLine, string.Empty);
-        }
-
 
         private void writeHtml(HtmlTextWriter html)
         {
