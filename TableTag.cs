@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace HtmlTags
 {
@@ -34,6 +35,35 @@ namespace HtmlTags
         public TableTag AddBodyRow(Action<TableRowTag> configure)
         {
             configure(AddBodyRow());
+            return this;
+        }
+
+        public TableTag AddFooterRow(Action<TableRowTag> configure)
+        {
+            var footer = Children.FirstOrDefault(x => x.TagName() == "tfoot");
+            if (footer == null)
+            {
+                footer = new HtmlTag("tfoot");
+                Child(footer);
+            }
+
+            configure(footer.Child<TableRowTag>());
+
+            return this;
+        }
+
+
+        public TableTag Caption(string caption)
+        {
+            var captionTag = Children.FirstOrDefault(x => x.TagName() == "caption");
+            if (captionTag == null)
+            {
+                captionTag = new HtmlTag("caption");
+                Children.Insert(0, captionTag);
+            }
+
+            captionTag.Text(caption);
+
             return this;
         }
     }
