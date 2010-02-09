@@ -45,6 +45,7 @@ namespace HtmlTags
 
         public HtmlTag Next { get; set; }
 
+
         public IList<HtmlTag> Children { get { return _children; } }
 
         IEnumerable<HtmlTag> ITagSource.AllTags()
