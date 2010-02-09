@@ -13,6 +13,11 @@ namespace HtmlTags
 
     public class HtmlTag : ITagSource
     {
+        public static HtmlTag Empty()
+        {
+            return new HtmlTag("span").Visible(false);
+        }
+
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
         private readonly IDictionary<string, string> _customStyles = new Dictionary<string, string>();
