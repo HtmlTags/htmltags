@@ -11,7 +11,13 @@ namespace HtmlTags
         {
             NoClosingTag();
             Id("mainForm");
-            Attr("method", "post");
+            Method("post");
+        }
+
+        public FormTag Method(string httpMethod)
+        {
+            Attr("method", httpMethod);
+            return this;
         }
 
         public FormTag Action(string url)
