@@ -57,6 +57,7 @@
     <Compile Include="CheckboxTag.cs" />
     <Compile Include="DivTag.cs" />
     <Compile Include="DLTag.cs" />
+    <Compile Include="FormTag.cs" />
     <Compile Include="HiddenTag.cs" />
     <Compile Include="HtmlDocument.cs" />
     <Compile Include="HtmlTag.cs" />
