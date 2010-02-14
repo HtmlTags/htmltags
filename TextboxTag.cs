@@ -7,5 +7,11 @@ namespace HtmlTags
         {
             Attr("type", "text");
         }
+
+        public TextboxTag(string name, string value) : this()
+        {
+            Attr("name", name);
+            Attr("value", value);
+        }
     }
 }
