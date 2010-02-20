@@ -193,6 +193,12 @@ namespace HtmlTags
             return ToString(new HtmlTextWriter(new StringWriter(), string.Empty){NewLine = string.Empty});
         }
 
+        public string ToPrettyString()
+        {
+            return ToString(new HtmlTextWriter(new StringWriter(), "  ") { NewLine = Environment.NewLine });
+        }
+
+
         public string ToString(HtmlTextWriter html)
         {
             writeHtml(html);
