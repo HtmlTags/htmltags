@@ -5,47 +5,47 @@ using System.Collections.Generic;
 namespace HtmlTags
 {
     [Serializable]
-    internal class Cache<KEY, VALUE> : IEnumerable<VALUE> where VALUE : class
+    internal class Cache<TKey, TValue> : IEnumerable<TValue> where TValue : class
     {
         private readonly object _locker = new object();
-        private readonly IDictionary<KEY, VALUE> _values;
+        private readonly IDictionary<TKey, TValue> _values;
 
-        private Func<VALUE, KEY> _getKey = delegate { throw new NotImplementedException(); };
+        private Func<TValue, TKey> _getKey = delegate { throw new NotImplementedException(); };
 
-        private Func<KEY, VALUE> _onMissing = delegate(KEY key)
+        private Func<TKey, TValue> _onMissing = delegate(TKey key)
         {
             string message = string.Format("Key '{0}' could not be found", key);
             throw new KeyNotFoundException(message);
         };
 
         public Cache()
-            : this(new Dictionary<KEY, VALUE>())
+            : this(new Dictionary<TKey, TValue>())
         {
         }
 
-        public Cache(Func<KEY, VALUE> onMissing)
-            : this(new Dictionary<KEY, VALUE>(), onMissing)
+        public Cache(Func<TKey, TValue> onMissing)
+            : this(new Dictionary<TKey, TValue>(), onMissing)
         {
         }
 
-        public Cache(IDictionary<KEY, VALUE> dictionary, Func<KEY, VALUE> onMissing)
+        public Cache(IDictionary<TKey, TValue> dictionary, Func<TKey, TValue> onMissing)
             : this(dictionary)
         {
             _onMissing = onMissing;
         }
 
-        public Cache(IDictionary<KEY, VALUE> dictionary)
+        public Cache(IDictionary<TKey, TValue> dictionary)
         {
             _values = dictionary;
         }
 
-        public Func<KEY, VALUE> OnMissing { set { _onMissing = value; } }
+        public Func<TKey, TValue> OnMissing { set { _onMissing = value; } }
 
-        public Func<VALUE, KEY> GetKey { get { return _getKey; } set { _getKey = value; } }
+        public Func<TValue, TKey> GetKey { get { return _getKey; } set { _getKey = value; } }
 
         public int Count { get { return _values.Count; } }
 
-        public VALUE First
+        public TValue First
         {
             get
             {
@@ -58,10 +58,10 @@ namespace HtmlTags
             }
         }
 
-        public IDictionary<KEY, VALUE> Inner { get { return _values; } }
+        public IDictionary<TKey, TValue> Inner { get { return _values; } }
 
 
-        public VALUE this[KEY key]
+        public TValue this[TKey key]
         {
             get
             {
@@ -71,7 +71,7 @@ namespace HtmlTags
                     {
                         if (!_values.ContainsKey(key))
                         {
-                            VALUE value = _onMissing(key);
+                            TValue value = _onMissing(key);
                             _values.Add(key, value);
                         }
                     }
@@ -92,26 +92,26 @@ namespace HtmlTags
             }
         }
 
-        #region IEnumerable<VALUE> Members
+        #region IEnumerable<TValue> Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<VALUE>) this).GetEnumerator();
+            return ((IEnumerable<TValue>) this).GetEnumerator();
         }
 
-        public IEnumerator<VALUE> GetEnumerator()
+        public IEnumerator<TValue> GetEnumerator()
         {
             return _values.Values.GetEnumerator();
         }
 
         #endregion
 
-        public IEnumerable<KEY> GetKeys()
+        public IEnumerable<TKey> GetKeys()
         {
             return _values.Keys;
         }
 
-        public void Fill(KEY key, VALUE value)
+        public void Fill(TKey key, TValue value)
         {
             if (_values.ContainsKey(key))
             {
@@ -121,9 +121,9 @@ namespace HtmlTags
             _values.Add(key, value);
         }
 
-        public bool TryRetrieve(KEY key, out VALUE value)
+        public bool TryRetrieve(TKey key, out TValue value)
         {
-            value = default(VALUE);
+            value = default(TValue);
 
             if (_values.ContainsKey(key))
             {
@@ -134,7 +134,7 @@ namespace HtmlTags
             return false;
         }
 
-        public void Each(Action<VALUE> action)
+        public void Each(Action<TValue> action)
         {
             foreach (var pair in _values)
             {
@@ -142,7 +142,7 @@ namespace HtmlTags
             }
         }
 
-        public void Each(Action<KEY, VALUE> action)
+        public void Each(Action<TKey, TValue> action)
         {
             foreach (var pair in _values)
             {
@@ -150,21 +150,21 @@ namespace HtmlTags
             }
         }
 
-        public bool Has(KEY key)
+        public bool Has(TKey key)
         {
             return _values.ContainsKey(key);
         }
 
-        public bool Exists(Predicate<VALUE> predicate)
+        public bool Exists(Predicate<TValue> predicate)
         {
             bool returnValue = false;
 
-            Each(delegate(VALUE value) { returnValue |= predicate(value); });
+            Each(delegate(TValue value) { returnValue |= predicate(value); });
 
             return returnValue;
         }
 
-        public VALUE Find(Predicate<VALUE> predicate)
+        public TValue Find(Predicate<TValue> predicate)
         {
             foreach (var pair in _values)
             {
@@ -177,15 +177,15 @@ namespace HtmlTags
             return null;
         }
 
-        public VALUE[] GetAll()
+        public TValue[] GetAll()
         {
-            var returnValue = new VALUE[Count];
+            var returnValue = new TValue[Count];
             _values.Values.CopyTo(returnValue, 0);
 
             return returnValue;
         }
 
-        public void Remove(KEY key)
+        public void Remove(TKey key)
         {
             if (_values.ContainsKey(key))
             {
