@@ -15,6 +15,31 @@ namespace HtmlTags
             _body = Add("tbody");
         }
 
+        public TableTag CaptionText(string text)
+        {
+            HtmlTag caption = captionTag();
+            if (caption == null)
+            {
+                caption = new HtmlTag("caption");
+                Children.Insert(0, caption);
+            }
+
+            caption.Text(text);
+
+            return this;
+        }
+
+        public string CaptionText()
+        {
+            HtmlTag caption = captionTag();
+            return caption == null ? string.Empty : caption.Text();
+        }
+
+        private HtmlTag captionTag()
+        {
+            return Children.FirstOrDefault(x => x.TagName() == "caption");
+        }
+
         public TableRowTag AddHeaderRow()
         {
             return _header.Child<TableRowTag>();
