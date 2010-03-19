@@ -90,6 +90,17 @@ namespace HtmlTags
             return tag;
         }
 
+        public void Push(HtmlTag tag)
+        {
+            Current.Child(tag);
+            _currentStack.Push(tag);
+        }
+
+        public void PushWithoutAttaching(HtmlTag tag)
+        {
+            _currentStack.Push(tag);
+        }
+
         public void Pop()
         {
             if (_currentStack.Count > 0)
