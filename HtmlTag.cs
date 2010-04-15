@@ -32,7 +32,12 @@ namespace HtmlTags
         private string _tag;
         private bool _ignoreClosingTag;
 
-        public HtmlTag(string tag)
+        private HtmlTag()
+        {
+            EncodeInnerText = true;
+        }
+
+        public HtmlTag(string tag) : this()
         {
             _tag = tag.ToLower();
         }
@@ -43,9 +48,10 @@ namespace HtmlTags
             configure(this);
         }
 
+        protected bool EncodeInnerText { get; set; }
+
         public HtmlTag Next { get; set; }
-
-
+        
         public IList<HtmlTag> Children { get { return _children; } }
 
         IEnumerable<HtmlTag> ITagSource.AllTags()
@@ -228,10 +234,7 @@ namespace HtmlTags
 
             html.RenderBeginTag(_tag);
 
-            if (_innerText != null)
-            {
-                html.WriteEncodedText(_innerText);
-            }
+            writeInnerText(html);
 
             _children.Each(x => x.writeHtml(html));
 
@@ -241,6 +244,20 @@ namespace HtmlTags
             }
 
             if (Next != null) Next.writeHtml(html);
+        }
+
+        private void writeInnerText(HtmlTextWriter html)
+        {
+            if (_innerText == null) return;
+
+            if (EncodeInnerText)
+            {
+                html.WriteEncodedText(_innerText);
+            }
+            else
+            {
+                html.Write(_innerText);
+            }
         }
 
         private string[] toClassArray()
