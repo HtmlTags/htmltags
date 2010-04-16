@@ -363,6 +363,12 @@ namespace HtmlTags
             _ignoreClosingTag = true;
             return this;
         }
+
+        public HtmlTag UnEncoded()
+        {
+            EncodeInnerText = false;
+            return this;
+        }
     }
 
     public static class TagExtensions
