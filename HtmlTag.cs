@@ -320,6 +320,11 @@ namespace HtmlTags
             return this;
         }
 
+        public IEnumerable<string> GetClasses()
+        {
+            return _cssClasses;
+        }
+
         public bool HasClass(string className)
         {
             return _cssClasses.Contains(className);
@@ -362,6 +367,7 @@ namespace HtmlTags
             return this;
         }
 
+
         public HtmlTag WrapWith(string tag)
         {
             var wrapper = new HtmlTag(tag);
@@ -391,6 +397,12 @@ namespace HtmlTags
 
             // Rather throw up on nulls than put a fake in
             return Thread.CurrentPrincipal;
+        }
+
+        public HtmlTag UnEncoded()
+        {
+            EncodeInnerText = false;
+            return this;
         }
     }
 
