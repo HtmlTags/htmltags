@@ -34,6 +34,7 @@ namespace HtmlTags
         private bool _isVisible = true;
         private string _tag;
         private bool _ignoreClosingTag;
+        private bool _isAuthorized = true;
 
         private HtmlTag()
         {
@@ -196,6 +197,17 @@ namespace HtmlTags
             return this;
         }
 
+        public HtmlTag Authorized(bool isAuthorized)
+        {
+            _isAuthorized = isAuthorized;
+            return this;
+        }
+
+        public bool Authorized()
+        {
+            return _isAuthorized;
+        }
+
 
         public override string ToString()
         {
@@ -217,6 +229,7 @@ namespace HtmlTags
         private void writeHtml(HtmlTextWriter html)
         {
             if (!_isVisible) return;
+            if (!_isAuthorized) return;
 
             _htmlAttributes.Each(html.AddAttribute);
 
