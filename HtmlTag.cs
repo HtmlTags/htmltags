@@ -15,6 +15,9 @@ namespace HtmlTags
     }
 
     public class HtmlTag : ITagSource
+#if !LEGACY
+        , IHtmlString
+#endif
     {
         public static HtmlTag Empty()
         {
@@ -212,6 +215,11 @@ namespace HtmlTags
         public override string ToString()
         {
             return ToString(new HtmlTextWriter(new StringWriter(), string.Empty){NewLine = string.Empty});
+        }
+
+        public string ToHtmlString()
+        {
+            return ToString();
         }
 
         public string ToPrettyString()
