@@ -394,6 +394,10 @@ namespace HtmlTags
             var wrapper = new HtmlTag(tag);
             wrapper.Child(this);
 
+            // Copies visibility and authorization from inner tag
+            wrapper.Visible(Visible());
+            wrapper.Authorized(Authorized());
+
             return wrapper;
         }
 
