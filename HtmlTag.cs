@@ -329,7 +329,7 @@ namespace HtmlTags
             return this;
         }
 
-        private bool isInvalidClassName(string className)
+        private static bool isInvalidClassName(string className)
         {
             if (className.StartsWith("{") && className.EndsWith("}")) return false;
 
@@ -357,6 +357,12 @@ namespace HtmlTags
         public bool HasClass(string className)
         {
             return _cssClasses.Contains(className);
+        }
+
+        public HtmlTag RemoveClass(string className)
+        {
+            _cssClasses.Remove(className);
+            return this;
         }
 
         public bool HasMetaData(string key)
