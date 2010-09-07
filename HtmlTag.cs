@@ -322,12 +322,20 @@ namespace HtmlTags
 
         public HtmlTag AddClass(string className)
         {
-            if (className.Contains(" ")) throw new ArgumentException("CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(className), "className");
+            if (isInvalidClassName(className)) throw new ArgumentException("CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(className), "className");
 
             _cssClasses.Add(className);
 
             return this;
         }
+
+        private bool isInvalidClassName(string className)
+        {
+            if (className.StartsWith("{") && className.EndsWith("}")) return false;
+
+            return className.Contains(" ");
+        }
+
 
         public HtmlTag AddClasses(params string[] classes)
         {
