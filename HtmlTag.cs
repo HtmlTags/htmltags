@@ -234,6 +234,11 @@ namespace HtmlTags
             return html.InnerWriter.ToString();
         }
 
+        public bool WillBeRendered()
+        {
+            return _isVisible && _isAuthorized;
+        }
+
         private void writeHtml(HtmlTextWriter html)
         {
             if (!_isVisible) return;
