@@ -171,6 +171,7 @@ namespace HtmlTags
 
         public HtmlTag MetaData<T>(string key, Action<T> configure) where T : class
         {
+            if (!_metaData.Has(key)) return this;
             var value = (T)_metaData[key];
             configure(value);
 
@@ -179,7 +180,7 @@ namespace HtmlTags
 
         public object MetaData(string key)
         {
-            return _metaData[key];
+            return !_metaData.Has(key) ? null : _metaData[key];
         }
 
         public HtmlTag Text(string text)
