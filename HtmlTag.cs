@@ -393,7 +393,7 @@ namespace HtmlTags
 
         public bool IsInputElement()
         {
-            return _tag == "input" || _tag == "select";
+            return _tag == "input" || _tag == "select" || _tag == "textarea";
         }
 
         public void ReplaceChildren(params HtmlTag[] tags)
