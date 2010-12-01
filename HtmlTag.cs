@@ -134,6 +134,16 @@ namespace HtmlTags
             return this;
         }
 
+        public string Style(string key)
+        {
+            return _customStyles[key];
+        }
+
+        public bool HasStyle(string key)
+        {
+            return _customStyles.ContainsKey(key);
+        }
+
         public HtmlTag Id(string id)
         {
             return Attr("id", id);
