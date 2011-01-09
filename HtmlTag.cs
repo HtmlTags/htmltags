@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.UI;
@@ -12,6 +13,37 @@ namespace HtmlTags
     public interface ITagSource
     {
         IEnumerable<HtmlTag> AllTags();
+    }
+
+    public class TagList : ITagSource
+#if !LEGACY
+        , IHtmlString
+#endif
+    {
+        private readonly IEnumerable<HtmlTag> _tags;
+
+        public TagList(IEnumerable<HtmlTag> tags)
+        {
+            _tags = tags;
+        }
+
+        public string ToHtmlString()
+        {
+            if (_tags.Count() > 5)
+            {
+                var builder = new StringBuilder();
+                _tags.Each(t => builder.AppendLine(t.ToString()));
+
+                return builder.ToString();
+            }
+
+            return _tags.Select(x => x.ToString()).ToArray().Join("\n");
+        }
+
+        public IEnumerable<HtmlTag> AllTags()
+        {
+            return _tags;
+        }
     }
 
     public class HtmlTag : ITagSource
