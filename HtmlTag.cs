@@ -44,6 +44,11 @@ namespace HtmlTags
         {
             return _tags;
         }
+
+        public override string ToString()
+        {
+            return ToHtmlString();
+        }
     }
 
     public class HtmlTag : ITagSource
