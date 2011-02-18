@@ -64,12 +64,25 @@ desc "Compiles the app"
 msbuild :compile => [:clean, :version] do |msb|
 	msb.path_to_command = File.join(ENV['windir'], 'Microsoft.NET', 'Framework', CLR_TOOLS_VERSION, 'MSBuild.exe')
 	msb.properties :configuration => COMPILE_TARGET
-	msb.targets :Rebuild
 	msb.solution = "src/HtmlTags.sln"
+    msb.targets :Rebuild
+    msb.log_level = :verbose
 end
 
 desc "Run unit tests"
 nunit :unit_test do |nunit|
   nunit.path_to_command = 'lib/nunit/nunit-console.exe'
   nunit.assemblies = "src/HtmlTags.Testing/bin/#{COMPILE_TARGET}/HtmlTags.Testing.dll"
+end
+
+namespace :fx35 do
+  desc "Compile the app against the .NET Framework 3.5"
+  msbuild :compile do |msb|
+    output = "bin\\\\#{COMPILE_TARGET}35\\\\"
+	msb.path_to_command = File.join(ENV['windir'], 'Microsoft.NET', 'Framework', CLR_TOOLS_VERSION, 'MSBuild.exe')
+	msb.properties "DefineConstants" => "LEGACY;TRACE", "TargetFrameworkVersion" => "v3.5", :configuration => COMPILE_TARGET, "OutDir" => output 
+	msb.solution = "src/HtmlTags.sln"
+    msb.targets :Rebuild
+    msb.log_level = :verbose
+  end
 end
