@@ -1,0 +1,17 @@
+push.bat
+TestResult.xml
+build
+build35
+artifacts
+obj
+bin
+deploy
+deploy/*
+src/CommonAssemblyInfo.cs
+_ReSharper.*
+*.csproj.user
+*.resharper.user
+*.ReSharper.user
+*.suo
+*.cache
+~$*
