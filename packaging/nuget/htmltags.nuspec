@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>HtmlTags</id>
+    <version>0.8.1</version>
+    <authors>Jeremy D. Miller</authors>
+    <owners>Joshua Flanagan, Jeremy D. Miller</owners>
+    <licenseUrl>https://github.com/DarthFubuMVC/htmltags/raw/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/DarthFubuMVC/htmltags</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package description</description>
+    <tags>html</tags>
+  </metadata>
+  <files>
+	<file src="..\..\src\HtmlTags\bin\release\HtmlTags.*" target="lib\4.0" />
+	<file src="..\..\src\HtmlTags\bin\release35\HtmlTags.*" target="lib\2.0" />
+  </files>
+</package>

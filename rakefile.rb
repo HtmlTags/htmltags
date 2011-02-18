@@ -86,3 +86,10 @@ namespace :fx35 do
     msb.log_level = :verbose
   end
 end
+
+namespace :package do
+  desc "Build nuget package"
+  task :nuget do
+    sh "lib/nuget.exe pack packaging/nuget/htmltags.nuspec -o #{props[:artifacts]}"
+  end
+end
