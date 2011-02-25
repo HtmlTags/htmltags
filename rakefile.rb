@@ -72,7 +72,7 @@ end
 desc "Run unit tests"
 nunit :unit_test do |nunit|
   nunit.path_to_command = 'lib/nunit/nunit-console.exe'
-  nunit.assemblies = "src/HtmlTags.Testing/bin/#{COMPILE_TARGET}/HtmlTags.Testing.dll"
+  nunit.assemblies = ["src/HtmlTags.Testing/bin/#{COMPILE_TARGET}/HtmlTags.Testing.dll"]
 end
 
 namespace :fx35 do

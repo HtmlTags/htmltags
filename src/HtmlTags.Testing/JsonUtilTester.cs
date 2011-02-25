@@ -1,3 +1,4 @@
+using System.Text;
 using NUnit.Framework;
 
 namespace HtmlTags.Testing
@@ -16,5 +17,21 @@ namespace HtmlTags.Testing
         {
             JsonUtil.ToUnsafeJson(javascript.function("onSuccess")).ShouldEqual("onSuccess");
         }
+
+        [Test]
+        public void get_by_bytes()
+        {
+            var json = JsonUtil.ToJson(new JsonUtilTarget{
+                Name = "Jeremy"
+            });
+            var bytes = Encoding.Default.GetBytes(json);
+
+            JsonUtil.Get<JsonUtilTarget>(bytes).Name.ShouldEqual("Jeremy");
+        }
+    }
+
+    public class JsonUtilTarget
+    {
+        public string Name { get; set; }
     }
 }

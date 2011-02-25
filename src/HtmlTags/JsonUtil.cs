@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 
@@ -14,15 +15,15 @@ namespace HtmlTags
         }
 
         /// <summary>
-        /// Allows you to use function names (via <see cref="javascript.function"/>) in the value of a property, which is against the JSON spec
+        ///   Allows you to use function names (via <see cref = "javascript.function" />) in the value of a property, which is against the JSON spec
         /// </summary>
-        /// <param name="objectToSerialize"></param>
+        /// <param name = "objectToSerialize"></param>
         /// <returns></returns>
         public static string ToUnsafeJson(object objectToSerialize)
         {
             var serializer = new JavaScriptSerializer();
-            serializer.RegisterConverters(new JavaScriptConverter[] {new JavascriptFunctionConverter()});
-            string output = serializer.Serialize(objectToSerialize);
+            serializer.RegisterConverters(new JavaScriptConverter[]{new JavascriptFunctionConverter()});
+            var output = serializer.Serialize(objectToSerialize);
             const string pattern = @"\{""__jsfunction"":""(?<function>\w+)""}";
             return Regex.Replace(output, pattern, m => m.Groups["function"].Value);
         }
@@ -32,6 +33,12 @@ namespace HtmlTags
             return new JavaScriptSerializer().Deserialize<T>(rawJson);
         }
 
+        public static T Get<T>(byte[] rawJson)
+        {
+            var jsonString = Encoding.Default.GetString(rawJson);
+            return Get<T>(jsonString);
+        }
+
         public static object Get(string rawJson)
         {
             return new JavaScriptSerializer().DeserializeObject(rawJson);
@@ -39,7 +46,10 @@ namespace HtmlTags
 
         public class JavascriptFunctionConverter : JavaScriptConverter
         {
-            public override IEnumerable<Type> SupportedTypes { get { return new[] {typeof (javascript.JavascriptFunction)}; } }
+            public override IEnumerable<Type> SupportedTypes
+            {
+                get { return new[]{typeof (javascript.JavascriptFunction)}; }
+            }
 
             public override object Deserialize(IDictionary<string, object> dictionary, Type type,
                                                JavaScriptSerializer serializer)
@@ -76,7 +86,10 @@ namespace HtmlTags
                 _functionName = functionName;
             }
 
-            public string javascriptFunction { get { return "You must use JsonUtil.ToUnsafeJson() to serialize this properly"; } }
+            public string javascriptFunction
+            {
+                get { return "You must use JsonUtil.ToUnsafeJson() to serialize this properly"; }
+            }
 
             public override string ToString()
             {

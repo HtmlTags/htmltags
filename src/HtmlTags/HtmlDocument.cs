@@ -50,6 +50,16 @@ namespace HtmlTags
             Process.Start(filename);
         }
 
+        public HtmlTag Body
+        {
+            get { return _body; }
+        }
+
+        public HtmlTag Head
+        {
+            get { return _head; }
+        }
+
         protected virtual string getPath()
         {
             return Path.GetTempFileName() + ".htm";
@@ -80,6 +90,11 @@ namespace HtmlTags
         {
             _last = tag;
             Current.Child(tag);
+        }
+
+        public void Add(ITagSource source)
+        {
+            source.AllTags().Each(Add);
         }
 
         public HtmlTag Push(string tagName)
