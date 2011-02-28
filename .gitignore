@@ -15,4 +15,7 @@ _ReSharper.*
 *.suo
 *.cache
 ~$*
-push.bat
+
+*.userprefs
+*.pidb
+test-results
