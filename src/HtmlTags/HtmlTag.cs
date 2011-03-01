@@ -76,6 +76,9 @@ namespace HtmlTags
         private bool _ignoreClosingTag;
         private bool _isAuthorized = true;
 
+
+        private HtmlTag _parent;
+
         private HtmlTag()
         {
             EncodeInnerText = true;
@@ -278,8 +281,12 @@ namespace HtmlTags
 
         public string ToString(HtmlTextWriter html)
         {
-            writeHtml(html);
-            return html.InnerWriter.ToString();
+            if (_parent == null)
+            {
+                writeHtml(html);
+                return html.InnerWriter.ToString();
+            }
+            return _parent.ToString(html);
         }
 
         public bool WillBeRendered()
@@ -460,7 +467,7 @@ namespace HtmlTags
         {
             var wrapper = new HtmlTag(tag);
             wrapper.Child(this);
-
+            _parent = wrapper;
             // Copies visibility and authorization from inner tag
             wrapper.Visible(Visible());
             wrapper.Authorized(Authorized());
@@ -471,6 +478,7 @@ namespace HtmlTags
         public HtmlTag WrapWith(HtmlTag wrapper)
         {
             wrapper.InsertFirst(this);
+            _parent = wrapper;
             return wrapper;
         }
 
