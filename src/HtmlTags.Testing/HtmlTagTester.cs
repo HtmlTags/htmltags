@@ -16,6 +16,18 @@ namespace HtmlTags.Testing
 
             tag.ToString().ShouldEqual("<span id=\"id\">");
         }
+        
+        [Test]
+        public void has_closing_tag_by_default()
+        {
+           new HtmlTag("div").HasClosingTag().ShouldBeTrue();
+        }
+        
+        [Test]
+        public void when_no_closing_tag_then_has_is_false()
+        {
+            new HtmlTag("div").NoClosingTag().HasClosingTag().ShouldBeFalse();
+        }
 
         [Test]
         public void write_next_if_it_exists()

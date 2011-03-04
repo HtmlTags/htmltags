@@ -315,7 +315,7 @@ namespace HtmlTags
 
             _children.Each(x => x.writeHtml(html));
 
-            if (!_ignoreClosingTag)
+            if (HasClosingTag())
             {
                 html.RenderEndTag();
             }
@@ -455,6 +455,10 @@ namespace HtmlTags
             return this;
         }
 
+        public bool HasClosingTag()
+        {
+            return !_ignoreClosingTag;
+        }
 
         public HtmlTag WrapWith(string tag)
         {
