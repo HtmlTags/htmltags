@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 
@@ -15,6 +14,18 @@ namespace HtmlTags.Testing
             tag.NoClosingTag();
 
             tag.ToString().ShouldEqual("<span id=\"id\">");
+        }
+
+        [Test]
+        public void has_closing_tag_by_default()
+        {
+            new HtmlTag("div").HasClosingTag().ShouldBeTrue();
+        }
+
+        [Test]
+        public void when_no_closing_tag_then_has_is_false()
+        {
+            new HtmlTag("div").NoClosingTag().HasClosingTag().ShouldBeFalse();
         }
 
         [Test]

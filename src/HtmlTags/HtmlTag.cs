@@ -86,8 +86,7 @@ namespace HtmlTags
             _tag = tag.ToLower();
         }
 
-        public HtmlTag(string tag, Action<HtmlTag> configure)
-            : this(tag)
+        public HtmlTag(string tag, Action<HtmlTag> configure) : this(tag)
         {
             configure(this);
         }
@@ -144,13 +143,13 @@ namespace HtmlTags
 
         public HtmlTag Add(string tag)
         {
-            string[] tags = tag.ToDelimitedArray('/');
-            HtmlTag element = this;
+            var tags = tag.ToDelimitedArray('/');
+            var element = this;
+
             tags.Each(x =>
             {
                 var child = new HtmlTag(x);
                 element.Child(child);
-
                 element = child;
             });
 
@@ -159,9 +158,8 @@ namespace HtmlTags
 
         public HtmlTag Add(string tag, Action<HtmlTag> configuration)
         {
-            HtmlTag element = Add(tag);
+            var element = Add(tag);
             configuration(element);
-
             return element;
         }
 
@@ -315,7 +313,7 @@ namespace HtmlTags
 
             _children.Each(x => x.writeHtml(html));
 
-            if (!_ignoreClosingTag)
+            if (HasClosingTag())
             {
                 html.RenderEndTag();
             }
@@ -375,18 +373,18 @@ namespace HtmlTags
 
         public HtmlTag AddClass(string className)
         {
-            if (isInvalidClassName(className)) throw new ArgumentException("CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(className), "className");
-
+            if (isInvalidClassName(className))
+            {
+                var errMsg = "CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(className);
+                throw new ArgumentException(errMsg, "className");
+            }
             _cssClasses.Add(className);
-
             return this;
         }
 
         private static bool isInvalidClassName(string className)
         {
-            if (className.StartsWith("{") && className.EndsWith("}")) return false;
-
-            return className.Contains(" ");
+            return (!className.StartsWith("{") || !className.EndsWith("}")) && className.Contains(" ");
         }
 
 
@@ -455,6 +453,10 @@ namespace HtmlTags
             return this;
         }
 
+        public bool HasClosingTag()
+        {
+            return !_ignoreClosingTag;
+        }
 
         public HtmlTag WrapWith(string tag)
         {
@@ -477,18 +479,13 @@ namespace HtmlTags
         public HtmlTag VisibleForRoles(params string[] roles)
         {
             var principal = findPrincipal();
-            return Visible(roles.Any(r => principal.IsInRole(r)));
+            return Visible(roles.Any(principal.IsInRole));
         }
 
         private IPrincipal findPrincipal()
         {
-            if (HttpContext.Current != null)
-            {
-                return HttpContext.Current.User;
-            }
-
+            return HttpContext.Current != null ? HttpContext.Current.User : Thread.CurrentPrincipal;
             // Rather throw up on nulls than put a fake in
-            return Thread.CurrentPrincipal;
         }
 
         public HtmlTag UnEncoded()
