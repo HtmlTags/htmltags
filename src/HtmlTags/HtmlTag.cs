@@ -3,54 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
-using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.UI;
 
 namespace HtmlTags
 {
-    public interface ITagSource
-    {
-        IEnumerable<HtmlTag> AllTags();
-    }
-
-    public class TagList : ITagSource
-#if !LEGACY
-        , IHtmlString
-#endif
-    {
-        private readonly IEnumerable<HtmlTag> _tags;
-
-        public TagList(IEnumerable<HtmlTag> tags)
-        {
-            _tags = tags;
-        }
-
-        public string ToHtmlString()
-        {
-            if (_tags.Count() > 5)
-            {
-                var builder = new StringBuilder();
-                _tags.Each(t => builder.AppendLine(t.ToString()));
-
-                return builder.ToString();
-            }
-
-            return _tags.Select(x => x.ToString()).ToArray().Join("\n");
-        }
-
-        public IEnumerable<HtmlTag> AllTags()
-        {
-            return _tags;
-        }
-
-        public override string ToString()
-        {
-            return ToHtmlString();
-        }
-    }
-
     public class HtmlTag : ITagSource
 #if !LEGACY
         , IHtmlString
@@ -144,8 +102,8 @@ namespace HtmlTags
 
         public HtmlTag Add(string tag)
         {
-            string[] tags = tag.ToDelimitedArray('/');
-            HtmlTag element = this;
+            var tags = tag.ToDelimitedArray('/');
+            var element = this;
             tags.Each(x =>
             {
                 var child = new HtmlTag(x);
@@ -159,7 +117,7 @@ namespace HtmlTags
 
         public HtmlTag Add(string tag, Action<HtmlTag> configuration)
         {
-            HtmlTag element = Add(tag);
+            var element = Add(tag);
             configuration(element);
 
             return element;
@@ -188,7 +146,7 @@ namespace HtmlTags
 
         public string Id()
         {
-            return _htmlAttributes["id"];
+            return Attr("id");
         }
 
         public HtmlTag Hide()
@@ -289,14 +247,13 @@ namespace HtmlTags
 
         private void writeHtml(HtmlTextWriter html)
         {
-            if (!_isVisible) return;
-            if (!_isAuthorized) return;
+            if (!WillBeRendered()) return;
 
             _htmlAttributes.Each(html.AddAttribute);
 
             if (_cssClasses.Count > 0 || _metaData.Count > 0)
             {
-                var classAttribute = toClassArray().Join(" ");
+                var classAttribute = cssClassesToRender().Join(" ");
                 html.AddAttribute("class", classAttribute);
             }
 
@@ -337,17 +294,17 @@ namespace HtmlTags
             }
         }
 
-        private string[] toClassArray()
+        private IEnumerable<string> cssClassesToRender()
         {
-            if (_metaData.Count == 0) return _cssClasses.ToArray();
+            if (_metaData.Count == 0) return _cssClasses;
 
             var metaDataClass = JsonUtil.ToUnsafeJson(_metaData.Inner);
-            return _cssClasses.Concat(new[] {metaDataClass}).ToArray();
+            return _cssClasses.Concat(new[] {metaDataClass});
         }
 
         public HtmlTag Attr(string attribute, object value)
         {
-            _htmlAttributes[attribute] = value == null ? string.Empty : value.ToString();
+            _htmlAttributes[attribute] = (value == null ? string.Empty : value.ToString());
             return this;
         }
 
@@ -481,10 +438,10 @@ namespace HtmlTags
         public HtmlTag VisibleForRoles(params string[] roles)
         {
             var principal = findPrincipal();
-            return Visible(roles.Any(r => principal.IsInRole(r)));
+            return Visible(roles.Any(principal.IsInRole));
         }
 
-        private IPrincipal findPrincipal()
+        private static IPrincipal findPrincipal()
         {
             if (HttpContext.Current != null)
             {

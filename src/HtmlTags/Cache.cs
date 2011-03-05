@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HtmlTags
 {
@@ -14,7 +15,7 @@ namespace HtmlTags
 
         private Func<TKey, TValue> _onMissing = delegate(TKey key)
         {
-            string message = string.Format("Key '{0}' could not be found", key);
+            var message = string.Format("Key '{0}' could not be found", key);
             throw new KeyNotFoundException(message);
         };
 
@@ -47,15 +48,7 @@ namespace HtmlTags
 
         public TValue First
         {
-            get
-            {
-                foreach (var pair in _values)
-                {
-                    return pair.Value;
-                }
-
-                return null;
-            }
+            get { return _values.Select(pair => pair.Value).FirstOrDefault(); }
         }
 
         public IDictionary<TKey, TValue> Inner { get { return _values; } }
@@ -157,7 +150,7 @@ namespace HtmlTags
 
         public bool Exists(Predicate<TValue> predicate)
         {
-            bool returnValue = false;
+            var returnValue = false;
 
             Each(delegate(TValue value) { returnValue |= predicate(value); });
 
@@ -166,15 +159,7 @@ namespace HtmlTags
 
         public TValue Find(Predicate<TValue> predicate)
         {
-            foreach (var pair in _values)
-            {
-                if (predicate(pair.Value))
-                {
-                    return pair.Value;
-                }
-            }
-
-            return null;
+            return (_values.Where(pair => predicate(pair.Value)).Select(pair => pair.Value)).FirstOrDefault();
         }
 
         public TValue[] GetAll()
