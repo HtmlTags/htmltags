@@ -304,7 +304,14 @@ namespace HtmlTags
 
         public HtmlTag Attr(string attribute, object value)
         {
-            _htmlAttributes[attribute] = (value == null ? string.Empty : value.ToString());
+            if (attribute.Equals("class", StringComparison.OrdinalIgnoreCase))
+            {
+                AddClasses(value.ToString().Split(' '));
+            }
+            else
+            {
+                _htmlAttributes[attribute] = (value == null ? string.Empty : value.ToString());
+            }
             return this;
         }
 
