@@ -193,6 +193,25 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void attr_add_class()
+        {
+            var tag = new HtmlTag("a");
+            tag.Attr("class", "test-class");
+            tag.HasClass("test-class").ShouldBeTrue();
+        }
+
+        [Test]
+        public void attr_add_multiple_classes_with_space_separated_classes()
+        {
+            var tag = new HtmlTag("a");
+            tag.AddClass("added-class");
+            tag.Attr("class", "test-class1 test-class2");
+            tag.HasClass("added-class").ShouldBeTrue();
+            tag.HasClass("test-class1").ShouldBeTrue();
+            tag.HasClass("test-class2").ShouldBeTrue();
+        }
+
+        [Test]
         public void render_multiple_classes()
         {
             HtmlTag tag = new HtmlTag("div").Text("text");
