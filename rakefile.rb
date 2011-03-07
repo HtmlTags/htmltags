@@ -90,7 +90,7 @@ namespace :fx35 do
   msbuild :compile do |msb|
     output = "bin\\\\#{COMPILE_TARGET}35\\\\"
 	msb.command = File.join(ENV['windir'], 'Microsoft.NET', 'Framework', CLR_TOOLS_VERSION, 'MSBuild.exe')
-	msb.properties "DefineConstants" => "LEGACY;TRACE", "TargetFrameworkVersion" => "v3.5", :configuration => COMPILE_TARGET, "OutDir" => output 
+	msb.properties "DefineConstants" => "LEGACY;TRACE", "TargetFrameworkVersion" => "v3.5", :configuration => COMPILE_TARGET, "OutDir" => output , "DocumentationFile" => ""
 	msb.solution = "src/HtmlTags.sln"
     msb.targets :Rebuild
     msb.log_level = :verbose

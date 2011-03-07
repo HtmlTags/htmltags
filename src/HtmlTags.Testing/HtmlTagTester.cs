@@ -33,7 +33,7 @@ namespace HtmlTags.Testing
         public void write_next_if_it_exists()
         {
             var tag = new HtmlTag("span").Text("something");
-            tag.Next = new HtmlTag("span").Text("next");
+            tag.After(new HtmlTag("span").Text("next"));
 
             tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
         }
@@ -42,7 +42,7 @@ namespace HtmlTags.Testing
         public void insert_before()
         {
             var tag = new HtmlTag("div");
-            tag.Add("span");
+            tag.Append("span");
             tag.InsertFirst(new HtmlTag("p"));
 
             tag.ToString().ShouldEqual("<div><p></p><span></span></div>");
@@ -60,17 +60,17 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void is_visible_set_to_false()
+        public void render_set_to_false()
         {
-            new HtmlTag("div").Visible(false).ToString().ShouldEqual("");
+            new HtmlTag("div").Render(false).ToString().ShouldEqual("");
         }
 
         [Test]
-        public void is_visible_set_to_true_by_default()
+        public void render_set_to_true_by_default()
         {
             var tag = new HtmlTag("div");
 
-            tag.Visible().ShouldBeTrue();
+            tag.Render().ShouldBeTrue();
             tag.ToString().ShouldEqual("<div></div>");
         }
 
@@ -259,6 +259,16 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void nesting_also_supports_jquery_direct_child_syntax()
+        {
+            var tag = new HtmlTag("table");
+            tag.Add("tbody > tr > td").Text("some text");
+
+            tag.ToString()
+                .ShouldEqual("<table><tbody><tr><td>some text</td></tr></tbody></table>");
+        }
+
+        [Test]
         public void render_multiple_levels_of_nesting_2()
         {
             HtmlTag tag = new HtmlTag("html").Modify(x =>
@@ -293,7 +303,7 @@ namespace HtmlTags.Testing
         [Test]
         public void render_tag_with_one_child()
         {
-            HtmlTag tag = new HtmlTag("div").Child(new HtmlTag("span").Text("something"));
+            HtmlTag tag = new HtmlTag("div").Append(new HtmlTag("span").Text("something"));
             tag.ToString().ShouldEqual("<div><span>something</span></div>");
         }
 
@@ -319,7 +329,7 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div");
             tag.Text("<b>Hi</b>");
-            tag.UnEncoded();
+            tag.Encoded(false);
 
             tag.ToString().ShouldEqual("<div><b>Hi</b></div>");
         }
@@ -356,16 +366,16 @@ namespace HtmlTags.Testing
         public void wrap_with_copies_the_visibility_from_the_inner_value_positive_case()
         {
             var tag = new HtmlTag("a");
-            tag.Visible().ShouldBeTrue();
-            tag.WrapWith("span").Visible().ShouldBeTrue();
+            tag.Render().ShouldBeTrue();
+            tag.WrapWith("span").Render().ShouldBeTrue();
         }
 
 
         [Test]
         public void wrap_with_copies_the_visibility_from_the_inner_value_negative_case()
         {
-            var tag = new HtmlTag("a").Visible(false);
-            tag.WrapWith("span").Visible().ShouldBeFalse();
+            var tag = new HtmlTag("a").Render(false);
+            tag.WrapWith("span").Render().ShouldBeFalse();
         }
 
 
@@ -419,8 +429,8 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div").Authorized(false);
             tag.ToString().ShouldBeEmpty();
 
-            tag.Visible(true).ToString().ShouldBeEmpty();
-            tag.Visible(false).ToString().ShouldBeEmpty();
+            tag.Render(true).ToString().ShouldBeEmpty();
+            tag.Render(false).ToString().ShouldBeEmpty();
         }
 
         [Test]
@@ -429,6 +439,12 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div").AddClasses("a", "b", "c");
             tag.RemoveClass("b");
             tag.ToString().ShouldEqual("<div class=\"a c\"></div>");
+        }
+
+        [Test]
+        public void rendering_a_NoTag_should_not_render_anything()
+        {
+            new NoTag().AddClass("important").Text("foo").ToString().ShouldEqual("");
         }
 
         public class ListValue
@@ -441,12 +457,12 @@ namespace HtmlTags.Testing
         {
             public NonEncodedTag(string tag) : base(tag)
             {
-                EncodeInnerText = false;
+                Encoded(false);
             }
 
             public NonEncodedTag(string tag, Action<HtmlTag> configure) : base(tag, configure)
             {
-                EncodeInnerText = false;
+                Encoded(false);
             }
         }
     }

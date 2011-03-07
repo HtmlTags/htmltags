@@ -88,7 +88,7 @@ namespace HtmlTags
         public void Add(HtmlTag tag)
         {
             Last = tag;
-            Current.Child(tag);
+            Current.Append(tag);
         }
 
         public void Add(ITagSource source)
@@ -106,7 +106,7 @@ namespace HtmlTags
 
         public void Push(HtmlTag tag)
         {
-            Current.Child(tag);
+            Current.Append(tag);
             _currentStack.Push(tag);
         }
 

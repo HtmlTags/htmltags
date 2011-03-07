@@ -19,15 +19,9 @@ namespace HtmlTags
             return string.Format(template, parameters);
         }
 
-        public static string[] ToDelimitedArray(this string content, char delimiter)
+        public static string[] ToDelimitedArray(this string content, params char[] delimiter)
         {
-            var array = content.Split(delimiter);
-            for (var i = 0; i < array.Length; i++)
-            {
-                array[i] = array[i].Trim();
-            }
-
-            return array;
+            return content.Split(delimiter).Select(x => x.Trim()).ToArray();
         }
 
         public static string Join(this IEnumerable<string> strings, string separator)

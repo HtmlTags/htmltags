@@ -2,16 +2,9 @@ namespace HtmlTags
 {
     public class NoTag : HtmlTag
     {
-        public NoTag()
-            : base("")
+        public NoTag() : base("")
         {
+            Render(false);
         }
-
-        public override string ToString()
-        {
-            return "";
-        }
-
-
     }
 }

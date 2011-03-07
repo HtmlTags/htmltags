@@ -20,14 +20,14 @@ namespace HtmlTags.Testing
         public void should_be_visible_when_the_user_has_the_role()
         {
             var tag = new HtmlTag("span").VisibleForRoles("role1", "role4");
-            tag.Visible().ShouldBeTrue();
+            tag.Render().ShouldBeTrue();
         }
 
         [Test]
         public void should_not_be_visible_when_the_user_does_not_have_the_role()
         {
             var tag = new HtmlTag("span").VisibleForRoles("role10", "role4");
-            tag.Visible().ShouldBeFalse(); 
+            tag.Render().ShouldBeFalse(); 
         }
     }
 }

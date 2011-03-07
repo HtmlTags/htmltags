@@ -23,6 +23,8 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DocumentationFile>bin\Debug\HtmlTags.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DocumentationFile>bin\Release\HtmlTags.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,13 +54,15 @@
     </Compile>
     <Compile Include="Cache.cs" />
     <Compile Include="CheckboxTag.cs" />
+    <Compile Include="Extended\CompatibilityExtensions.cs" />
     <Compile Include="DivTag.cs" />
     <Compile Include="DLTag.cs" />
+    <Compile Include="Extended\TagBuilderExtensions.cs" />
     <Compile Include="FormTag.cs" />
     <Compile Include="HiddenTag.cs" />
     <Compile Include="HtmlDocument.cs" />
     <Compile Include="HtmlTag.cs" />
-    <Compile Include="HtmlTagExtensions.cs" />
+    <Compile Include="Extended\AttributesExtensions.cs" />
     <Compile Include="ITagSource.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="LinkTag.cs" />

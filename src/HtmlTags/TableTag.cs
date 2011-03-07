@@ -11,8 +11,8 @@ namespace HtmlTags
         public TableTag()
             : base("table")
         {
-            _header = Add("thead");
-            _body = Add("tbody");
+            _header = new HtmlTag("thead", this);
+            _body = new HtmlTag("tbody", this);
         }
 
         public TableTag CaptionText(string text)
@@ -42,7 +42,7 @@ namespace HtmlTags
 
         public TableRowTag AddHeaderRow()
         {
-            return _header.Child<TableRowTag>();
+            return _header.Add<TableRowTag>();
         }
 
         public TableTag AddHeaderRow(Action<TableRowTag> configure)
@@ -54,7 +54,7 @@ namespace HtmlTags
 
         public TableRowTag AddBodyRow()
         {
-            return _body.Child<TableRowTag>();
+            return _body.Add<TableRowTag>();
         }
 
         public TableTag AddBodyRow(Action<TableRowTag> configure)
@@ -69,10 +69,10 @@ namespace HtmlTags
             if (footer == null)
             {
                 footer = new HtmlTag("tfoot");
-                Child(footer);
+                Append(footer);
             }
 
-            configure(footer.Child<TableRowTag>());
+            configure(footer.Add<TableRowTag>());
 
             return this;
         }
@@ -102,22 +102,22 @@ namespace HtmlTags
 
         public HtmlTag Header(string text)
         {
-            return Add("th").Text(text);
+            return new HtmlTag("th", this).Text(text);
         }
 
         public HtmlTag Header()
         {
-            return Add("th");
+            return new HtmlTag("th", this);
         }
 
         public HtmlTag Cell(string text)
         {
-            return Add("td").Text(text);
+            return new HtmlTag("td", this).Text(text);
         }
 
         public HtmlTag Cell()
         {
-            return Add("td");
+            return new HtmlTag("td", this);
         }
     }
 }

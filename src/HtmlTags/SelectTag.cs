@@ -34,7 +34,7 @@ namespace HtmlTags
         public HtmlTag Option(string display, object value)
         {
             var option = MakeOption(display, value);
-            AddChildren(option);
+            Append(option);
             return option;
         }
 

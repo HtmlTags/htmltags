@@ -16,7 +16,7 @@ namespace HtmlTags
     {
         public static HtmlTag Empty()
         {
-            return new HtmlTag("span").Visible(false);
+            return new HtmlTag("span").Render(false);
         }
 
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
@@ -29,15 +29,12 @@ namespace HtmlTags
 
         private readonly Cache<string, object> _metaData = new Cache<string, object>();
         private string _innerText = string.Empty;
-        private bool _isVisible = true;
+        private bool _shouldRender = true;
         private string _tag;
         private bool _ignoreClosingTag;
         private bool _isAuthorized = true;
 
-        private HtmlTag()
-        {
-            EncodeInnerText = true;
-        }
+        private HtmlTag() { }
 
         public HtmlTag(string tag) : this()
         {
@@ -50,27 +47,38 @@ namespace HtmlTags
             configure(this);
         }
 
-        protected bool EncodeInnerText { get; set; }
+        public HtmlTag(string tag, HtmlTag parent) : this()
+        {
+            _tag = tag.ToLower();
+            if (parent != null) parent.Append(this);
+        }
 
-        public HtmlTag Next { get; set; }
+        private bool _encodeInnerText = true;
         
+        [Obsolete("Will be removed by v1.0. Use Encoded() instead.")]
+        protected bool EncodeInnerText { get { return _encodeInnerText; } set { _encodeInnerText = value; } }
+
+        private HtmlTag _next;
+
+        [Obsolete("Will be removed by v1.0. Use After() instead.")]
+        public HtmlTag Next { get { return _next; } set { _next = value; } }
+
+        public HtmlTag After(HtmlTag nextTag)
+        {
+            _next = nextTag;
+            return this;
+        }
+
+        public HtmlTag After()
+        {
+            return _next;
+        }
+
         public IList<HtmlTag> Children { get { return _children; } }
 
         IEnumerable<HtmlTag> ITagSource.AllTags()
         {
             yield return this;
-        }
-
-        public HtmlTag AddChildren(ITagSource tags)
-        {
-            _children.AddRange(tags.AllTags());
-            return this;
-        }
-
-        public HtmlTag AddChildren(IEnumerable<HtmlTag> tags)
-        {
-            _children.AddRange(tags);
-            return this;
         }
 
         public string TagName()
@@ -98,29 +106,6 @@ namespace HtmlTags
         public void InsertFirst(HtmlTag tag)
         {
             _children.Insert(0, tag);
-        }
-
-        public HtmlTag Add(string tag)
-        {
-            var tags = tag.ToDelimitedArray('/');
-            var element = this;
-            tags.Each(x =>
-            {
-                var child = new HtmlTag(x);
-                element.Child(child);
-
-                element = child;
-            });
-
-            return element;
-        }
-
-        public HtmlTag Add(string tag, Action<HtmlTag> configuration)
-        {
-            var element = Add(tag);
-            configuration(element);
-
-            return element;
         }
 
         public HtmlTag Style(string key, string value)
@@ -154,18 +139,98 @@ namespace HtmlTags
             return Style("display", "none");
         }
 
-        public HtmlTag Child(HtmlTag child)
+        /// <summary>
+        /// Creates nested child tags and returns the innermost tag. Use <see cref="Append(string)"/> if you want to return the parent tag.
+        /// </summary>
+        /// <param name="tagNames">One or more HTML element names separated by a <c>/</c> or <c>></c></param>
+        /// <returns>The innermost tag that was newly added</returns>
+        public HtmlTag Add(string tagNames)
         {
-            _children.Add(child);
-            return this;
+            var tags = tagNames.ToDelimitedArray('/', '>');
+            return tags.Aggregate(this, (parent, tag) => new HtmlTag(tag, parent));
         }
 
-        public T Child<T>() where T : HtmlTag, new()
+        /// <summary>
+        /// Creates nested child tags and returns the innermost tag after running <paramref name="configuration"/> on it. Use <see cref="Append(string, Action{HtmlTag})"/> if you want to return the parent tag.
+        /// </summary>
+        /// <param name="tagNames">One or more HTML element names separated by a <c>/</c> or <c>></c></param>
+        /// <param name="configuration">Modifications to perform on the newly added innermost tag</param>
+        /// <returns>The innermost tag that was newly added</returns>
+        public HtmlTag Add(string tagNames, Action<HtmlTag> configuration)
+        {
+            var element = Add(tagNames);
+            configuration(element);
+
+            return element;
+        }
+
+        /// <summary>
+        /// Creates a tag of <typeparamref name="T"/> and adds it as a child. Returns the created child tag.
+        /// </summary>
+        /// <typeparam name="T">The type of <see cref="HtmlTag"/> to create</typeparam>
+        /// <returns>The created child tag</returns>
+        public T Add<T>() where T : HtmlTag, new()
         {
             var child = new T();
             _children.Add(child);
 
             return child;
+        }
+
+        /// <summary>
+        /// Adds the given tag as the last child of the parent, and returns the parent.
+        /// </summary>
+        /// <param name="child">The tag to add as a child of the parent.</param>
+        /// <returns>The parent tag</returns>
+        public HtmlTag Append(HtmlTag child)
+        {
+            _children.Add(child);
+            return this;
+        }
+
+        /// <summary>
+        /// Creates nested child tags and returns the tag on which the method was called. Use <see cref="Add(string)"/> if you want to return the innermost tag.
+        /// </summary>
+        /// <param name="tagNames">One or more HTML element names separated by a <c>/</c> or <c>></c></param>
+        /// <returns>The instance on which the method was called (the parent of the new tags)</returns>
+        public HtmlTag Append(string tagNames)
+        {
+            Add(tagNames);
+            return this;
+        }
+
+        /// <summary>
+        /// Creates nested child tags, runs <paramref name="configuration"/> on the innermost tag, and returns the tag on which the method was called. Use <see cref="Add(string, Action{HtmlTag})"/> if you want to return the innermost tag.
+        /// </summary>
+        /// <param name="tagNames"></param>
+        /// <param name="configuration"></param>
+        /// <returns>The parent tag</returns>
+        public HtmlTag Append(string tagNames, Action<HtmlTag> configuration)
+        {
+            Add(tagNames, configuration);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds all tags from <paramref name="tagSource"/> as children of the current tag. Returns the parent tag.
+        /// </summary>
+        /// <param name="tagSource">The source of tags to add as children.</param>
+        /// <returns>The parent tag</returns>
+        public HtmlTag Append(ITagSource tagSource)
+        {
+            _children.AddRange(tagSource.AllTags());
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a sequence of tags as children of the current tag. Returns the parent tag.
+        /// </summary>
+        /// <param name="tags">A sequence of tags to add as children.</param>
+        /// <returns>The parent tag</returns>
+        public HtmlTag Append(IEnumerable<HtmlTag> tags)
+        {
+            _children.AddRange(tags);
+            return this;
         }
 
         public HtmlTag MetaData(string key, object value)
@@ -220,7 +285,9 @@ namespace HtmlTags
 
         public override string ToString()
         {
-            return ToString(new HtmlTextWriter(new StringWriter(), string.Empty){NewLine = string.Empty});
+            return WillBeRendered() ? 
+                ToString(new HtmlTextWriter(new StringWriter(), string.Empty) { NewLine = string.Empty }) :
+                string.Empty;
         }
 
         public string ToHtmlString()
@@ -230,7 +297,9 @@ namespace HtmlTags
 
         public string ToPrettyString()
         {
-            return ToString(new HtmlTextWriter(new StringWriter(), "  ") { NewLine = Environment.NewLine });
+            return WillBeRendered() ?
+                ToString(new HtmlTextWriter(new StringWriter(), "  ") { NewLine = Environment.NewLine }) :
+                string.Empty;
         }
 
 
@@ -242,7 +311,7 @@ namespace HtmlTags
 
         public bool WillBeRendered()
         {
-            return _isVisible && _isAuthorized;
+            return _shouldRender && _isAuthorized;
         }
 
         private void writeHtml(HtmlTextWriter html)
@@ -277,14 +346,14 @@ namespace HtmlTags
                 html.RenderEndTag();
             }
 
-            if (Next != null) Next.writeHtml(html);
+            if (_next != null) _next.writeHtml(html);
         }
 
         private void writeInnerText(HtmlTextWriter html)
         {
             if (_innerText == null) return;
 
-            if (EncodeInnerText)
+            if (_encodeInnerText)
             {
                 html.WriteEncodedText(_innerText);
             }
@@ -326,15 +395,15 @@ namespace HtmlTags
             return this;
         }
 
-        public HtmlTag Visible(bool isVisible)
+        public HtmlTag Render(bool shouldRender)
         {
-            _isVisible = isVisible;
+            _shouldRender = shouldRender;
             return this;
         }
 
-        public bool Visible()
+        public bool Render()
         {
-            return _isVisible;
+            return _shouldRender;
         }
 
         public HtmlTag AddClass(string className)
@@ -427,10 +496,10 @@ namespace HtmlTags
         public HtmlTag WrapWith(string tag)
         {
             var wrapper = new HtmlTag(tag);
-            wrapper.Child(this);
+            wrapper.Append(this);
 
             // Copies visibility and authorization from inner tag
-            wrapper.Visible(Visible());
+            wrapper.Render(Render());
             wrapper.Authorized(Authorized());
 
             return wrapper;
@@ -445,7 +514,7 @@ namespace HtmlTags
         public HtmlTag VisibleForRoles(params string[] roles)
         {
             var principal = findPrincipal();
-            return Visible(roles.Any(principal.IsInRole));
+            return Render(roles.Any(principal.IsInRole));
         }
 
         private static IPrincipal findPrincipal()
@@ -459,36 +528,15 @@ namespace HtmlTags
             return Thread.CurrentPrincipal;
         }
 
-        public HtmlTag UnEncoded()
+        public HtmlTag Encoded(bool encodeInnerText)
         {
-            EncodeInnerText = false;
+            _encodeInnerText = encodeInnerText;
             return this;
         }
-    }
 
-    public static class TagExtensions
-    {
-        public static HtmlTag Span(this HtmlTag tag, Action<HtmlTag> configure)
+        public bool Encoded()
         {
-            var span = new HtmlTag("span");
-            configure(span);
-            return tag.Child(span);
-        }
-
-        public static HtmlTag Div(this HtmlTag tag, Action<HtmlTag> configure)
-        {
-            var div = new HtmlTag("div");
-            configure(div);
-
-            return tag.Child(div);
-        }
-
-        public static LinkTag ActionLink(this HtmlTag tag, string text, params string[] classes)
-        {
-            var child = new LinkTag(text, "#", classes);
-            tag.Child(child);
-
-            return child;
+            return _encodeInnerText;
         }
     }
 }

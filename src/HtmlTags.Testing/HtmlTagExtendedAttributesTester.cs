@@ -1,9 +1,11 @@
+using HtmlTags.Extended;
+using HtmlTags.Extended.Attributes;
 using NUnit.Framework;
 
 namespace HtmlTags.Testing
 {
     [TestFixture]
-    public class HtmlTagExtensionsTester
+    public class HtmlTagExtendedAttributesTester
     {
         [Test]
         public void value_ext_method()
