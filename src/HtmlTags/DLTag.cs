@@ -15,10 +15,10 @@ namespace HtmlTags
             configure(this);
         }
 
-        public DLTag AddDefinition(string header, string content)
+        public DLTag AddDefinition(string term, string definition)
         {
-            Add("dt").Text(header);
-            Add("dl").Text(content);
+            Add("dt").Text(term);
+            Add("dd").Text(definition);
 
             return this;
         }

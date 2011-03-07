@@ -51,6 +51,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CheckboxTagTester.cs" />
+    <Compile Include="DLTagTester.cs" />
     <Compile Include="HtmlDocumentTester.cs" />
     <Compile Include="HtmlTagExtendedAttributesTester.cs" />
     <Compile Include="HtmlTagTester.cs" />
