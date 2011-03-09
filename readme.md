@@ -10,4 +10,4 @@ Create a `span` tag with a CSS classes and an ID:
 
 This will produce:
 
-    <span class="important">Luke</span>
+    <span id="first-name" class="important">Luke</span>
