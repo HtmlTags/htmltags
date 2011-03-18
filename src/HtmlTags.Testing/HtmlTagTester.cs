@@ -132,12 +132,12 @@ namespace HtmlTags.Testing
             tag.MetaData("a", 1);
             tag.MetaData("b", "b-value");
 
-            tag.ToString().ShouldEqual("<div class=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
+            tag.ToString().ShouldEqual("<div data-:=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
 
             // now with another class
             tag.AddClass("class1");
 
-            tag.ToString().ShouldEqual("<div class=\"class1 {&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
+            tag.ToString().ShouldEqual("<div class=\"class1\" data-:=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
         }
 
         [Test]
@@ -359,7 +359,7 @@ namespace HtmlTags.Testing
             {
                 Display = "a",
                 Value = "1"
-            }).ToString().ShouldEqual("<div class=\"{&quot;listValue&quot;:{&quot;Display&quot;:&quot;a&quot;,&quot;Value&quot;:&quot;1&quot;}}\"></div>");
+            }).ToString().ShouldEqual("<div data-:=\"{&quot;listValue&quot;:{&quot;Display&quot;:&quot;a&quot;,&quot;Value&quot;:&quot;1&quot;}}\"></div>");
         }
 
         [Test]

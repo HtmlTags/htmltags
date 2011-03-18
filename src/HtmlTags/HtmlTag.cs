@@ -19,6 +19,7 @@ namespace HtmlTags
             return new HtmlTag("span").Render(false);
         }
 
+        public static readonly string MetadataAttribute = "data-:";
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
         private readonly IDictionary<string, string> _customStyles = new Dictionary<string, string>();
@@ -320,10 +321,16 @@ namespace HtmlTags
 
             _htmlAttributes.Each(html.AddAttribute);
 
-            if (_cssClasses.Count > 0 || _metaData.Count > 0)
+            if (_cssClasses.Count > 0)
             {
-                var classAttribute = cssClassesToRender().Join(" ");
-                html.AddAttribute("class", classAttribute);
+                var classValue = _cssClasses.Join(" ");
+                html.AddAttribute("class", classValue);
+            }
+
+            if (_metaData.Count > 0)
+            {
+                var metadataValue = JsonUtil.ToUnsafeJson(_metaData.Inner);
+                html.AddAttribute(MetadataAttribute, metadataValue);
             }
 
             if (_customStyles.Count > 0)
@@ -361,14 +368,6 @@ namespace HtmlTags
             {
                 html.Write(_innerText);
             }
-        }
-
-        private IEnumerable<string> cssClassesToRender()
-        {
-            if (_metaData.Count == 0) return _cssClasses;
-
-            var metaDataClass = JsonUtil.ToUnsafeJson(_metaData.Inner);
-            return _cssClasses.Concat(new[] {metaDataClass});
         }
 
         public HtmlTag Attr(string attribute, object value)
