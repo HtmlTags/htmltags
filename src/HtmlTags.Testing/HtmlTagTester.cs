@@ -155,6 +155,68 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void render_custom_data()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("integer", 1);
+            tag.Data("string", "b-value");
+            tag.Data("bool", true);
+            tag.Data("setting", new ListValue {Value = "RED", Display = "Red"});
+            tag.ToString().ShouldEqual("<div data-integer=\"1\" data-string=\"b-value\" data-bool=\"true\" data-setting=\"{&quot;Display&quot;:&quot;Red&quot;,&quot;Value&quot;:&quot;RED&quot;}\"></div>");
+        }
+
+        [Test]
+        public void retrieve_a_previously_set_custom_data_value()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("age", 42);
+            tag.Data("age").ShouldEqual(42);
+        }
+
+        [Test]
+        public void retrieve_a_non_existing_custom_data_should_return_null()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("name").ShouldBeNull();
+        }
+
+        [Test]
+        public void set_a_custom_data_to_null_should_remove_the_data_attribute()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("name", "Luke");
+            tag.Data("name", null);
+            tag.HasAttr("data-name").ShouldBeFalse();
+        }
+
+        [Test]
+        public void set_a_custom_data_to_empty_string_should_store_an_empty_string()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("name", "");
+            tag.HasAttr("data-name").ShouldBeTrue();
+            tag.Data("name").ShouldEqual("");
+            tag.ToString().ShouldEqual("<div data-name=\"\"></div>");
+        }
+
+        [Test]
+        public void manipulate_previously_set_custom_data()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("error", new ListValue { Display = "Original" });
+            tag.Data<ListValue>("error", val => val.Display = "Changed");
+            tag.Data("error").As<ListValue>().Display.ShouldEqual("Changed");
+        }
+
+        [Test]
+        public void attempt_to_manipulate_non_existing_custom_data_should_be_a_no_op()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data<ListValue>("error", val => val.Display = "Changed");
+            tag.Data("error").ShouldBeNull();
+        }
+
+        [Test]
         public void render_metadata()
         {
             HtmlTag tag = new HtmlTag("div").Text("text");

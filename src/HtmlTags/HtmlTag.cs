@@ -20,15 +20,15 @@ namespace HtmlTags
             return new HtmlTag("span").Render(false);
         }
 
-        public static readonly string MetadataAttribute = "data-:";
         private const string CssClassAttribute = "class";
         private const string CssStyleAttribute = "style";
-
+        private const string DataPrefix = "data-";
+        public static readonly string MetadataAttribute = DataPrefix + ":";
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
         private readonly IDictionary<string, string> _customStyles = new Dictionary<string, string>();
 
-        private readonly Cache<string, string> _htmlAttributes = new Cache<string, string>(key => null);
+        private readonly Cache<string, object> _htmlAttributes = new Cache<string, object>(key => null);
 
         private readonly Cache<string, object> _metaData = new Cache<string, object>();
         private string _innerText = string.Empty;
@@ -249,6 +249,33 @@ namespace HtmlTags
             return this;
         }
 
+        public HtmlTag Data(string key, object value)
+        {
+            var dataKey = DataPrefix + key;
+            if (value == null)
+            {
+                return RemoveAttr(dataKey);
+            }
+            _htmlAttributes[dataKey] = value;
+            return this;
+        }
+
+        public HtmlTag Data<T>(string key, Action<T> configure) where T : class
+        {
+            var dataKey = DataPrefix + key;
+            if (!_htmlAttributes.Has(dataKey)) return this;
+            var value = (T)_htmlAttributes[dataKey];
+            configure(value);
+            return this;
+        }
+
+        public object Data(string key)
+        {
+            var dataKey = DataPrefix + key;
+            if (!_htmlAttributes.Has(dataKey)) return null;
+            return _htmlAttributes[dataKey];
+        }
+
         public HtmlTag MetaData(string key, object value)
         {
             _metaData[key] = value;
@@ -334,7 +361,14 @@ namespace HtmlTags
         {
             if (!WillBeRendered()) return;
 
-            _htmlAttributes.Each(html.AddAttribute);
+            _htmlAttributes.Each((key, val) =>
+            {
+                if (val != null)
+                {
+                    var stringValue = !(val is string) && key.StartsWith(DataPrefix) ? JsonUtil.ToJson(val) : val.ToString();
+                    html.AddAttribute(key, stringValue);
+                }
+            });
 
             if (_cssClasses.Count > 0)
             {
@@ -419,7 +453,8 @@ namespace HtmlTags
 
         public string Attr(string attribute)
         {
-            return _htmlAttributes[attribute] ?? string.Empty;
+            var attrVal = _htmlAttributes[attribute];
+            return attrVal == null ? string.Empty : attrVal.ToString();
         }
 
         public HtmlTag RemoveAttr(string attribute)
@@ -438,7 +473,7 @@ namespace HtmlTags
             }
             else
             {
-            _htmlAttributes.Remove(attribute);
+                _htmlAttributes.Remove(attribute);
             }
             return this;
         }
