@@ -249,6 +249,12 @@ namespace HtmlTags
             return this;
         }
 
+        /// <summary>
+        /// Stores a value in an HTML5 custom data attribute
+        /// </summary>
+        /// <param name="key">The name of the data attribute. Will have "data-" prepended when rendered.</param>
+        /// <param name="value">The value to store. Non-string values will be JSON encoded.</param>
+        /// <returns>The calling tag.</returns>
         public HtmlTag Data(string key, object value)
         {
             var dataKey = DataPrefix + key;
@@ -260,6 +266,13 @@ namespace HtmlTags
             return this;
         }
 
+        /// <summary>
+        /// Modifies an existing reference value stored in an HTML5 custom data
+        /// </summary>
+        /// <typeparam name="T">The type of the data stored in the given location</typeparam>
+        /// <param name="key">The name of the data storage location</param>
+        /// <param name="configure">The action to perform on the currently stored value</param>
+        /// <returns>The calling tag.</returns>
         public HtmlTag Data<T>(string key, Action<T> configure) where T : class
         {
             var dataKey = DataPrefix + key;
@@ -269,6 +282,11 @@ namespace HtmlTags
             return this;
         }
 
+        /// <summary>
+        /// Returns the value stored in HTML5 custom data
+        /// </summary>
+        /// <param name="key">The name of the data storage location</param>
+        /// <returns>The calling tag.</returns>
         public object Data(string key)
         {
             var dataKey = DataPrefix + key;
@@ -276,12 +294,33 @@ namespace HtmlTags
             return _htmlAttributes[dataKey];
         }
 
+        /// <summary>
+        /// Stores multiple JSON-encoded key/value pairs in a the "data-:" attribute. Useful when used with the jquery.metadata plugin
+        /// </summary>
+        /// <param name="key">The name of the stored value</param>
+        /// <param name="value">The value to store</param>
+        /// <remarks>You need to configure the the jquery.metadata plugin to read from the data-: attribute.
+        /// Add the following line after you have loaded jquery.metadata.js, but before you use its metadata() method:
+        /// <code>
+        /// if ($.metadata) {
+        ///    $.metadata.setType('attr', 'data-:');
+        /// }
+        /// </code>
+        /// </remarks>
+        /// <returns>The calling tag.</returns>
         public HtmlTag MetaData(string key, object value)
         {
             _metaData[key] = value;
             return this;
         }
 
+        /// <summary>
+        /// Modifies an existing reference value stored in MetaData
+        /// </summary>
+        /// <typeparam name="T">The type of the stored value</typeparam>
+        /// <param name="key">The name of the stored value</param>
+        /// <param name="configure">The action to perform on the currently stored value</param>
+        /// <returns>The calling tag.</returns>
         public HtmlTag MetaData<T>(string key, Action<T> configure) where T : class
         {
             if (!_metaData.Has(key)) return this;
@@ -291,6 +330,11 @@ namespace HtmlTags
             return this;
         }
 
+        /// <summary>
+        /// Returns the MetaData value stored for a given key.
+        /// </summary>
+        /// <param name="key">The name of the stored value</param>
+        /// <returns>The calling tag.</returns>
         public object MetaData(string key)
         {
             return !_metaData.Has(key) ? null : _metaData[key];
