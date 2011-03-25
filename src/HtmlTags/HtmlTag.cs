@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,13 +21,14 @@ namespace HtmlTags
         }
 
         public static readonly string MetadataAttribute = "data-:";
+        private const string CssClassAttribute = "class";
+        private const string CssStyleAttribute = "style";
+
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
         private readonly IDictionary<string, string> _customStyles = new Dictionary<string, string>();
 
-        private readonly Cache<string, string> _htmlAttributes =
-            new Cache<string, string>(
-                key => { throw new KeyNotFoundException("Does not have html attribute '{0}'".ToFormat(key)); });
+        private readonly Cache<string, string> _htmlAttributes = new Cache<string, string>(key => null);
 
         private readonly Cache<string, object> _metaData = new Cache<string, object>();
         private string _innerText = string.Empty;
@@ -337,7 +339,7 @@ namespace HtmlTags
             if (_cssClasses.Count > 0)
             {
                 var classValue = _cssClasses.Join(" ");
-                html.AddAttribute("class", classValue);
+                html.AddAttribute(CssClassAttribute, classValue);
             }
 
             if (_metaData.Count > 0)
@@ -352,7 +354,7 @@ namespace HtmlTags
                     .Select(x => x.Key + ":" + x.Value)
                     .ToArray().Join(";");
 
-                html.AddAttribute("style", attValue);
+                html.AddAttribute(CssStyleAttribute, attValue);
             }
 
             html.RenderBeginTag(_tag);
@@ -385,25 +387,59 @@ namespace HtmlTags
 
         public HtmlTag Attr(string attribute, object value)
         {
-            if (attribute.Equals("class", StringComparison.OrdinalIgnoreCase))
+            if (value == null || value.Equals(string.Empty))
+            {
+                return RemoveAttr(attribute);
+            }
+            if (isCssClassAttr(attribute))
             {
                 AddClasses(value.ToString().Split(' '));
             }
             else
             {
-                _htmlAttributes[attribute] = (value == null ? string.Empty : value.ToString());
+                _htmlAttributes[attribute] = value.ToString();
             }
             return this;
         }
 
+        private static bool isCssClassAttr(string attribute)
+        {
+            return attribute.Equals(CssClassAttribute, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool isCssStyleAttr(string attribute)
+        {
+            return attribute.Equals(CssStyleAttribute, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool isMetadataAttr(string attribute)
+        {
+            return attribute.Equals(MetadataAttribute, StringComparison.OrdinalIgnoreCase);
+        }
+
         public string Attr(string attribute)
         {
-            return _htmlAttributes[attribute];
+            return _htmlAttributes[attribute] ?? string.Empty;
         }
 
         public HtmlTag RemoveAttr(string attribute)
         {
-            _htmlAttributes.Remove(attribute);
+            if (isCssClassAttr(attribute))
+            {
+                _cssClasses.Clear();
+            }
+            else if (isCssStyleAttr(attribute))
+            {
+                _customStyles.Clear();
+            }
+            else if (isMetadataAttr(attribute))
+            {
+                _metaData.ClearAll();
+            }
+            else
+            {
+                _htmlAttributes.Remove(attribute);
+            }
             return this;
         }
 
@@ -480,6 +516,9 @@ namespace HtmlTags
 
         public bool HasAttr(string key)
         {
+            if (isCssClassAttr(key)) return _cssClasses.Count > 0;
+            if (isCssStyleAttr(key)) return _customStyles.Count > 0;
+            if (isMetadataAttr(key)) return _metaData.Count > 0;
             return _htmlAttributes.Has(key);
         }
 

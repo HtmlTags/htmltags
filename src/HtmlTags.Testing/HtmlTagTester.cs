@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
+using HtmlTags.Testing;
 
 namespace HtmlTags.Testing
 {
@@ -345,6 +346,71 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void set_an_attribute_to_null_should_remove_the_attribute()
+        {
+            var tag = new HtmlTag("div");
+            tag.Attr("name", "bill");
+            tag.HasAttr("name").ShouldBeTrue();
+            tag.Attr("name", null);
+            tag.HasAttr("name").ShouldBeFalse();
+        }
+
+        [Test]
+        public void set_an_attribute_to_empty_string_should_remove_the_attribute()
+        {
+            var tag = new HtmlTag("div");
+            tag.Attr("name", "bill");
+            tag.HasAttr("name").ShouldBeTrue();
+            tag.Attr("name", "");
+            tag.HasAttr("name").ShouldBeFalse();
+        }
+
+        [Test]
+        public void set_the_class_attribute_to_null_should_remove_all_classes()
+        {
+            var tag = new HtmlTag("div");
+            tag.AddClass("first");
+            tag.AddClass("second");
+            tag.Attr("class", null);
+            tag.ToString().ShouldEqual("<div></div>");
+        }
+
+        [Test]
+        public void set_the_class_attribute_to_empty_string_should_remove_all_classes()
+        {
+            var tag = new HtmlTag("div");
+            tag.AddClass("first");
+            tag.AddClass("second");
+            tag.Attr("class", string.Empty);
+            tag.ToString().ShouldEqual("<div></div>");
+        }
+
+        [Test]
+        public void removing_the_class_attribute_should_remove_all_classes()
+        {
+            var tag = new HtmlTag("div");
+            tag.AddClass("first");
+            tag.AddClass("second");
+            tag.RemoveAttr("class");
+            tag.ToString().ShouldEqual("<div></div>");
+        }
+
+        [Test]
+        public void should_report_has_class_attribute_if_any_classes_added()
+        {
+            var tag = new HtmlTag("div");
+            tag.HasAttr("class").ShouldBeFalse();
+            tag.AddClass("first");
+            tag.HasAttr("class").ShouldBeTrue();
+        }
+
+        [Test]
+        public void retrieve_a_non_existing_attr_should_return_an_empty_string()
+        {
+            new HtmlTag("div").Attr("new").ShouldEqual(string.Empty);
+        }
+
+        [Test]
         public void the_inner_text_is_html_encoded()
         {
             var tag = new HtmlTag("div");
@@ -378,6 +444,86 @@ namespace HtmlTags.Testing
                 .Style("padding-right", "30px")
                 .ToString()
                 .ShouldEqual("<div style=\"padding-left:20px;padding-right:30px\"></div>");
+        }
+
+        [Test]
+        public void removing_the_style_attribute_should_remove_all_styles()
+        {
+            var tag = new HtmlTag("div");
+            tag.Style("padding-left", "20px").Style("padding-right", "30px");
+            tag.HasStyle("padding-left").ShouldBeTrue();
+            tag.HasStyle("padding-right").ShouldBeTrue();
+            
+            tag.RemoveAttr("style");
+            
+            tag.HasStyle("padding-left").ShouldBeFalse();
+            tag.HasStyle("padding-right").ShouldBeFalse();
+        }
+
+        [Test]
+        public void setting_the_style_attribute_to_empty_string_should_remove_all_styles()
+        {
+            var tag = new HtmlTag("div");
+            tag.Style("padding-left", "20px").Style("padding-right", "30px");
+            tag.HasStyle("padding-left").ShouldBeTrue();
+
+            tag.Attr("style", string.Empty);
+
+            tag.HasStyle("padding-left").ShouldBeFalse();
+        }
+
+        [Test]
+        public void setting_the_style_attribute_to_null_should_remove_all_styles()
+        {
+            var tag = new HtmlTag("div");
+            tag.Style("padding-left", "20px").Style("padding-right", "30px");
+            tag.HasStyle("padding-left").ShouldBeTrue();
+
+            tag.Attr("style", null);
+
+            tag.HasStyle("padding-left").ShouldBeFalse();
+        }
+
+        [Test]
+        public void hasattr_should_be_true_for_style_if_any_styles_exist()
+        {
+            var tag = new HtmlTag("div");
+            tag.HasAttr("style").ShouldBeFalse();
+            tag.Style("padding-left", "20px");
+            tag.HasAttr("style").ShouldBeTrue();
+        }
+
+        [Test]
+        public void setting_the_metadata_attribute_to_empty_string_should_remove_all_metadata()
+        {
+            var tag = new HtmlTag("div");
+            tag.MetaData("name", "Luke");
+            tag.HasMetaData("name").ShouldBeTrue();
+
+            tag.Attr(HtmlTag.MetadataAttribute, string.Empty);
+            
+            tag.HasMetaData("name").ShouldBeFalse();
+        }
+
+        [Test]
+        public void setting_the_metadata_attribute_to_null_should_remove_all_metadata()
+        {
+            var tag = new HtmlTag("div");
+            tag.MetaData("name", "Luke");
+            tag.HasMetaData("name").ShouldBeTrue();
+
+            tag.Attr(HtmlTag.MetadataAttribute, null);
+
+            tag.HasMetaData("name").ShouldBeFalse();
+        }
+
+        [Test]
+        public void hasattr_should_be_true_for_metadata_attribute_if_any_metadata_exists()
+        {
+            var tag = new HtmlTag("div");
+            tag.HasAttr(HtmlTag.MetadataAttribute).ShouldBeFalse();
+            tag.MetaData("name", "Luke");
+            tag.HasAttr(HtmlTag.MetadataAttribute).ShouldBeTrue();
         }
 
         [Test]
