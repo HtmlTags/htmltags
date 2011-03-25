@@ -30,12 +30,40 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void write_next_if_it_exists()
+        public void set_the_next_sibling_via_next_property()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            tag.Next = new HtmlTag("span").Text("next");
+
+            tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
+        }
+
+        [Test]
+        public void set_the_next_sibling_via_next_property_should_overwrite_any_existing_sibling()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            tag.Next = new HtmlTag("span").Text("next");
+            tag.Next = new HtmlTag("span").Text("brother");
+            tag.ToString().ShouldEqual("<span>something</span><span>brother</span>");
+        }
+
+
+        [Test]
+        public void set_the_next_sibling_via_the_after_method()
         {
             var tag = new HtmlTag("span").Text("something");
             tag.After(new HtmlTag("span").Text("next"));
 
             tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
+        }
+
+        [Test]
+        public void set_the_next_sibling_via_the_after_method_preserves_any_existing_sibling()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            tag.After(new HtmlTag("span").Text("first brother"));
+            tag.After(new HtmlTag("span").Text("second brother"));
+            tag.ToString().ShouldEqual("<span>something</span><span>second brother</span><span>first brother</span>");
         }
 
         [Test]

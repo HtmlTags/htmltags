@@ -61,15 +61,28 @@ namespace HtmlTags
 
         private HtmlTag _next;
 
-        [Obsolete("Will be removed by v1.0. Use After() instead.")]
+        /// <summary>
+        /// The sibling tag that immediately follows the current tag. 
+        /// Setting this value will remove any existing value. Use <see cref="After(HtmlTag)"/> if you wish to insert a new sibling before any existing sibling.
+        /// </summary>
         public HtmlTag Next { get { return _next; } set { _next = value; } }
 
+        /// <summary>
+        /// Inserts a sibling tag immediately after the current tag. Any existing sibling will follow the inserted tag.
+        /// </summary>
+        /// <param name="nextTag">The tag to add as a sibling</param>
+        /// <returns>The original tag</returns>
         public HtmlTag After(HtmlTag nextTag)
         {
+            nextTag.Next = _next;
             _next = nextTag;
             return this;
         }
 
+        /// <summary>
+        /// Returns the sibling tag that immediately follows the current tag. Same as <see cref="Next" />.
+        /// </summary>
+        /// <returns></returns>
         public HtmlTag After()
         {
             return _next;
