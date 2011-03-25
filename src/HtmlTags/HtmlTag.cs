@@ -438,7 +438,7 @@ namespace HtmlTags
             }
             else
             {
-                _htmlAttributes.Remove(attribute);
+            _htmlAttributes.Remove(attribute);
             }
             return this;
         }
