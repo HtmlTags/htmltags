@@ -54,7 +54,6 @@
     </Compile>
     <Compile Include="Cache.cs" />
     <Compile Include="CheckboxTag.cs" />
-    <Compile Include="Extended\CompatibilityExtensions.cs" />
     <Compile Include="DivTag.cs" />
     <Compile Include="DLTag.cs" />
     <Compile Include="Extended\TagBuilderExtensions.cs" />

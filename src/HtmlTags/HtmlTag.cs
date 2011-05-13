@@ -58,9 +58,6 @@ namespace HtmlTags
 
         private bool _encodeInnerText = true;
         
-        [Obsolete("Will be removed by v1.0. Use Encoded() instead.")]
-        protected bool EncodeInnerText { get { return _encodeInnerText; } set { _encodeInnerText = value; } }
-
         private HtmlTag _next;
 
         /// <summary>
