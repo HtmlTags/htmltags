@@ -3,7 +3,7 @@
  .NET objects for generating HTML
 
 ## Installation
-Install via [nuget](http://www.nuget.org/List/Packages/HtmlTags):
+Install via [nuget](http://www.nuget.org/):
 
     PM> Install-Package HtmlTags
 
