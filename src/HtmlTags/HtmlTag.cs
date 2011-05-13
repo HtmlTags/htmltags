@@ -105,12 +105,6 @@ namespace HtmlTags
             return this;
         }
 
-        public HtmlTag Prepend(string text)
-        {
-            _innerText = text + _innerText;
-            return this;
-        }
-
         public HtmlTag FirstChild()
         {
             return _children.FirstOrDefault();

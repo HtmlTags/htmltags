@@ -104,14 +104,6 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void prepend()
-        {
-            HtmlTag tag = new HtmlTag("div").Text("something");
-            tag.Prepend("more in front ");
-            tag.ToString().ShouldEqual("<div>more in front something</div>");
-        }
-
-        [Test]
         public void render_a_single_attribute()
         {
             HtmlTag tag = new HtmlTag("table").Attr("cellPadding", 2);
