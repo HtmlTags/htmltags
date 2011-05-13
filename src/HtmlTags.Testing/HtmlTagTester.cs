@@ -1,14 +1,64 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
-using HtmlTags.Testing;
 
 namespace HtmlTags.Testing
 {
     [TestFixture]
-    public class HtmlTagTester
+    public class core_behavior_tests
     {
+        [Test]
+        public void render_a_tag()
+        {
+            var tag = new HtmlTag("p");
+            tag.ToString().ShouldEqual("<p></p>");
+        }
+
+        [Test]
+        public void render_a_tag_with_inner_text()
+        {
+            var tag = new HtmlTag("p").Text("some text");
+            tag.ToString().ShouldEqual("<p>some text</p>");
+        }
+
+        [Test]
+        public void the_inner_text_is_html_encoded_by_default()
+        {
+            var tag = new HtmlTag("div");
+            tag.Text("<b>Hi</b>");
+            tag.ToString().ShouldEqual("<div>&lt;b&gt;Hi&lt;/b&gt;</div>");
+        }
+
+        [Test]
+        public void can_opt_out_of_html_encoded_inner_text()
+        {
+            var tag = new HtmlTag("div");
+            tag.Text("<b>Hi</b>");
+            tag.Encoded(false);
+
+            tag.ToString().ShouldEqual("<div><b>Hi</b></div>");
+        }
+
+        [Test]
+        public void should_respect_subclass_encode_preference()
+        {
+            var tag = new NonEncodedTag("div");
+            tag.Text("<b>Hi</b>");
+            tag.ToString().ShouldEqual("<div><b>Hi</b></div>");
+        }
+
+        [Test]
+        public void has_closing_tag_by_default()
+        {
+            new HtmlTag("div").HasClosingTag().ShouldBeTrue();
+        }
+
+        [Test]
+        public void renders_closing_tag_by_default()
+        {
+            new HtmlTag("div").ToString().ShouldEqual("<div></div>");
+        }
+
         [Test]
         public void do_not_write_closing_tag()
         {
@@ -17,13 +67,7 @@ namespace HtmlTags.Testing
 
             tag.ToString().ShouldEqual("<span id=\"id\">");
         }
-        
-        [Test]
-        public void has_closing_tag_by_default()
-        {
-           new HtmlTag("div").HasClosingTag().ShouldBeTrue();
-        }
-        
+
         [Test]
         public void when_no_closing_tag_then_has_is_false()
         {
@@ -31,235 +75,30 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void set_the_next_sibling_via_next_property()
+        public void recognize_input_elements()
         {
-            var tag = new HtmlTag("span").Text("something");
-            tag.Next = new HtmlTag("span").Text("next");
+            new HtmlTag("span").IsInputElement().ShouldBeFalse();
 
-            tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
+            new HtmlTag("input").IsInputElement().ShouldBeTrue();
+            new HtmlTag("select").IsInputElement().ShouldBeTrue();
+            new HtmlTag("textarea").IsInputElement().ShouldBeTrue();
         }
 
-        [Test]
-        public void set_the_next_sibling_via_next_property_should_overwrite_any_existing_sibling()
-        {
-            var tag = new HtmlTag("span").Text("something");
-            tag.Next = new HtmlTag("span").Text("next");
-            tag.Next = new HtmlTag("span").Text("brother");
-            tag.ToString().ShouldEqual("<span>something</span><span>brother</span>");
-        }
-
-
-        [Test]
-        public void set_the_next_sibling_via_the_after_method()
-        {
-            var tag = new HtmlTag("span").Text("something");
-            tag.After(new HtmlTag("span").Text("next"));
-
-            tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
-        }
-
-        [Test]
-        public void set_the_next_sibling_via_the_after_method_preserves_any_existing_sibling()
-        {
-            var tag = new HtmlTag("span").Text("something");
-            tag.After(new HtmlTag("span").Text("first brother"));
-            tag.After(new HtmlTag("span").Text("second brother"));
-            tag.ToString().ShouldEqual("<span>something</span><span>second brother</span><span>first brother</span>");
-        }
-
-        [Test]
-        public void insert_before()
-        {
-            var tag = new HtmlTag("div");
-            tag.Append("span");
-            tag.InsertFirst(new HtmlTag("p"));
-
-            tag.ToString().ShouldEqual("<div><p></p><span></span></div>");
-        }
-
-        [Test]
-        public void is_input_element()
-        {
-            var tag = new HtmlTag("span");
-
-            tag.IsInputElement().ShouldBeFalse();
-            tag.TagName("input").IsInputElement().ShouldBeTrue();
-            tag.TagName("select").IsInputElement().ShouldBeTrue();
-            tag.TagName("textarea").IsInputElement().ShouldBeTrue();
-        }
-
-        [Test]
-        public void render_set_to_false()
-        {
-            new HtmlTag("div").Render(false).ToString().ShouldEqual("");
-        }
-
-        [Test]
-        public void render_set_to_true_by_default()
-        {
-            var tag = new HtmlTag("div");
-
-            tag.Render().ShouldBeTrue();
-            tag.ToString().ShouldEqual("<div></div>");
-        }
+        //
+        // HTML attributes
+        //
 
         [Test]
         public void render_a_single_attribute()
         {
-            HtmlTag tag = new HtmlTag("table").Attr("cellPadding", 2);
+            var tag = new HtmlTag("table").Attr("cellPadding", 2);
             tag.ToString().ShouldEqual("<table cellPadding=\"2\"></table>");
         }
 
         [Test]
-        public void render_a_single_class_even_though_it_is_registered_more_than_once()
-        {
-            HtmlTag tag = new HtmlTag("div").Text("text");
-            tag.AddClass("a");
-
-            tag.ToString().ShouldEqual("<div class=\"a\">text</div>");
-
-            tag.AddClass("a");
-
-            tag.ToString().ShouldEqual("<div class=\"a\">text</div>");
-        }
-
-        [Test]
-        public void can_get_classes_from_tag()
-        {
-            HtmlTag tag = new HtmlTag("div");
-
-            var classes = new[] {"class1", "class2"};
-
-            tag.AddClasses(classes);
-
-            var tagClasses = tag.GetClasses();
-
-            tagClasses.ShouldHaveCount(2);
-            tagClasses.Except(classes).ShouldHaveCount(0);
-
-        }
-
-        [Test]
-        public void render_id()
-        {
-            HtmlTag tag = new HtmlTag("div").Id("theDiv");
-            tag.ToString().ShouldEqual("<div id=\"theDiv\"></div>");
-        }
-
-        [Test]
-        public void render_custom_data()
-        {
-            var tag = new HtmlTag("div");
-            tag.Data("integer", 1);
-            tag.Data("string", "b-value");
-            tag.Data("bool", true);
-            tag.Data("setting", new ListValue {Value = "RED", Display = "Red"});
-            tag.ToString().ShouldEqual("<div data-integer=\"1\" data-string=\"b-value\" data-bool=\"true\" data-setting=\"{&quot;Display&quot;:&quot;Red&quot;,&quot;Value&quot;:&quot;RED&quot;}\"></div>");
-        }
-
-        [Test]
-        public void retrieve_a_previously_set_custom_data_value()
-        {
-            var tag = new HtmlTag("div");
-            tag.Data("age", 42);
-            tag.Data("age").ShouldEqual(42);
-        }
-
-        [Test]
-        public void retrieve_a_non_existing_custom_data_should_return_null()
-        {
-            var tag = new HtmlTag("div");
-            tag.Data("name").ShouldBeNull();
-        }
-
-        [Test]
-        public void set_a_custom_data_to_null_should_remove_the_data_attribute()
-        {
-            var tag = new HtmlTag("div");
-            tag.Data("name", "Luke");
-            tag.Data("name", null);
-            tag.HasAttr("data-name").ShouldBeFalse();
-        }
-
-        [Test]
-        public void set_a_custom_data_to_empty_string_should_store_an_empty_string()
-        {
-            var tag = new HtmlTag("div");
-            tag.Data("name", "");
-            tag.HasAttr("data-name").ShouldBeTrue();
-            tag.Data("name").ShouldEqual("");
-            tag.ToString().ShouldEqual("<div data-name=\"\"></div>");
-        }
-
-        [Test]
-        public void manipulate_previously_set_custom_data()
-        {
-            var tag = new HtmlTag("div");
-            tag.Data("error", new ListValue { Display = "Original" });
-            tag.Data<ListValue>("error", val => val.Display = "Changed");
-            tag.Data("error").As<ListValue>().Display.ShouldEqual("Changed");
-        }
-
-        [Test]
-        public void attempt_to_manipulate_non_existing_custom_data_should_be_a_no_op()
-        {
-            var tag = new HtmlTag("div");
-            tag.Data<ListValue>("error", val => val.Display = "Changed");
-            tag.Data("error").ShouldBeNull();
-        }
-
-        [Test]
-        public void render_metadata()
-        {
-            HtmlTag tag = new HtmlTag("div").Text("text");
-            tag.MetaData("a", 1);
-            tag.MetaData("b", "b-value");
-
-            tag.ToString().ShouldEqual("<div data-:=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
-
-            // now with another class
-            tag.AddClass("class1");
-
-            tag.ToString().ShouldEqual("<div class=\"class1\" data-:=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
-        }
-
-        [Test]
-        public void retrieve_a_previously_set_metadata()
-        {
-            var tag = new HtmlTag("div");
-            tag.MetaData("name", "joe");
-            tag.MetaData("name").ShouldEqual("joe");
-        }
-
-        [Test]
-        public void retrieve_a_non_existing_metadata_should_return_null()
-        {
-            var tag = new HtmlTag("div");
-            tag.MetaData("name").ShouldBeNull();
-        }
-
-        [Test]
-        public void manipulate_a_previously_set_metadata()
-        {
-            var tag = new HtmlTag("div");
-            tag.MetaData("error", new ListValue{Display = "Original"});
-            tag.MetaData<ListValue>("error", val => val.Display = "Changed");
-            tag.MetaData("error").As<ListValue>().Display.ShouldEqual("Changed");
-        }
-
-        [Test]
-        public void attempt_to_manipulate_a_non_existing_metadata_should_be_a_no_op()
-        {
-            var tag = new HtmlTag("div");
-            tag.MetaData<ListValue>("error", val => val.Display = "Changed");
-            tag.MetaData("error").ShouldBeNull();
-        }
-
-
-        [Test]
         public void render_multiple_attributes()
         {
-            HtmlTag tag = new HtmlTag("table").Attr("cellPadding", "2").Attr("cellSpacing", "3");
+            var tag = new HtmlTag("table").Attr("cellPadding", "2").Attr("cellSpacing", "3");
             tag.ToString().ShouldEqual("<table cellPadding=\"2\" cellSpacing=\"3\"></table>");
         }
 
@@ -269,14 +108,20 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div");
             tag.Attr("foo", "bar");
             tag.HasAttr("foo").ShouldBeTrue();
-            
+
             tag.RemoveAttr("foo");
             tag.HasAttr("foo").ShouldBeFalse();
-
         }
 
         [Test]
-        public void attr_add_class()
+        public void render_id()
+        {
+            var tag = new HtmlTag("div").Id("theDiv");
+            tag.ToString().ShouldEqual("<div id=\"theDiv\"></div>");
+        }
+
+        [Test]
+        public void attr_can_be_used_to_add_css_class()
         {
             var tag = new HtmlTag("a");
             tag.Attr("class", "test-class");
@@ -295,105 +140,9 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void render_multiple_classes()
-        {
-            HtmlTag tag = new HtmlTag("div").Text("text");
-            tag.AddClass("a");
-            tag.AddClass("b");
-            tag.AddClass("c");
-
-            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
-        }
-
-        [Test]
-        public void render_multiple_classes_with_a_single_method_call()
-        {
-            HtmlTag tag = new HtmlTag("div").Text("text");
-            tag.AddClasses("a", "b", "c");
-
-            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
-        }
-
-        [Test]
-        public void do_not_allow_spaces_in_class_names()
-        {
-            HtmlTag tag = new HtmlTag("div").Text("text");
-            typeof(ArgumentException).ShouldBeThrownBy(() =>
-            {
-                tag.AddClass("a b c");
-            });
-        }
-
-        [Test]
-        public void do_allow_a_class_that_is_a_json_blob_with_spaces()
-        {
-            var tag = new HtmlTag("div").AddClass("{a:1, a:2}");
-            tag.ToString().ShouldContain("class=\"{a:1, a:2}\"");
-        }
-
-        [Test]
-        public void render_multiple_levels_of_nesting()
-        {
-            var tag = new HtmlTag("table");
-            tag.Add("tbody/tr/td").Text("some text");
-
-            tag.ToString()
-                .ShouldEqual("<table><tbody><tr><td>some text</td></tr></tbody></table>");
-        }
-
-        [Test]
-        public void nesting_also_supports_jquery_direct_child_syntax()
-        {
-            var tag = new HtmlTag("table");
-            tag.Add("tbody > tr > td").Text("some text");
-
-            tag.ToString()
-                .ShouldEqual("<table><tbody><tr><td>some text</td></tr></tbody></table>");
-        }
-
-        [Test]
-        public void render_multiple_levels_of_nesting_2()
-        {
-            HtmlTag tag = new HtmlTag("html").Modify(x =>
-            {
-                x.Add("head", head =>
-                {
-                    head.Add("title").Text("The title");
-                    head.Add("style").Text("the style");
-                });
-
-                x.Add("body/div").Text("inner text of div");
-            });
-
-            tag.ToString().ShouldEqual(
-                "<html><head><title>The title</title><style>the style</style></head><body><div>inner text of div</div></body></html>");
-        }
-
-        [Test]
-        public void render_simple_tag()
-        {
-            var tag = new HtmlTag("p");
-            tag.ToString().ShouldEqual("<p></p>");
-        }
-
-        [Test]
-        public void render_simple_tag_with_inner_text()
-        {
-            HtmlTag tag = new HtmlTag("p").Text("some text");
-            tag.ToString().ShouldEqual("<p>some text</p>");
-        }
-
-        [Test]
-        public void render_tag_with_one_child()
-        {
-            HtmlTag tag = new HtmlTag("div").Append(new HtmlTag("span").Text("something"));
-            tag.ToString().ShouldEqual("<div><span>something</span></div>");
-        }
-
-        [Test]
         public void replace_a_single_attribute()
         {
-            HtmlTag tag = new HtmlTag("table")
+            var tag = new HtmlTag("table")
                 .Attr("cellPadding", 2)
                 .Attr("cellPadding", 5);
             tag.ToString().ShouldEqual("<table cellPadding=\"5\"></table>");
@@ -464,31 +213,92 @@ namespace HtmlTags.Testing
             new HtmlTag("div").Attr("new").ShouldEqual(string.Empty);
         }
 
+        //
+        // CSS classes
+        //
+
         [Test]
-        public void the_inner_text_is_html_encoded()
+        public void add_a_class()
         {
             var tag = new HtmlTag("div");
-            tag.Text("<b>Hi</b>");
-            tag.ToString().ShouldEqual("<div>&lt;b&gt;Hi&lt;/b&gt;</div>");
+            tag.AddClass("a");
+
+            tag.ToString().ShouldEqual("<div class=\"a\"></div>");
         }
 
         [Test]
-        public void the_inner_text_is_html_unencoded()
+        public void render_multiple_classes()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClass("a");
+            tag.AddClass("b");
+            tag.AddClass("c");
+
+            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+        }
+
+        [Test]
+        public void render_multiple_classes_with_a_single_method_call()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClasses("a", "b", "c");
+
+            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+        }
+
+        [Test]
+        public void remove_a_class()
+        {
+            var tag = new HtmlTag("div").AddClasses("a", "b", "c");
+            tag.RemoveClass("b");
+            tag.ToString().ShouldEqual("<div class=\"a c\"></div>");
+        }
+
+        [Test]
+        public void render_a_single_class_even_though_it_is_registered_more_than_once()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClass("a");
+
+            tag.ToString().ShouldEqual("<div class=\"a\">text</div>");
+
+            tag.AddClass("a");
+
+            tag.ToString().ShouldEqual("<div class=\"a\">text</div>");
+        }
+
+        [Test]
+        public void can_get_classes_from_tag()
         {
             var tag = new HtmlTag("div");
-            tag.Text("<b>Hi</b>");
-            tag.Encoded(false);
 
-            tag.ToString().ShouldEqual("<div><b>Hi</b></div>");
+            var classes = new[] { "class1", "class2" };
+
+            tag.AddClasses(classes);
+
+            var tagClasses = tag.GetClasses();
+
+            tagClasses.ShouldHaveCount(2);
+            tagClasses.Except(classes).ShouldHaveCount(0);
         }
 
         [Test]
-        public void should_respect_subclass_encode_preference()
+        public void do_not_allow_spaces_in_class_names()
         {
-            var tag = new NonEncodedTag("div");
-            tag.Text("<b>Hi</b>");
-            tag.ToString().ShouldEqual("<div><b>Hi</b></div>");
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("a b c"); });
         }
+
+        [Test]
+        public void do_allow_a_class_that_is_a_json_blob_with_spaces()
+        {
+            var tag = new HtmlTag("div").AddClass("{a:1, a:2}");
+            tag.ToString().ShouldContain("class=\"{a:1, a:2}\"");
+        }
+
+        //
+        // inline styles
+        //
 
         [Test]
         public void write_styles()
@@ -507,9 +317,9 @@ namespace HtmlTags.Testing
             tag.Style("padding-left", "20px").Style("padding-right", "30px");
             tag.HasStyle("padding-left").ShouldBeTrue();
             tag.HasStyle("padding-right").ShouldBeTrue();
-            
+
             tag.RemoveAttr("style");
-            
+
             tag.HasStyle("padding-left").ShouldBeFalse();
             tag.HasStyle("padding-right").ShouldBeFalse();
         }
@@ -546,6 +356,320 @@ namespace HtmlTags.Testing
             tag.Style("padding-left", "20px");
             tag.HasAttr("style").ShouldBeTrue();
         }
+    }
+
+    [TestFixture]
+    public class children_tests
+    {
+        [Test]
+        public void add_a_child_tag()
+        {
+            var tag = new HtmlTag("div").Append(new HtmlTag("span").Text("something"));
+            tag.ToString().ShouldEqual("<div><span>something</span></div>");
+        }
+
+        [Test]
+        public void insert_before()
+        {
+            var tag = new HtmlTag("div");
+            tag.Append("span");
+            tag.InsertFirst(new HtmlTag("p"));
+
+            tag.ToString().ShouldEqual("<div><p></p><span></span></div>");
+        }
+
+        [Test]
+        public void add_multiple_levels_of_nesting()
+        {
+            var tag = new HtmlTag("table");
+            tag.Add("tbody/tr/td").Text("some text");
+
+            tag.ToString()
+                .ShouldEqual("<table><tbody><tr><td>some text</td></tr></tbody></table>");
+        }
+
+        [Test]
+        public void nesting_also_supports_jquery_direct_child_syntax()
+        {
+            var tag = new HtmlTag("table");
+            tag.Add("tbody > tr > td").Text("some text");
+
+            tag.ToString()
+                .ShouldEqual("<table><tbody><tr><td>some text</td></tr></tbody></table>");
+        }
+
+        [Test]
+        public void add_multiple_levels_of_nesting_with_initializer()
+        {
+            var tag = new HtmlTag("html").Modify(x =>
+            {
+                x.Add("head", head =>
+                {
+                    head.Add("title").Text("The title");
+                    head.Add("style").Text("the style");
+                });
+
+                x.Add("body/div").Text("inner text of div");
+            });
+
+            tag.ToString().ShouldEqual(
+                "<html><head><title>The title</title><style>the style</style></head><body><div>inner text of div</div></body></html>");
+        }
+    }
+
+    [TestFixture]
+    public class sibling_tests
+    {
+        [Test]
+        public void set_the_next_sibling_via_next_property()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            tag.Next = new HtmlTag("span").Text("next");
+
+            tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
+        }
+
+        [Test]
+        public void set_the_next_sibling_via_next_property_should_overwrite_any_existing_sibling()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            tag.Next = new HtmlTag("span").Text("next");
+            tag.Next = new HtmlTag("span").Text("brother");
+            tag.ToString().ShouldEqual("<span>something</span><span>brother</span>");
+        }
+
+
+        [Test]
+        public void set_the_next_sibling_via_the_after_method()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            tag.After(new HtmlTag("span").Text("next"));
+
+            tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
+        }
+
+        [Test]
+        public void set_the_next_sibling_via_the_after_method_preserves_any_existing_sibling()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            tag.After(new HtmlTag("span").Text("first brother"));
+            tag.After(new HtmlTag("span").Text("second brother"));
+            tag.ToString().ShouldEqual("<span>something</span><span>second brother</span><span>first brother</span>");
+        }
+    }
+
+    [TestFixture]
+    public class output_control_tests
+    {
+        [Test]
+        public void render_set_to_true_by_default()
+        {
+            var tag = new HtmlTag("div");
+
+            tag.Render().ShouldBeTrue();
+            tag.ToString().ShouldEqual("<div></div>");
+        }
+
+        [Test]
+        public void render_set_to_false_always_returns_an_empty_string()
+        {
+            new HtmlTag("div").Render(false).ToString().ShouldEqual("");
+        }
+
+        [Test]
+        public void tags_are_authorized_by_default()
+        {
+            new HtmlTag("div").Authorized().ShouldBeTrue();
+        }
+
+        [Test]
+        public void unauthorized_tags_will_always_return_an_empty_string_regardless_of_render_setting()
+        {
+            var tag = new HtmlTag("div").Authorized(false);
+            tag.ToString().ShouldBeEmpty();
+
+            tag.Render(true).ToString().ShouldBeEmpty();
+            tag.Render(false).ToString().ShouldBeEmpty();
+        }
+
+        [Test]
+        public void rendering_a_NoTag_should_not_render_anything()
+        {
+            new NoTag().AddClass("important").Text("foo").ToString().ShouldEqual("");
+        }
+    }
+
+    [TestFixture]
+    public class wrapping_tags_tests
+    {
+        [Test]
+        public void wrap_with_returns_a_new_tag_with_the_original_as_the_first_child()
+        {
+            var tag = new HtmlTag("a");
+            var wrapped = tag.WrapWith("span");
+
+            wrapped.ShouldNotBeTheSameAs(tag);
+            wrapped.TagName().ShouldEqual("span");
+            wrapped.FirstChild().ShouldBeTheSameAs(tag);
+        }
+
+        [Test]
+        public void wrap_with_another_tag_returns_the_wrapping_tag_with_the_original_as_its_child()
+        {
+            var tag = new HtmlTag("a");
+            var wrapper = new HtmlTag("span");
+
+            tag.WrapWith(wrapper).ShouldBeTheSameAs(wrapper);
+            wrapper.FirstChild().ShouldBeTheSameAs(tag);
+        }
+
+        [Test]
+        public void wrapped_tag_will_be_rendered_if_the_original_tag_was_to_be_rendered()
+        {
+            var tag = new HtmlTag("a");
+            tag.Render().ShouldBeTrue();
+            tag.WrapWith("span").Render().ShouldBeTrue();
+        }
+
+
+        [Test]
+        public void wrapped_tag_will_not_be_rendered_if_the_original_tag_was_not_to_be_rendered()
+        {
+            var tag = new HtmlTag("a").Render(false);
+            tag.WrapWith("span").Render().ShouldBeFalse();
+        }
+
+        [Test]
+        public void wrapped_tag_will_be_authorized_if_the_original_tag_was_authorized()
+        {
+            var tag = new HtmlTag("a");
+            tag.Authorized().ShouldBeTrue();
+            tag.WrapWith("span").Authorized().ShouldBeTrue();
+        }
+
+        [Test]
+        public void wrapped_tag_will_not_be_authorized_if_the_original_tag_was_not_authorized()
+        {
+            var tag = new HtmlTag("a").Authorized(false);
+            tag.WrapWith("span").Authorized().ShouldBeFalse();
+        }
+    }
+
+    [TestFixture]
+    public class custom_data_attribute_tests
+    {
+        [Test]
+        public void add_custom_data()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("integer", 1);
+            tag.Data("string", "b-value");
+            tag.Data("bool", true);
+            tag.Data("setting", new ListValue {Value = "RED", Display = "Red"});
+            tag.ToString().ShouldEqual("<div data-integer=\"1\" data-string=\"b-value\" data-bool=\"true\" data-setting=\"{&quot;Display&quot;:&quot;Red&quot;,&quot;Value&quot;:&quot;RED&quot;}\"></div>");
+        }
+
+        [Test]
+        public void retrieve_a_previously_set_custom_data_value()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("age", 42);
+            tag.Data("age").ShouldEqual(42);
+        }
+
+        [Test]
+        public void retrieve_a_non_existing_custom_data_should_return_null()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("name").ShouldBeNull();
+        }
+
+        [Test]
+        public void set_a_custom_data_to_null_should_remove_the_data_attribute()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("name", "Luke");
+            tag.Data("name", null);
+            tag.HasAttr("data-name").ShouldBeFalse();
+        }
+
+        [Test]
+        public void set_a_custom_data_to_empty_string_should_store_an_empty_string()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("name", "");
+            tag.HasAttr("data-name").ShouldBeTrue();
+            tag.Data("name").ShouldEqual("");
+            tag.ToString().ShouldEqual("<div data-name=\"\"></div>");
+        }
+
+        [Test]
+        public void manipulate_previously_set_custom_data()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data("error", new ListValue {Display = "Original"});
+            tag.Data<ListValue>("error", val => val.Display = "Changed");
+            tag.Data("error").As<ListValue>().Display.ShouldEqual("Changed");
+        }
+
+        [Test]
+        public void attempt_to_manipulate_non_existing_custom_data_should_be_a_no_op()
+        {
+            var tag = new HtmlTag("div");
+            tag.Data<ListValue>("error", val => val.Display = "Changed");
+            tag.Data("error").ShouldBeNull();
+        }
+    }
+
+    [TestFixture]
+    public class metadata_tests
+    {
+        [Test]
+        public void render_metadata()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.MetaData("a", 1);
+            tag.MetaData("b", "b-value");
+
+            tag.ToString().ShouldEqual("<div data-:=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
+
+            // now with another class
+            tag.AddClass("class1");
+
+            tag.ToString().ShouldEqual("<div class=\"class1\" data-:=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
+        }
+
+        [Test]
+        public void retrieve_a_previously_set_metadata()
+        {
+            var tag = new HtmlTag("div");
+            tag.MetaData("name", "joe");
+            tag.MetaData("name").ShouldEqual("joe");
+        }
+
+        [Test]
+        public void retrieve_a_non_existing_metadata_should_return_null()
+        {
+            var tag = new HtmlTag("div");
+            tag.MetaData("name").ShouldBeNull();
+        }
+
+        [Test]
+        public void manipulate_a_previously_set_metadata()
+        {
+            var tag = new HtmlTag("div");
+            tag.MetaData("error", new ListValue {Display = "Original"});
+            tag.MetaData<ListValue>("error", val => val.Display = "Changed");
+            tag.MetaData("error").As<ListValue>().Display.ShouldEqual("Changed");
+        }
+
+        [Test]
+        public void attempt_to_manipulate_a_non_existing_metadata_should_be_a_no_op()
+        {
+            var tag = new HtmlTag("div");
+            tag.MetaData<ListValue>("error", val => val.Display = "Changed");
+            tag.MetaData("error").ShouldBeNull();
+        }
 
         [Test]
         public void setting_the_metadata_attribute_to_empty_string_should_remove_all_metadata()
@@ -555,7 +679,7 @@ namespace HtmlTags.Testing
             tag.HasMetaData("name").ShouldBeTrue();
 
             tag.Attr(HtmlTag.MetadataAttribute, string.Empty);
-            
+
             tag.HasMetaData("name").ShouldBeFalse();
         }
 
@@ -584,114 +708,32 @@ namespace HtmlTags.Testing
         public void write_deep_object_in_metadata()
         {
             new HtmlTag("div").MetaData("listValue", new ListValue
-            {
-                Display = "a",
-                Value = "1"
-            }).ToString().ShouldEqual("<div data-:=\"{&quot;listValue&quot;:{&quot;Display&quot;:&quot;a&quot;,&quot;Value&quot;:&quot;1&quot;}}\"></div>");
+                {
+                    Display = "a",
+                    Value = "1"
+                }).ToString().ShouldEqual("<div data-:=\"{&quot;listValue&quot;:{&quot;Display&quot;:&quot;a&quot;,&quot;Value&quot;:&quot;1&quot;}}\"></div>");
+        }
+    }
+
+
+    internal class ListValue
+    {
+        public string Display { get; set; }
+        public string Value { get; set; }
+    }
+
+    internal class NonEncodedTag : HtmlTag
+    {
+        public NonEncodedTag(string tag)
+            : base(tag)
+        {
+            Encoded(false);
         }
 
-        [Test]
-        public void wrap_with_copies_the_visibility_from_the_inner_value_positive_case()
+        public NonEncodedTag(string tag, Action<HtmlTag> configure)
+            : base(tag, configure)
         {
-            var tag = new HtmlTag("a");
-            tag.Render().ShouldBeTrue();
-            tag.WrapWith("span").Render().ShouldBeTrue();
-        }
-
-
-        [Test]
-        public void wrap_with_copies_the_visibility_from_the_inner_value_negative_case()
-        {
-            var tag = new HtmlTag("a").Render(false);
-            tag.WrapWith("span").Render().ShouldBeFalse();
-        }
-
-
-        [Test]
-        public void wrap_with_copies_the_authorization_from_the_inner_value_positive_case()
-        {
-            var tag = new HtmlTag("a");
-            tag.Authorized().ShouldBeTrue();
-            tag.WrapWith("span").Authorized().ShouldBeTrue();
-        }
-
-
-        [Test]
-        public void wrap_with_copies_the_authorization_from_the_inner_value_negative_case()
-        {
-            var tag = new HtmlTag("a").Authorized(false);
-            tag.WrapWith("span").Authorized().ShouldBeFalse();
-        }
-
-        [Test]
-        public void wrap_with_returns_a_new_tag_with_the_original_as_the_first_child()
-        {
-            var tag = new HtmlTag("a");
-            var wrapped = tag.WrapWith("span");
-
-            wrapped.ShouldNotBeTheSameAs(tag);
-            wrapped.TagName().ShouldEqual("span");
-            wrapped.FirstChild().ShouldBeTheSameAs(tag);
-        }
-
-        [Test]
-        public void wrap_with_another_tag_returns_the_second_tag_with_the_first_as_the_child()
-        {
-            var tag = new HtmlTag("a");
-            var wrapper = new HtmlTag("span");
-
-            tag.WrapWith(wrapper).ShouldBeTheSameAs(wrapper);
-            wrapper.FirstChild().ShouldBeTheSameAs(tag);
-        }
-
-
-        [Test]
-        public void is_authorized_by_default()
-        {
-            new HtmlTag("div").Authorized().ShouldBeTrue();
-        }
-
-        [Test]
-        public void is_authorized_value_false_makes_tag_hidden_regardless_of_visibility()
-        {
-            var tag = new HtmlTag("div").Authorized(false);
-            tag.ToString().ShouldBeEmpty();
-
-            tag.Render(true).ToString().ShouldBeEmpty();
-            tag.Render(false).ToString().ShouldBeEmpty();
-        }
-
-        [Test]
-        public void remove_a_class()
-        {
-            var tag = new HtmlTag("div").AddClasses("a", "b", "c");
-            tag.RemoveClass("b");
-            tag.ToString().ShouldEqual("<div class=\"a c\"></div>");
-        }
-
-        [Test]
-        public void rendering_a_NoTag_should_not_render_anything()
-        {
-            new NoTag().AddClass("important").Text("foo").ToString().ShouldEqual("");
-        }
-
-        public class ListValue
-        {
-            public string Display { get; set; }
-            public string Value { get; set; }
-        }
-
-        public class NonEncodedTag : HtmlTag
-        {
-            public NonEncodedTag(string tag) : base(tag)
-            {
-                Encoded(false);
-            }
-
-            public NonEncodedTag(string tag, Action<HtmlTag> configure) : base(tag, configure)
-            {
-                Encoded(false);
-            }
+            Encoded(false);
         }
     }
 }
