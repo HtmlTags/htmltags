@@ -50,9 +50,8 @@ namespace HtmlTags
             configure(this);
         }
 
-        public HtmlTag(string tag, HtmlTag parent) : this()
+        public HtmlTag(string tag, HtmlTag parent) : this(tag)
         {
-            _tag = tag.ToLower();
             if (parent != null) parent.Append(this);
         }
 
@@ -543,13 +542,20 @@ namespace HtmlTags
 
         public HtmlTag AddClasses(params string[] classes)
         {
-            classes.Each(x => AddClass(x));
-            return this;
+            return addClasses(classes);
         }
 
-        public HtmlTag AddClasses(IList<string> classes)
+        public HtmlTag AddClasses(IEnumerable<string> classes)
         {
-            AddClasses(classes.ToArray());
+            return addClasses(classes);
+        }
+
+        private HtmlTag addClasses(IEnumerable<string> classes)
+        {
+            foreach (var cssClass in classes)
+            {
+                AddClass(cssClass);
+            }
             return this;
         }
 
