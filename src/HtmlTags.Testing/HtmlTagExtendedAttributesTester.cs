@@ -55,7 +55,7 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void unencoded_turns_of_innert_text_html_encoding()
+        public void unencoded_turns_off_inner_text_html_encoding()
         {
             var tag = new HtmlTag("div").Text("<img />").UnEncoded();
             tag.Encoded().ShouldBeFalse();
