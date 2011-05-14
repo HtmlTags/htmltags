@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="CheckboxTagTester.cs" />
     <Compile Include="DLTagTester.cs" />
+    <Compile Include="ElementTesters.cs" />
     <Compile Include="HtmlDocumentTester.cs" />
     <Compile Include="HtmlTagExtendedAttributesTester.cs" />
     <Compile Include="HtmlTagTester.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="SelectTagTester.cs" />
     <Compile Include="SpecificationExtensions.cs" />
     <Compile Include="TableTagTester.cs" />
+    <Compile Include="TagBuilderExtensionsTester.cs" />
     <Compile Include="VisibleForRoleTesting.cs" />
   </ItemGroup>
   <ItemGroup>

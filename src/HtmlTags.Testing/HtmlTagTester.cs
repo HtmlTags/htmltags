@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -72,6 +73,18 @@ namespace HtmlTags.Testing
         public void when_no_closing_tag_then_has_is_false()
         {
             new HtmlTag("div").NoClosingTag().HasClosingTag().ShouldBeFalse();
+        }
+
+        [Test]
+        public void initialize_tag_via_constructor()
+        {
+            var tag = new HtmlTag("div", x =>
+            {
+                x.Id("me");
+                x.Attr("title", "tooltip");
+            });
+
+            tag.ToString().ShouldEqual("<div id=\"me\" title=\"tooltip\"></div>");
         }
 
         [Test]
@@ -247,6 +260,16 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void render_multiple_classes_from_a_sequence()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            var sequenceOfClasses = new List<string>{"a", "b", "c"};
+            tag.AddClasses(sequenceOfClasses);
+
+            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+        }
+
+        [Test]
         public void remove_a_class()
         {
             var tag = new HtmlTag("div").AddClasses("a", "b", "c");
@@ -369,13 +392,40 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void insert_before()
+        public void create_a_new_tag_as_child_of_existing_tag()
+        {
+            var existing = new HtmlTag("div");
+            var newTag = new HtmlTag("span", existing);
+            newTag.Text("something");
+            existing.ToString().ShouldEqual("<div><span>something</span></div>");
+        }
+
+        [Test]
+        public void insert_a_new_child_tag_as_the_first_child()
         {
             var tag = new HtmlTag("div");
             tag.Append("span");
             tag.InsertFirst(new HtmlTag("p"));
 
             tag.ToString().ShouldEqual("<div><p></p><span></span></div>");
+        }
+
+        [Test]
+        public void add_and_return_a_child_tag_by_name()
+        {
+            var original = new HtmlTag("div");
+            var child = original.Add("span");
+            child.ToString().ShouldEqual("<span></span>");
+            original.ToString().ShouldEqual("<div><span></span></div>");
+        }
+
+        [Test]
+        public void add_and_return_a_child_tag_by_type()
+        {
+            var original = new HtmlTag("div");
+            var child = original.Add<HiddenTag>();
+            child.ToString().ShouldEqual("<input type=\"hidden\" />");
+            original.ToString().ShouldEqual("<div><input type=\"hidden\" /></div>");
         }
 
         [Test]
@@ -414,6 +464,25 @@ namespace HtmlTags.Testing
 
             tag.ToString().ShouldEqual(
                 "<html><head><title>The title</title><style>the style</style></head><body><div>inner text of div</div></body></html>");
+        }
+
+        [Test]
+        public void remove_existing_children_and_add_new_children()
+        {
+            var tag = new HtmlTag("div").Append("br").Append("p");
+            tag.Children.ShouldHaveCount(2);
+            tag.ReplaceChildren(new HtmlTag("hr"));
+            tag.Children.ShouldHaveCount(1);
+            tag.ToString().ShouldEqual("<div><hr /></div>");
+        }
+
+        [Test]
+        public void does_not_return_children_or_siblings_when_treated_as_a_tag_source()
+        {
+            var original = new HtmlTag("div");
+            original.Add("span");
+            original.After(new HtmlTag("p"));
+            ((ITagSource) original).AllTags().Single().ShouldBeTheSameAs(original);
         }
     }
 
@@ -455,6 +524,16 @@ namespace HtmlTags.Testing
             tag.After(new HtmlTag("span").Text("first brother"));
             tag.After(new HtmlTag("span").Text("second brother"));
             tag.ToString().ShouldEqual("<span>something</span><span>second brother</span><span>first brother</span>");
+        }
+
+        [Test]
+        public void retrieve_the_next_sibling()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            var nextSibling = new HtmlTag("span").Text("first brother");
+            tag.After(nextSibling);
+
+            tag.After().ShouldBeTheSameAs(nextSibling);
         }
     }
 
@@ -726,12 +805,6 @@ namespace HtmlTags.Testing
     {
         public NonEncodedTag(string tag)
             : base(tag)
-        {
-            Encoded(false);
-        }
-
-        public NonEncodedTag(string tag, Action<HtmlTag> configure)
-            : base(tag, configure)
         {
             Encoded(false);
         }

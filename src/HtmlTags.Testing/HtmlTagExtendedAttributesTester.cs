@@ -53,6 +53,14 @@ namespace HtmlTags.Testing
         {
             new HtmlTag("div").HideUnless(false).Style("display").ShouldEqual("none");
         }
+
+        [Test]
+        public void unencoded_turns_of_innert_text_html_encoding()
+        {
+            var tag = new HtmlTag("div").Text("<img />").UnEncoded();
+            tag.Encoded().ShouldBeFalse();
+            tag.ToString().ShouldEqual("<div><img /></div>");
+        }
     }
 
 
@@ -104,12 +112,5 @@ namespace HtmlTags.Testing
         {
             theTag.TagName().ShouldEqual("textarea");
         }
-    }
-
-
-    [TestFixture]
-    public class MultilineModeTester
-    {
-        
     }
 }
