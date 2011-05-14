@@ -20,7 +20,7 @@ namespace HtmlTags.Testing
 
             var tag = new TableTag();
             var headerRow = tag.AddHeaderRow();
-            headerRow.Header("Heading 1");
+            headerRow.Header().Text("Heading 1");
             headerRow.Header("Heading 2");
             tag.ToString().ShouldEqual(expected);
         }
@@ -65,7 +65,7 @@ namespace HtmlTags.Testing
 
             var tag = new TableTag();
             var bodyRow1 = tag.AddBodyRow();
-            bodyRow1.Cell("cell 1");
+            bodyRow1.Cell().Text("cell 1");
             bodyRow1.Cell("cell 2");
             var bodyRow2 = tag.AddBodyRow();
             bodyRow2.Cell("cell 3");
