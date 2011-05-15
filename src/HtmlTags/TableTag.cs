@@ -7,11 +7,13 @@ namespace HtmlTags
     {
         private readonly HtmlTag _body;
         private readonly HtmlTag _header;
+        private readonly HtmlTag _footer;
 
         public TableTag()
             : base("table")
         {
             _header = new HtmlTag("thead", this);
+            _footer = new HtmlTag("tfoot", this).Render(false);
             _body = new HtmlTag("tbody", this);
         }
 
@@ -65,15 +67,8 @@ namespace HtmlTags
 
         public TableTag AddFooterRow(Action<TableRowTag> configure)
         {
-            var footer = Children.FirstOrDefault(x => x.TagName() == "tfoot");
-            if (footer == null)
-            {
-                footer = new HtmlTag("tfoot");
-                Append(footer);
-            }
-
-            configure(footer.Add<TableRowTag>());
-
+            _footer.Render(true);
+            configure(_footer.Add<TableRowTag>());
             return this;
         }
 
