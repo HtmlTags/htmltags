@@ -29,24 +29,19 @@ namespace HtmlTags
         public string Title { get { return _title.Text(); } set { _title.Text(value); } }
         public HtmlTag Current { get { return _currentStack.Count == 0 ? _body : _currentStack.Peek(); } }
         public HtmlTag Last { get; private set; }
+        public Action<string, string> FileWriter = writeToFile;
+        public Action<string> FileOpener = openFile;
 
         public void WriteToFile(string fileName)
         {
-            ensureFolderExists(fileName);
-
-            using (var writer = new StreamWriter(fileName))
-            {
-                writer.WriteLine(ToString());
-            }
+            FileWriter(fileName, ToString());
         }
-
 
         public void OpenInBrowser()
         {
             var filename = getPath();
             WriteToFile(filename);
-
-            Process.Start(filename);
+            FileOpener(filename);
         }
 
         public HtmlTag Body
@@ -64,6 +59,16 @@ namespace HtmlTags
             return Path.GetTempFileName() + ".htm";
         }
 
+        private static void writeToFile(string fileName, string fileContents)
+        {
+            ensureFolderExists(fileName);
+
+            using (var writer = new StreamWriter(fileName))
+            {
+                writer.WriteLine(fileContents);
+            }
+        }
+
         private static void ensureFolderExists(string fileName)
         {
             var folder = Path.GetDirectoryName(fileName);
@@ -77,6 +82,11 @@ namespace HtmlTags
             {
                 Directory.CreateDirectory(folder);
             }
+        }
+
+        private static void openFile(string fileName)
+        {
+            Process.Start(fileName);
         }
 
         public HtmlTag Add(string tagName)

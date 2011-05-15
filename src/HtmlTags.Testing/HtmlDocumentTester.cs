@@ -70,5 +70,41 @@ namespace HtmlTags.Testing
 
             document.Last.TagName().ShouldEqual("p");
         }
+
+        [Test]
+        public void write_to_file_sends_the_document_to_the_file_writer()
+        {
+            string actualContent = null;
+            document.FileWriter = (path, content) =>
+                                      {
+                                          actualContent = content;
+                                      };
+
+            document.WriteToFile("myfile.htm");
+
+            actualContent.ShouldStartWith("<!DOCTYPE");
+        }
+
+        [Test]
+        public void open_in_browser_writes_a_temp_file_then_opens_it()
+        {
+            string actualPath = null;
+            string actualContent = null;
+            string actualTempFileName = null;
+            document.FileWriter = (path, content) =>
+                                      {
+                                          actualPath = path;
+                                          actualContent = content;
+                                      };
+            document.FileOpener = (filename) =>
+                                      {
+                                          actualTempFileName = filename;
+                                      };
+            
+            document.OpenInBrowser();
+
+            actualPath.ShouldEqual(actualTempFileName);
+            actualContent.ShouldStartWith("<!DOCTYPE");
+        }
     }
 }
