@@ -49,6 +49,24 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void implements_to_html_string_for_aspnet_4_compatibility()
+        {
+            var tag = new HtmlTag("p");
+            tag.ToHtmlString().ShouldEqual("<p></p>");
+        }
+
+        [Test]
+        public void pretty_string_is_more_suitable_for_human_viewing()
+        {
+            var tag = new HtmlTag("div");
+            new HtmlTag("p", tag).Id("intro").Text("Once upon a midnight...");
+            
+            tag.ToPrettyString().ShouldEqual(@"<div>
+  <p id=""intro"">Once upon a midnight...</p>
+</div>");
+        }
+
+        [Test]
         public void has_closing_tag_by_default()
         {
             new HtmlTag("div").HasClosingTag().ShouldBeTrue();
@@ -131,6 +149,27 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div").Id("theDiv");
             tag.ToString().ShouldEqual("<div id=\"theDiv\"></div>");
+        }
+
+        [Test]
+        public void retrieve_a_set_id()
+        {
+            var tag = new HtmlTag("div").Id("the-div");
+            tag.Id().ShouldEqual("the-div");
+        }
+
+        [Test]
+        public void set_the_title_attribute()
+        {
+            var tag = new HtmlTag("div").Title("My Title");
+            tag.ToString().ShouldEqual("<div title=\"My Title\"></div>");
+        }
+
+        [Test]
+        public void retrieve_the_title()
+        {
+            var tag = new HtmlTag("div").Title("My Title");
+            tag.Title().ShouldEqual("My Title");
         }
 
         [Test]
@@ -401,6 +440,49 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void append_adds_a_new_child_and_return_the_original()
+        {
+            var parent = new HtmlTag("div");
+            var resultOfAppend = parent.Append("p");
+            resultOfAppend.ShouldBeTheSameAs(parent);
+            parent.ToString().ShouldEqual("<div><p></p></div>");
+        }
+
+        [Test]
+        public void append_nested_children()
+        {
+            var parent = new HtmlTag("div");
+            parent.Append("p > span");
+            parent.ToString().ShouldEqual("<div><p><span></span></p></div>");
+        }
+
+
+        [Test]
+        public void append_all_tags_from_a_tag_source()
+        {
+            var tagSource = new TagList(new[]{new HtmlTag("br"), new HtmlTag("hr")  });
+            var parent = new HtmlTag("div");
+            parent.Append(tagSource);
+            parent.ToString().ShouldEqual("<div><br></br><hr /></div>");
+        }
+
+        [Test]
+        public void append_all_tags_from_a_sequence()
+        {
+            var sequence = new[] { new HtmlTag("br"), new HtmlTag("hr") };
+            var parent = new HtmlTag("div");
+            parent.Append(sequence);
+            parent.ToString().ShouldEqual("<div><br></br><hr /></div>");
+        }
+
+        [Test]
+        public void append_and_modify_the_innermost_child()
+        {
+            var tag = new HtmlTag("body").Append("div > form > input", child => child.Id("first-name"));
+            tag.ToString().ShouldEqual("<body><div><form><input id=\"first-name\" /></form></div></body>");
+        }
+
+        [Test]
         public void insert_a_new_child_tag_as_the_first_child()
         {
             var tag = new HtmlTag("div");
@@ -411,7 +493,7 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void add_and_return_a_child_tag_by_name()
+        public void add_returns_the_newly_created_child_tag()
         {
             var original = new HtmlTag("div");
             var child = original.Add("span");
@@ -482,7 +564,10 @@ namespace HtmlTags.Testing
             var original = new HtmlTag("div");
             original.Add("span");
             original.After(new HtmlTag("p"));
-            ((ITagSource) original).AllTags().Single().ShouldBeTheSameAs(original);
+            var tagSource = (ITagSource) original;
+            var allTags = tagSource.AllTags().ToArray();
+            allTags.ShouldHaveCount(1);
+            allTags[0].ShouldBeTheSameAs(original);
         }
     }
 
@@ -535,11 +620,28 @@ namespace HtmlTags.Testing
 
             tag.After().ShouldBeTheSameAs(nextSibling);
         }
+
+        [Test]
+        public void get_the_next_sibling_via_property_is_equivelent_to_after()
+        {
+            var tag = new HtmlTag("span").Text("something");
+            var nextSibling = new HtmlTag("span").Text("first brother");
+            tag.After(nextSibling);
+
+            tag.Next.ShouldBeTheSameAs(nextSibling);
+        }
     }
 
     [TestFixture]
     public class output_control_tests
     {
+        [Test]
+        public void hide_renders_the_tag_but_sets_style_to_display_none()
+        {
+            var tag = new HtmlTag("div").Hide();
+            tag.Style("display").ShouldEqual("none");
+        }
+
         [Test]
         public void render_set_to_true_by_default()
         {
@@ -569,6 +671,13 @@ namespace HtmlTags.Testing
 
             tag.Render(true).ToString().ShouldBeEmpty();
             tag.Render(false).ToString().ShouldBeEmpty();
+        }
+
+        [Test]
+        public void Empty_can_be_used_as_a_non_rendering_placeholder()
+        {
+            var tag = new HtmlTag("body").Append(HtmlTag.Empty());
+            tag.ToString().Equals("<body></body>");
         }
 
         [Test]

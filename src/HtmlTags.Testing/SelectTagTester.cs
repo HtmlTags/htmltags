@@ -1,15 +1,11 @@
 using NUnit.Framework;
+using System.Linq;
 
 namespace HtmlTags.Testing
 {
     [TestFixture]
     public class SelectTagTester
     {
-        [SetUp]
-        public void SetUp()
-        {
-        }
-
         [Test]
         public void selected_by_value()
         {
@@ -24,6 +20,19 @@ namespace HtmlTags.Testing
             tag.Children[1].Attr("selected").ShouldEqual("selected");
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
+
+        [Test]
+        public void can_initialize_options_in_constructor()
+        {
+            var select = new SelectTag(tag =>
+            {
+                tag.Option("a", "1");
+                tag.Option("b", "2");
+                tag.Option("c", "3");
+            });
+            select.Children.Select(t => t.Text()).ShouldHaveTheSameElementsAs(new[]{"a", "b", "c"});
+        }
+
 
         [Test]
         public void should_remove_previous_selected_value()

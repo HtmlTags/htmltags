@@ -16,6 +16,19 @@ namespace HtmlTags.Testing
         {
             new HiddenTag().ToString().ShouldEqual("<input type=\"hidden\" />");
         }
+
+        [Test]
+        public void create_a_text_input()
+        {
+            new TextboxTag().ToString().ShouldEqual("<input type=\"text\" />");
+        }
+
+        [Test]
+        public void create_a_text_input_with_name_and_value()
+        {
+            var tag = new TextboxTag("firstname", "Lucas");
+            tag.ToString().ShouldEqual("<input type=\"text\" name=\"firstname\" value=\"Lucas\" />");
+        }
     }
 
     [TestFixture]

@@ -19,6 +19,12 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void to_json_should_present_error_message_if_you_attempt_to_serialize_a_javascript_function()
+        {
+            JsonUtil.ToJson(javascript.function("onSuccess")).ShouldContain("You must use JsonUtil.ToUnsafeJson()");
+        }
+
+        [Test]
         public void get_by_bytes()
         {
             var json = JsonUtil.ToJson(new JsonUtilTarget{

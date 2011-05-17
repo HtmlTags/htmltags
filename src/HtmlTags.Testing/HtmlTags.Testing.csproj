@@ -61,6 +61,7 @@
     <Compile Include="SpecificationExtensions.cs" />
     <Compile Include="TableTagTester.cs" />
     <Compile Include="TagBuilderExtensionsTester.cs" />
+    <Compile Include="TagListTester.cs" />
     <Compile Include="VisibleForRoleTesting.cs" />
   </ItemGroup>
   <ItemGroup>

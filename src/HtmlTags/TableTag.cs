@@ -19,7 +19,7 @@ namespace HtmlTags
 
         public TableTag CaptionText(string text)
         {
-            HtmlTag caption = captionTag();
+            HtmlTag caption = existingCaption();
             if (caption == null)
             {
                 caption = new HtmlTag("caption");
@@ -33,11 +33,11 @@ namespace HtmlTags
 
         public string CaptionText()
         {
-            HtmlTag caption = captionTag();
+            var caption = existingCaption();
             return caption == null ? string.Empty : caption.Text();
         }
 
-        private HtmlTag captionTag()
+        private HtmlTag existingCaption()
         {
             return Children.FirstOrDefault(x => x.TagName() == "caption");
         }
@@ -75,7 +75,7 @@ namespace HtmlTags
 
         public TableTag Caption(string caption)
         {
-            var captionTag = Children.FirstOrDefault(x => x.TagName() == "caption");
+            var captionTag = existingCaption();
             if (captionTag == null)
             {
                 captionTag = new HtmlTag("caption");

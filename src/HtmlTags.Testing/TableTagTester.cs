@@ -57,6 +57,12 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void caption_is_empty_string_if_hasnt_been_set()
+        {
+            new TableTag().CaptionText().ShouldEqual(string.Empty);
+        }
+
+        [Test]
         public void should_add_cells_to_rows_in_the_tbody()
         {
             var expected = getExpectedHtml(null,
