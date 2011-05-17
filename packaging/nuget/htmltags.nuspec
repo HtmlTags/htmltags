@@ -7,6 +7,7 @@
     <owners>Jeremy D. Miller, Joshua Flanagan</owners>
     <licenseUrl>https://github.com/DarthFubuMVC/htmltags/raw/master/license.txt</licenseUrl>
     <projectUrl>https://github.com/DarthFubuMVC/htmltags</projectUrl>
+    <iconUrl>https://github.com/DarthFubuMVC/htmltags/raw/master/logo/HtmlTags_Icon_128x128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Package description</description>
     <tags>html</tags>
