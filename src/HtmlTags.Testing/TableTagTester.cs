@@ -169,8 +169,8 @@ namespace HtmlTags.Testing
             string captionTag = string.IsNullOrEmpty(caption)
                                     ? string.Empty
                                     : string.Format("<caption>{0}</caption>", caption);
-            return string.Format("<table>{0}<thead>{1}</thead><tbody>{2}</tbody>{3}</table>",
-                captionTag, theadContents, tbodyContents, tfoot);
+            return string.Format("<table>{0}<thead>{1}</thead>{2}<tbody>{3}</tbody></table>",
+                captionTag, theadContents, tfoot, tbodyContents);
         }
     }
 }
