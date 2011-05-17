@@ -1,4 +1,4 @@
-#HtmlTags
+# ![HtmlTags](https://github.com/DarthFubuMVC/htmltags/raw/master/logo/HtmlTags_Icon_32x32.png) HtmlTags
 
  .NET objects for generating HTML
 
