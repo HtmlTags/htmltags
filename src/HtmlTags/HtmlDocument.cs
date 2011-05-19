@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace HtmlTags
 {
@@ -27,7 +28,7 @@ namespace HtmlTags
 
         public string DocType { get; set; }
         public string Title { get { return _title.Text(); } set { _title.Text(value); } }
-        public HtmlTag Current { get { return _currentStack.Count == 0 ? _body : _currentStack.Peek(); } }
+        public HtmlTag Current { get { return _currentStack.Any() ? _currentStack.Peek() : _body; } }
         public HtmlTag Last { get; private set; }
         public Action<string, string> FileWriter = writeToFile;
         public Action<string> FileOpener = openFile;
@@ -127,7 +128,7 @@ namespace HtmlTags
 
         public void Pop()
         {
-            if (_currentStack.Count > 0)
+            if (_currentStack.Any())
             {
                 _currentStack.Pop();
             }

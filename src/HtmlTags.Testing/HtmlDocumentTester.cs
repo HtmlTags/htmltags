@@ -16,10 +16,49 @@ namespace HtmlTags.Testing
         private HtmlDocument document;
 
         [Test]
+        public void head_contains_the_title()
+        {
+            document.Head.FirstChild().Text().ShouldBeTheSameAs(document.Title);
+            document.ToCompacted().ShouldContain("<head><title>the title</title></head>");
+        }
+
+        [Test]
         public void add_does_not_push_onto_stack()
         {
             document.Add("div/a").Text("hello");
             document.Current.TagName().ShouldEqual("body");
+        }
+
+        [Test]
+        public void add_a_tag_by_tag_name()
+        {
+            HtmlTag element = document.Add("div/a").Text("hello");
+            element.TagName().ShouldEqual("a");
+        }
+
+        [Test]
+        public void add_an_htmlTag()
+        {
+            document.Add(new HtmlTag("p"));
+            document.Last.TagName().ShouldEqual("p");
+            document.Current.TagName().ShouldEqual("body");
+            document.Current.FirstChild().TagName().ShouldEqual("p");
+        }
+
+        [Test]
+        public void add_tags_from_a_tag_source()
+        {
+            var tagList = new TagList(
+                new[]
+                    {
+                        new HtmlTag("h1"),
+                        new HtmlTag("div"),
+                        new HtmlTag("p")
+                    });
+            document.Add(tagList);
+            document.Body.Children.ShouldHaveCount(3);
+            document.Current.TagName().ShouldEqual("body");
+            document.Last.TagName().ShouldEqual("p");
         }
 
         [Test]
@@ -51,6 +90,26 @@ namespace HtmlTags.Testing
             HtmlTag element = document.Push("div/span").Text("hello");
             document.Current.ShouldBeTheSameAs(element);
             document.ToCompacted().ShouldContain("<body><div><span>hello</span></div></body>");
+        }
+
+        [Test]
+        public void push_an_htmlTag()
+        {
+            var element = new HtmlTag("p").Text("a paragraph");
+            document.Push(element);
+            document.Current.ShouldBeTheSameAs(element);
+            document.ToCompacted().ShouldContain("<body><p>a paragraph</p></body>");
+        }
+
+        [Test]
+        public void push_without_attaching_does_not_add_to_children()
+        {
+            HtmlTag attachedTag = document.Push("div");
+            HtmlTag unattachedTag = new HtmlTag("span");
+            document.PushWithoutAttaching(unattachedTag);
+            document.Body.FirstChild().ShouldBeTheSameAs(attachedTag);
+            document.Current.ShouldBeTheSameAs(unattachedTag);
+            document.ToCompacted().ShouldEndWith("<body><div></div></body></html>");
         }
 
         [Test]
