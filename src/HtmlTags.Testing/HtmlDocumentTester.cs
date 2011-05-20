@@ -19,7 +19,7 @@ namespace HtmlTags.Testing
         public void head_contains_the_title()
         {
             document.Head.FirstChild().Text().ShouldBeTheSameAs(document.Title);
-            document.ToCompacted().ShouldContain("<head><title>the title</title></head>");
+            document.ToString().ShouldContain("<head><title>the title</title></head>");
         }
 
         [Test]
@@ -65,14 +65,49 @@ namespace HtmlTags.Testing
         public void add_styling()
         {
             document.AddStyle("some styling");
-            document.ToCompacted().ShouldContain("<style>some styling</style>");
+            document.ToString().ShouldContain("</title><style>some styling</style></head>");
+        }
+
+        [Test]
+        public void reference_external_stylesheet()
+        {
+            var path = "css/site.css";
+            document.ReferenceStyle(path);
+            document.ToString().ShouldContain("</title><link media=\"screen\" href=\"css/site.css\" type=\"text/css\" rel=\"stylesheet\" /></head>");
         }
 
         [Test]
         public void check_the_basic_structure_with_title_body_and_head()
         {
-            document.ToCompacted().ShouldEqual("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + Environment.NewLine +
+            document.ToString().ShouldEqual("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + Environment.NewLine +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>the title</title></head><body></body></html>");
+        }
+
+        [Test]
+        public void to_compacted_returns_the_html_string()
+        {
+            document.ToCompacted().ShouldEqual(document.ToString());
+        }
+
+        [Test]
+        public void add_javascript()
+        {
+            document.AddJavaScript(@"
+alert('hello');
+alert('world');
+");
+            var expected = String.Format(
+                "</title><script type=\"text/javascript\">{0}{0}alert('hello');{0}alert('world');{0}{0}</script></head>",
+                Environment.NewLine);
+            document.ToString().ShouldContain(expected);
+        }
+
+        [Test]
+        public void reference_javascript_by_file()
+        {
+            var path = "scripts/myfile.js";
+            document.ReferenceJavaScriptFile(path);
+            document.ToString().ShouldContain("</title><script type=\"text/javascript\" language=\"javascript\" src=\"" + path + "\"></script></head>");
         }
 
         [Test]
@@ -89,7 +124,7 @@ namespace HtmlTags.Testing
         {
             HtmlTag element = document.Push("div/span").Text("hello");
             document.Current.ShouldBeTheSameAs(element);
-            document.ToCompacted().ShouldContain("<body><div><span>hello</span></div></body>");
+            document.ToString().ShouldContain("<body><div><span>hello</span></div></body>");
         }
 
         [Test]
@@ -98,7 +133,7 @@ namespace HtmlTags.Testing
             var element = new HtmlTag("p").Text("a paragraph");
             document.Push(element);
             document.Current.ShouldBeTheSameAs(element);
-            document.ToCompacted().ShouldContain("<body><p>a paragraph</p></body>");
+            document.ToString().ShouldContain("<body><p>a paragraph</p></body>");
         }
 
         [Test]
@@ -109,7 +144,7 @@ namespace HtmlTags.Testing
             document.PushWithoutAttaching(unattachedTag);
             document.Body.FirstChild().ShouldBeTheSameAs(attachedTag);
             document.Current.ShouldBeTheSameAs(unattachedTag);
-            document.ToCompacted().ShouldEndWith("<body><div></div></body></html>");
+            document.ToString().ShouldEndWith("<body><div></div></body></html>");
         }
 
         [Test]
