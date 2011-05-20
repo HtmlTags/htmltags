@@ -1,10 +1,7 @@
 COMPILE_TARGET = ENV['config'].nil? ? "release" : ENV['config']
-require 'rubygems'
-gem 'albacore', '= 0.2.5'
-require 'albacore'
 
 include FileTest
-#require 'albacore'
+require 'albacore'
 load "VERSION.txt"
 
 RESULTS_DIR = "results"
@@ -114,24 +111,8 @@ end
 
 namespace :package do
   desc "Build nuget package"
-  task :nuget => [:build_nuget_symbols, :build_nuget_lib] do
-    rm_f Dir.glob("HtmlTags*.nuspec")
-  end
-
-  nugetpack :build_nuget_lib => :libspec do |nuget|
-    nuget.command = "lib/nuget.exe"
-    nuget.nuspec = "HtmlTags.nuspec"
-    nuget.output = props[:artifacts]
-  end
-  
-  task :build_nuget_symbols => :nuget_symbols do
-    cp "#{props[:artifacts]}/HtmlTags.#{build_number}.nupkg", "#{props[:artifacts]}/HtmlTags.#{build_number}.symbols.nupkg"
-  end
-
-  nugetpack :nuget_symbols => :symbolspec do |nuget|
-    nuget.command = "lib/nuget.exe"
-    nuget.nuspec = "HtmlTags-symbols.nuspec"
-    nuget.output = props[:artifacts]
+  task :nuget do
+    sh "lib/nuget.exe pack packaging/nuget/htmltags.nuspec -o #{props[:artifacts]} -Version #{build_number}"
   end
 
   desc "Zip up build artifacts"
@@ -147,36 +128,5 @@ namespace :package do
     zip.directories_to_zip = [props[:stage35]]
     zip.output_file = 'htmltags_net35.zip'
     zip.output_path = [props[:artifacts]]
-  end
-
-  def define_spec(spec) 
-    spec.id = "HtmlTags"
-    spec.authors = "Jeremy D. Miller, Joshua Flanagan"
-    spec.description = "Simple objects for generating HTML"
-
-    spec.owners = spec.authors
-    spec.licenseUrl = "https://github.com/DarthFubuMVC/htmltags/raw/master/license.txt"
-    spec.projectUrl = "https://github.com/DarthFubuMVC/htmltags"
-    spec.iconUrl = "https://github.com/DarthFubuMVC/htmltags/raw/master/logo/HtmlTags_Icon_128x128.png"
-    spec.requireLicenseAcceptance = "false"
-    spec.tags = "html mvc"
-
-    spec.file 'build\HtmlTags.dll', 'lib\4.0'
-    spec.file 'build\HtmlTags.xml', 'lib\4.0'
-    spec.file 'build35\HtmlTags.dll', 'lib\2.0'
-  end
-
-  nuspec :libspec do |spec|
-    define_spec spec
-    spec.output_file = "HtmlTags.nuspec"
-    spec.version = build_number
-  end
-  nuspec :symbolspec do |spec|
-    define_spec spec
-    spec.output_file = "HtmlTags-symbols.nuspec"
-    spec.version = build_number
-    spec.file 'build\HtmlTags.pdb', 'lib\4.0'
-    spec.file 'build35\HtmlTags.pdb', 'lib\2.0'
-    spec.file 'src\HtmlTags\**\*.cs', 'src'
   end
 end
