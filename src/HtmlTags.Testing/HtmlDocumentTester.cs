@@ -84,12 +84,6 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void to_compacted_returns_the_html_string()
-        {
-            document.ToCompacted().ShouldEqual(document.ToString());
-        }
-
-        [Test]
         public void add_javascript()
         {
             document.AddJavaScript(@"

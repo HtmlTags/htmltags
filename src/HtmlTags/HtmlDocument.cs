@@ -134,12 +134,6 @@ namespace HtmlTags
             }
         }
 
-        public string ToCompacted()
-        {
-            var returnValue = DocType + Environment.NewLine + _top;
-            return substitute(returnValue);
-        }
-
         private string substitute(string value)
         {
             foreach (var alteration in _alterations)
