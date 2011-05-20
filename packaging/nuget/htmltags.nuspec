@@ -15,5 +15,6 @@
   <files>
 	<file src="..\..\build\*.*" target="lib\4.0" />
 	<file src="..\..\build35\*.*" target="lib\2.0" />
+	<file src="..\..\src\HtmlTags\**\*.cs" target="src" />
   </files>
 </package>

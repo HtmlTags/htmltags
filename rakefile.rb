@@ -113,6 +113,8 @@ namespace :package do
   desc "Build nuget package"
   task :nuget do
     sh "lib/nuget.exe pack packaging/nuget/htmltags.nuspec -o #{props[:artifacts]} -Version #{build_number}"
+    mv "#{props[:artifacts]}/HtmlTags.#{build_number}.nupkg", "#{props[:artifacts]}/HtmlTags.#{build_number}.symbols.nupkg"
+    sh "lib/nuget.exe pack packaging/nuget/htmltags.nuspec -o #{props[:artifacts]} -Version #{build_number} -Exclude **\\*.pdb -Exclude **\*.cs"
   end
 
   desc "Zip up build artifacts"
