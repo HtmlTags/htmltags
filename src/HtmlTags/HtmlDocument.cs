@@ -14,12 +14,11 @@ namespace HtmlTags
         private readonly Stack<HtmlTag> _currentStack = new Stack<HtmlTag>();
         private readonly HtmlTag _head;
         private readonly HtmlTag _title;
-        private readonly HtmlTag _top = new HtmlTag("html").Attr("xmlns", "http://www.w3.org/1999/xhtml");
+        private readonly HtmlTag _top = new HtmlTag("html");
 
         public HtmlDocument()
         {
-            DocType =
-                "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+            DocType = "<!DOCTYPE html>";
             _head = _top.Add("head");
             _title = _head.Add("title");
             _body = _top.Add("body");
@@ -27,6 +26,7 @@ namespace HtmlTags
         }
 
         public string DocType { get; set; }
+        public HtmlTag Html { get { return _top; } }
         public string Title { get { return _title.Text(); } set { _title.Text(value); } }
         public HtmlTag Current { get { return _currentStack.Any() ? _currentStack.Peek() : _body; } }
         public HtmlTag Last { get; private set; }

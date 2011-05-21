@@ -79,8 +79,19 @@ namespace HtmlTags.Testing
         [Test]
         public void check_the_basic_structure_with_title_body_and_head()
         {
+            document.ToString().ShouldEqual("<!DOCTYPE html>" + Environment.NewLine +
+                "<html><head><title>the title</title></head><body></body></html>");
+        }
+
+        [Test]
+        public void can_set_a_legacy_doctype()
+        {
+            document.DocType =
+                "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+            document.Html.Attr("xmlns", "http://www.w3.org/1999/xhtml");
+
             document.ToString().ShouldEqual("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + Environment.NewLine +
-                "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>the title</title></head><body></body></html>");
+               "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>the title</title></head><body></body></html>");
         }
 
         [Test]
