@@ -134,7 +134,7 @@ alert('world');
         {
             var path = "scripts/myfile.js";
             document.ReferenceJavaScriptFile(path);
-            document.ToString().ShouldContain("</title><script type=\"text/javascript\" language=\"javascript\" src=\"" + path + "\"></script></head>");
+            document.ToString().ShouldContain("</title><script type=\"text/javascript\" src=\"" + path + "\"></script></head>");
         }
 
         [Test]

@@ -161,7 +161,7 @@ namespace HtmlTags
 
         public void ReferenceJavaScriptFile(string path)
         {
-            _head.Add("script").Attr("type", "text/javascript").Attr("language", "javascript").Attr("src", path);
+            _head.Add("script").Attr("type", "text/javascript").Attr("src", path);
         }
 
         public void ReferenceStyle(string path)
