@@ -153,15 +153,25 @@ namespace HtmlTags
 
         public void AddJavaScript(string javascript)
         {
-            var key = Guid.NewGuid().ToString();
-            Last = _head.Add("script").Attr("type", "text/javascript").Text(key);
+            AddScript("text/javascript", javascript);
+        }
 
-            _alterations.Add(html => html.Replace(key, Environment.NewLine + javascript + Environment.NewLine));
+        public void AddScript(string scriptType, string scriptContents)
+        {
+            var key = Guid.NewGuid().ToString();
+            Last = _head.Add("script").Attr("type", scriptType).Text(key);
+
+            _alterations.Add(html => html.Replace(key, Environment.NewLine + scriptContents + Environment.NewLine));
         }
 
         public void ReferenceJavaScriptFile(string path)
         {
-            Last = _head.Add("script").Attr("type", "text/javascript").Attr("src", path);
+            ReferenceScriptFile("text/javascript", path);
+        }
+
+        public void ReferenceScriptFile(string scriptType, string path)
+        {
+            Last = _head.Add("script").Attr("type", scriptType).Attr("src", path);
         }
 
         public void ReferenceStyle(string path)

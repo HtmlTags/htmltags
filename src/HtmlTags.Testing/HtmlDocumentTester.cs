@@ -139,6 +139,13 @@ alert('world');
         }
 
         [Test]
+        public void add_script_of_a_different_type()
+        {
+            document.AddScript("text/x-ecmascript", "var today;");
+            document.ToString().ShouldContain("</title><script type=\"text/x-ecmascript\">" + Environment.NewLine + "var today;" + Environment.NewLine + "</script></head>");
+        }
+
+        [Test]
         public void reference_javascript_by_file()
         {
             var path = "scripts/myfile.js";
@@ -158,6 +165,13 @@ alert('world');
                 "<script type=\"text/javascript\" src=\"nav.js\"></script>",
                 "<script type=\"text/vbscript\" src=\"biz.js\"></script>",
                 "</head>"));
+        }
+
+        [Test]
+        public void reference_script_file_of_a_different_type()
+        {
+            document.ReferenceScriptFile("text/vbscript", "nojudgment.vbs");
+            document.ToString().ShouldContain("</title><script type=\"text/vbscript\" src=\"nojudgment.vbs\"></script></head>");
         }
 
         [Test]
