@@ -146,7 +146,7 @@ namespace HtmlTags
         public void AddStyle(string styling)
         {
             var key = Guid.NewGuid().ToString();
-            _head.Add("style").Text(key);
+            Last = _head.Add("style").Text(key);
 
             _alterations.Add(html => html.Replace(key, styling));
         }
@@ -166,7 +166,7 @@ namespace HtmlTags
 
         public void ReferenceStyle(string path)
         {
-            _head.Add("link")
+            Last = _head.Add("link")
                 .Attr("media", "screen")
                 .Attr("href", path)
                 .Attr("type", "text/css")

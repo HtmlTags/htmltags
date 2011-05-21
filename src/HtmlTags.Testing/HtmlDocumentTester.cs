@@ -69,11 +69,33 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void add_attributes_to_style_tag()
+        {
+            document.AddStyle("p { display: block; }");
+            document.Last.Attr("media", "screen");
+            document.ToString().ShouldContain("</title><style media=\"screen\">p { display: block; }</style></head>");
+        }
+
+        [Test]
         public void reference_external_stylesheet()
         {
             var path = "css/site.css";
             document.ReferenceStyle(path);
             document.ToString().ShouldContain("</title><link media=\"screen\" href=\"css/site.css\" type=\"text/css\" rel=\"stylesheet\" /></head>");
+        }
+
+        [Test]
+        public void reference_external_stylesheet_and_override_attributes()
+        {
+            document.ReferenceStyle("main.css");
+            document.ReferenceStyle("print.css");
+            document.Last.Attr("media", "print");
+            document.ToString().ShouldContain(
+                String.Format("{0}{1}{2}{3}",
+                              "</title>",
+                              "<link media=\"screen\" href=\"main.css\" type=\"text/css\" rel=\"stylesheet\" />",
+                              "<link media=\"print\" href=\"print.css\" type=\"text/css\" rel=\"stylesheet\" />",
+                              "</head>"));
         }
 
         [Test]
