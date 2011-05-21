@@ -130,11 +130,34 @@ alert('world');
         }
 
         [Test]
+        public void add_attributes_to_script_tag()
+        {
+            document.AddJavaScript("var today;");
+            document.Last.Attr("defer", "true");
+            var expected = String.Format("</title><script type=\"text/javascript\" defer=\"true\">{0}var today;{0}</script></head>", Environment.NewLine);
+            document.ToString().ShouldContain(expected);
+        }
+
+        [Test]
         public void reference_javascript_by_file()
         {
             var path = "scripts/myfile.js";
             document.ReferenceJavaScriptFile(path);
             document.ToString().ShouldContain("</title><script type=\"text/javascript\" src=\"" + path + "\"></script></head>");
+        }
+
+        [Test]
+        public void reference_javascript_file_and_override_attributes()
+        {
+            document.ReferenceJavaScriptFile("nav.js");
+            document.ReferenceJavaScriptFile("biz.js");
+            document.Last.Attr("type", "text/vbscript");
+            document.ToString().ShouldContain(
+                String.Format("{0}{1}{2}{3}",
+                "</title>",
+                "<script type=\"text/javascript\" src=\"nav.js\"></script>",
+                "<script type=\"text/vbscript\" src=\"biz.js\"></script>",
+                "</head>"));
         }
 
         [Test]
