@@ -14,20 +14,23 @@ namespace HtmlTags
         private readonly Stack<HtmlTag> _currentStack = new Stack<HtmlTag>();
         private readonly HtmlTag _head;
         private readonly HtmlTag _title;
-        private readonly HtmlTag _top = new HtmlTag("html");
 
         public HtmlDocument()
         {
+            RootTag = new HtmlTag("html");
             DocType = "<!DOCTYPE html>";
-            _head = _top.Add("head");
+            _head = RootTag.Add("head");
             _title = _head.Add("title");
-            _body = _top.Add("body");
+            _body = RootTag.Add("body");
             Last = _body;
         }
 
         public string DocType { get; set; }
-        public HtmlTag Html { get { return _top; } }
+        public HtmlTag RootTag { get; private set; }
+        public HtmlTag Head { get { return _head; } }
+        public HtmlTag Body { get { return _body; } }
         public string Title { get { return _title.Text(); } set { _title.Text(value); } }
+
         public HtmlTag Current { get { return _currentStack.Any() ? _currentStack.Peek() : _body; } }
         public HtmlTag Last { get; private set; }
         public Action<string, string> FileWriter = writeToFile;
@@ -43,16 +46,6 @@ namespace HtmlTags
             var filename = getPath();
             WriteToFile(filename);
             FileOpener(filename);
-        }
-
-        public HtmlTag Body
-        {
-            get { return _body; }
-        }
-
-        public HtmlTag Head
-        {
-            get { return _head; }
         }
 
         protected virtual string getPath()
@@ -146,7 +139,7 @@ namespace HtmlTags
 
         public override string ToString()
         {
-            var value = DocType + Environment.NewLine + _top;
+            var value = DocType + Environment.NewLine + RootTag;
             return substitute(value);
         }
 

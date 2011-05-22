@@ -88,7 +88,7 @@ namespace HtmlTags.Testing
         {
             document.DocType =
                 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
-            document.Html.Attr("xmlns", "http://www.w3.org/1999/xhtml");
+            document.RootTag.Attr("xmlns", "http://www.w3.org/1999/xhtml");
 
             document.ToString().ShouldEqual("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + Environment.NewLine +
                "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>the title</title></head><body></body></html>");
