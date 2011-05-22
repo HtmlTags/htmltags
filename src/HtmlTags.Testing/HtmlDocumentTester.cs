@@ -71,8 +71,7 @@ namespace HtmlTags.Testing
         [Test]
         public void add_attributes_to_style_tag()
         {
-            document.AddStyle("p { display: block; }");
-            document.Last.Attr("media", "screen");
+            document.AddStyle("p { display: block; }").Attr("media", "screen");
             document.ToString().ShouldContain("</title><style media=\"screen\">p { display: block; }</style></head>");
         }
 
@@ -88,8 +87,7 @@ namespace HtmlTags.Testing
         public void reference_external_stylesheet_and_override_attributes()
         {
             document.ReferenceStyle("main.css");
-            document.ReferenceStyle("print.css");
-            document.Last.Attr("media", "print");
+            document.ReferenceStyle("print.css").Attr("media", "print");
             document.ToString().ShouldContain(
                 String.Format("{0}{1}{2}{3}",
                               "</title>",
@@ -132,8 +130,7 @@ alert('world');
         [Test]
         public void add_attributes_to_script_tag()
         {
-            document.AddJavaScript("var today;");
-            document.Last.Attr("defer", "true");
+            document.AddJavaScript("var today;").Attr("defer", "true");
             var expected = String.Format("</title><script type=\"text/javascript\" defer=\"true\">{0}var today;{0}</script></head>", Environment.NewLine);
             document.ToString().ShouldContain(expected);
         }
@@ -157,8 +154,7 @@ alert('world');
         public void reference_javascript_file_and_override_attributes()
         {
             document.ReferenceJavaScriptFile("nav.js");
-            document.ReferenceJavaScriptFile("biz.js");
-            document.Last.Attr("type", "text/vbscript");
+            document.ReferenceJavaScriptFile("biz.js").Attr("type", "text/vbscript");
             document.ToString().ShouldContain(
                 String.Format("{0}{1}{2}{3}",
                 "</title>",
@@ -226,6 +222,30 @@ alert('world');
 
             document.Push("p");
 
+            document.Last.TagName().ShouldEqual("p");
+        }
+
+        [Test]
+        public void adding_styles_does_not_alter_the_Last_property()
+        {
+            document.Add("p");
+            
+            document.AddStyle("font-weight: bold;");
+            document.Last.TagName().ShouldEqual("p");
+
+            document.ReferenceStyle("my.css");
+            document.Last.TagName().ShouldEqual("p");
+        }
+
+        [Test]
+        public void adding_scripts_does_not_alter_the_Last_property()
+        {
+            document.Add("p");
+
+            document.AddJavaScript("alert('hi');");
+            document.Last.TagName().ShouldEqual("p");
+
+            document.ReferenceJavaScriptFile("my.js");
             document.Last.TagName().ShouldEqual("p");
         }
 

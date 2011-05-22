@@ -143,40 +143,38 @@ namespace HtmlTags
             return substitute(value);
         }
 
-        public void AddStyle(string styling)
+        public HtmlTag AddStyle(string styling)
         {
             var key = Guid.NewGuid().ToString();
-            Last = _head.Add("style").Text(key);
-
             _alterations.Add(html => html.Replace(key, styling));
+            return _head.Add("style").Text(key);
         }
 
-        public void AddJavaScript(string javascript)
+        public HtmlTag AddJavaScript(string javascript)
         {
-            AddScript("text/javascript", javascript);
+            return AddScript("text/javascript", javascript);
         }
 
-        public void AddScript(string scriptType, string scriptContents)
+        public HtmlTag AddScript(string scriptType, string scriptContents)
         {
             var key = Guid.NewGuid().ToString();
-            Last = _head.Add("script").Attr("type", scriptType).Text(key);
-
             _alterations.Add(html => html.Replace(key, Environment.NewLine + scriptContents + Environment.NewLine));
+            return _head.Add("script").Attr("type", scriptType).Text(key);
         }
 
-        public void ReferenceJavaScriptFile(string path)
+        public HtmlTag ReferenceJavaScriptFile(string path)
         {
-            ReferenceScriptFile("text/javascript", path);
+            return ReferenceScriptFile("text/javascript", path);
         }
 
-        public void ReferenceScriptFile(string scriptType, string path)
+        public HtmlTag ReferenceScriptFile(string scriptType, string path)
         {
-            Last = _head.Add("script").Attr("type", scriptType).Attr("src", path);
+            return _head.Add("script").Attr("type", scriptType).Attr("src", path);
         }
 
-        public void ReferenceStyle(string path)
+        public HtmlTag ReferenceStyle(string path)
         {
-            Last = _head.Add("link")
+            return _head.Add("link")
                 .Attr("media", "screen")
                 .Attr("href", path)
                 .Attr("type", "text/css")
