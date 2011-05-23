@@ -35,7 +35,7 @@ It will generate the following HTML:
 What if you wanted to apply a CSS class to that input? Or change the element id?
 You can do it, but it requires a much more verbose overload:
 
-   <%: Html.TextBox("FirstName", "Lucas", new Dictionary<string, object> {{"id", "first-name"}, {"class", "required"}) %>
+    <%: Html.TextBox("FirstName", "Lucas", new Dictionary<string, object> {{"id", "first-name"}, {"class", "required"}) %>
 
 ### HtmlHelpers that return HtmlTags
 
@@ -109,7 +109,7 @@ Will render:
 
     <input id="Birthday" name="Birthday" type="text" data-validate="true" data-validate-type="date" data-min-date="&quot;\/Date(-2208967200000)\/&quot;" />
 
-### MetaData
+### jQuery Metadata support
 
 Or you can serialize an entire settings object in a single value on the server that can be interpreted on the client using something like the [jQuery Metadata plugin](http://docs.jquery.com/Plugins/Metadata):
 
