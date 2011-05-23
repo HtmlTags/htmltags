@@ -32,7 +32,10 @@ It will generate the following HTML:
 
     <input id="FirstName" name="FirstName" type="text" value="" />
 
-What if you wanted to apply a CSS class to that input? Or change the element id? Good luck.
+What if you wanted to apply a CSS class to that input? Or change the element id?
+You can do it, but it requires a much more verbose overload:
+
+   <%: Html.TextBox("FirstName", "Lucas", new Dictionary<string, object> {{"id", "first-name"}, {"class", "required"}) %>
 
 ### HtmlHelpers that return HtmlTags
 
@@ -92,6 +95,54 @@ Most methods that set a value also have an overload that returns the value:
 
 	var tag = new HtmlTag("span").Attr("title", "My Tooltip");
 	Console.WriteLine( tag.Attr("title") ); // writes: My Tooltip
+
+### Custom Data attributes
+
+There is also built-in support for JSON serializing values of HTML5-style custom data attributes:
+
+    <%: Html.TextBoxTag("Birthday")
+        .Data("validate", true)
+        .Data("validate-type", "date")
+        .Data("min-date", new DateTime(1900, 1, 1)) %>
+
+Will render:
+
+    <input id="Birthday" name="Birthday" type="text" data-validate="true" data-validate-type="date" data-min-date="&quot;\/Date(-2208967200000)\/&quot;" />
+
+### MetaData
+
+Or you can serialize an entire settings object in a single value on the server that can be interpreted on the client using something like the [jQuery Metadata plugin](http://docs.jquery.com/Plugins/Metadata):
+
+    public class EditableOptions {
+        public bool MultiLine { get; set; }
+        public int MaxLength { get; set; }
+        public string InputType { get; set; }
+    }
+
+    public static HtmlTag Editable(this HtmlHelper html) {
+        // EditableOptions hardcoded for this example, but they could be 
+        // determined based on different criteria for the input being rendered
+        var options = new EditableOptions {
+            MultiLine = false,
+            MaxLength = 20,
+            InputType = "date"
+        };
+
+        return new HtmlTag("div").MetaData("editable", options);
+    }
+
+Notice we're passing an instance of an object (EditableOptions) as the value of the "editable" metadata. This will render:
+
+    <div data-:="{&quot;editable&quot;:{&quot;MultiLine&quot;:false,&quot;MaxLength&quot;:20,&quot;InputType&quot;:&quot;date&quot;}}"></div>
+
+You can then drive logic on the client using this data:
+
+    $.metadata.setType('attr', 'data-:'); //once on your page
+    var o = $("div").metadata();
+    alert(o.MultiLine); // # false
+    alert(o.MaxLength); // # 20
+    alert(o.InputType); // # "date"
+
 
 ### More information
 
