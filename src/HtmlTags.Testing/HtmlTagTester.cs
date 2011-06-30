@@ -134,6 +134,24 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void attributes_are_encoded_by_default()
+        {
+            const string options = "options: availableMeals, optionsText: 'mealName'";
+            var tag = new HtmlTag("div").Data("bind", options);
+
+            var expectedAfterEncodingText = options.Replace("'", "&#39;");
+            tag.ToString().ShouldContain(expectedAfterEncodingText);
+        }
+
+        [Test]
+        public void attributes_can_be_unencoded_if_needed()
+        {
+            const string options = "options: availableMeals, optionsText: 'mealName'";
+            var tag = new HtmlTag("div").Data("bind", options, false);
+            tag.ToString().ShouldContain(options);
+        }
+
+        [Test]
         public void remove_attribute()
         {
             var tag = new HtmlTag("div");
