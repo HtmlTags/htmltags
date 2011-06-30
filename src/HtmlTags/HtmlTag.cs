@@ -10,22 +10,6 @@ using System.Web.UI;
 
 namespace HtmlTags
 {
-    public class HtmlAttribute
-    {
-        public HtmlAttribute(object value)
-            : this(value, true)
-        {
-        }
-
-        public HtmlAttribute(object value, bool isEncoded)
-        {
-            Value = value;
-            IsEncoded = isEncoded;
-        }
-
-        public object Value { get; set; }
-        public bool IsEncoded { get; set; }
-    }
 
     public class HtmlTag : ITagSource
 #if !LEGACY
@@ -690,6 +674,28 @@ namespace HtmlTags
         public bool Encoded()
         {
             return _encodeInnerText;
+        }
+
+        private class HtmlAttribute
+        {
+            public HtmlAttribute(object value)
+                : this(value, true)
+            {
+            }
+
+            public HtmlAttribute(object value, bool isEncoded)
+            {
+                Value = value;
+                IsEncoded = isEncoded;
+            }
+
+            public object Value { get; set; }
+            public bool IsEncoded { get; set; }
+
+            public override string ToString()
+            {
+                return Value != null ? Value.ToString() : string.Empty;
+            }
         }
     }
 }
