@@ -137,9 +137,9 @@ namespace HtmlTags.Testing
         public void attributes_are_encoded_by_default()
         {
             const string options = "options: availableMeals, optionsText: 'mealName'";
-            var tag = new HtmlTag("div").Data("bind", options);
-
             var expectedAfterEncodingText = options.Replace("'", "&#39;");
+
+            var tag = new HtmlTag("div").Attr("data-bind", options);
             tag.ToString().ShouldContain(expectedAfterEncodingText);
         }
 
@@ -147,7 +147,7 @@ namespace HtmlTags.Testing
         public void attributes_can_be_unencoded_if_needed()
         {
             const string options = "options: availableMeals, optionsText: 'mealName'";
-            var tag = new HtmlTag("div").Data("bind", options, false);
+            var tag = new HtmlTag("div").UnencodedAttr("bind", options);
             tag.ToString().ShouldContain(options);
         }
 

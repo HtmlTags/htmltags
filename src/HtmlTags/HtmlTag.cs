@@ -245,16 +245,15 @@ namespace HtmlTags
         /// </summary>
         /// <param name="key">The name of the data attribute. Will have "data-" prepended when rendered.</param>
         /// <param name="value">The value to store. Non-string values will be JSON </param>
-        /// <param name="encode">whether to encode the attribute or not</param>
         /// <returns>The calling tag.</returns>
-        public HtmlTag Data(string key, object value, bool encode = true)
+        public HtmlTag Data(string key, object value)
         {
             var dataKey = DataPrefix + key;
             if (value == null)
             {
                 return RemoveAttr(dataKey);
             }
-            _htmlAttributes[dataKey] = new HtmlAttribute(value, encode);
+            _htmlAttributes[dataKey] = new HtmlAttribute(value);
             return this;
         }
 
@@ -456,7 +455,17 @@ namespace HtmlTags
             }
         }
 
-        public HtmlTag Attr(string attribute, object value, bool encode = true)
+        public HtmlTag Attr(string attribute, object value)
+        {
+            return buildAttr(attribute, value);
+        }
+
+        public HtmlTag UnencodedAttr(string attribute, object value)
+        {
+            return buildAttr(attribute, value, false);
+        }
+
+        private HtmlTag buildAttr(string attribute, object value, bool encode = true)
         {
             if (value == null || value.Equals(string.Empty))
             {
