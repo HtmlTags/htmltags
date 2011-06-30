@@ -10,6 +10,23 @@ using System.Web.UI;
 
 namespace HtmlTags
 {
+    public class HtmlAttribute
+    {
+        public HtmlAttribute(object value)
+            : this(value, true)
+        {
+        }
+
+        public HtmlAttribute(object value, bool isEncoded)
+        {
+            Value = value;
+            IsEncoded = isEncoded;
+        }
+
+        public object Value { get; set; }
+        public bool IsEncoded { get; set; }
+    }
+
     public class HtmlTag : ITagSource
 #if !LEGACY
         , IHtmlString
@@ -34,7 +51,7 @@ namespace HtmlTags
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
         private readonly IDictionary<string, string> _customStyles = new Dictionary<string, string>();
 
-        private readonly Cache<string, object> _htmlAttributes = new Cache<string, object>(key => null);
+        private readonly Cache<string, HtmlAttribute> _htmlAttributes = new Cache<string, HtmlAttribute>(key => null);
 
         private readonly Cache<string, object> _metaData = new Cache<string, object>();
         private string _innerText = string.Empty;
@@ -250,16 +267,17 @@ namespace HtmlTags
         /// Stores a value in an HTML5 custom data attribute
         /// </summary>
         /// <param name="key">The name of the data attribute. Will have "data-" prepended when rendered.</param>
-        /// <param name="value">The value to store. Non-string values will be JSON encoded.</param>
+        /// <param name="value">The value to store. Non-string values will be JSON </param>
+        /// <param name="encode">whether to encode the attribute or not</param>
         /// <returns>The calling tag.</returns>
-        public HtmlTag Data(string key, object value)
+        public HtmlTag Data(string key, object value, bool encode = true)
         {
             var dataKey = DataPrefix + key;
             if (value == null)
             {
                 return RemoveAttr(dataKey);
             }
-            _htmlAttributes[dataKey] = value;
+            _htmlAttributes[dataKey] = new HtmlAttribute(value, encode);
             return this;
         }
 
@@ -274,7 +292,7 @@ namespace HtmlTags
         {
             var dataKey = DataPrefix + key;
             if (!_htmlAttributes.Has(dataKey)) return this;
-            var value = (T)_htmlAttributes[dataKey];
+            var value = (T)_htmlAttributes[dataKey].Value;
             configure(value);
             return this;
         }
@@ -288,7 +306,7 @@ namespace HtmlTags
         {
             var dataKey = DataPrefix + key;
             if (!_htmlAttributes.Has(dataKey)) return null;
-            return _htmlAttributes[dataKey];
+            return _htmlAttributes[dataKey].Value;
         }
 
         /// <summary>
@@ -402,12 +420,13 @@ namespace HtmlTags
         {
             if (!WillBeRendered()) return;
 
-            _htmlAttributes.Each((key, val) =>
+            _htmlAttributes.Each((key, attribute) =>
             {
-                if (val != null)
+                if (attribute != null)
                 {
-                    var stringValue = !(val is string) && key.StartsWith(DataPrefix) ? JsonUtil.ToJson(val) : val.ToString();
-                    html.AddAttribute(key, stringValue);
+                    var value = attribute.Value;
+                    var stringValue = !(value is string) && key.StartsWith(DataPrefix) ? JsonUtil.ToJson(value) : value.ToString();
+                    html.AddAttribute(key, stringValue, attribute.IsEncoded);
                 }
             });
 
@@ -460,7 +479,7 @@ namespace HtmlTags
             }
         }
 
-        public HtmlTag Attr(string attribute, object value)
+        public HtmlTag Attr(string attribute, object value, bool encode = true)
         {
             if (value == null || value.Equals(string.Empty))
             {
@@ -472,7 +491,7 @@ namespace HtmlTags
             }
             else
             {
-                _htmlAttributes[attribute] = value.ToString();
+                _htmlAttributes[attribute] = new HtmlAttribute(value.ToString(), encode);
             }
             return this;
         }
