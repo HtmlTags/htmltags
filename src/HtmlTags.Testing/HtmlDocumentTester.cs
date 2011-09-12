@@ -1,4 +1,5 @@
 using System;
+using FubuTestingSupport;
 using NUnit.Framework;
 
 namespace HtmlTags.Testing

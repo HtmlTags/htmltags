@@ -17,7 +17,8 @@ build_number = "#{BUILD_VERSION}.#{build_revision}"
 props = { :stage => File.expand_path("build"), :stage35 => File.expand_path("build35"), :artifacts => File.expand_path("artifacts") }
 
 desc "**Default**, compiles and runs tests"
-task :default => [:compile, :unit_test, :stage, "fx35:compile", "fx35:unit_test", "fx35:stage"]
+task :default => [:compile, :unit_test, :stage]
+#task :default => [:compile, :unit_test, :stage, "fx35:compile", "fx35:unit_test", "fx35:stage"]
 task :ci => [:default, "package:zips", "package:nuget"]
 
 desc "Update the version information for the build"

@@ -1,5 +1,6 @@
 using System.Security.Principal;
 using System.Threading;
+using FubuTestingSupport;
 using NUnit.Framework;
 
 namespace HtmlTags.Testing

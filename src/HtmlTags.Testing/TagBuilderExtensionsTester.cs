@@ -1,3 +1,4 @@
+using FubuTestingSupport;
 using NUnit.Framework;
 using HtmlTags.Extended.TagBuilders;
 
