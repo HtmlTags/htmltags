@@ -10,6 +10,11 @@ COPYRIGHT = 'Copyright 2009-2011 Jeremy D. Miller, et al. All rights reserved.';
 COMMON_ASSEMBLY_INFO = 'src/CommonAssemblyInfo.cs';
 CLR_TOOLS_VERSION = "v4.0.30319"
 
+#buildsupportfiles = Dir["#{File.dirname(__FILE__)}/buildsupport/*.rb"]
+#raise "Run `git submodule update --init` to populate your buildsupport folder." unless buildsupportfiles.any?
+#buildsupportfiles.each { |ext| load ext }
+
+
 tc_build_number = ENV["BUILD_NUMBER"]
 build_revision = tc_build_number || Time.new.strftime('5%H%M')
 build_number = "#{BUILD_VERSION}.#{build_revision}"
@@ -76,8 +81,11 @@ end
 
 desc "Run unit tests"
 nunit :unit_test do |nunit|
-  nunit.command = 'lib/nunit/nunit-console.exe'
-  nunit.assemblies = ["src/HtmlTags.Testing/bin/#{COMPILE_TARGET}/HtmlTags.Testing.dll"]
+    nunit.command = 'lib/nunit/nunit-console.exe'
+    nunit.assemblies = ["src/HtmlTags.Testing/bin/#{COMPILE_TARGET}/HtmlTags.Testing.dll"]
+
+#  runner = NUnitRunner.new :compilemode => COMPILE_TARGET, :source => 'src'
+#  runner.executeTests ['HtmlTags.Testing']
 end
 
 task :stage do
