@@ -24,11 +24,11 @@ props = { :stage => File.expand_path("build"), :stage35 => File.expand_path("bui
 desc "**Default**, compiles and runs tests"
 task :default => [:compile, :unit_test, :stage]
 #task :default => [:compile, :unit_test, :stage, "fx35:compile", "fx35:unit_test", "fx35:stage"]
-task :ci => [:default, "package:zips", "package:nuget"]
+task :ci => [:default, :history, :publish]
 
 desc "Update the version information for the build"
 assemblyinfo :version do |asm|
-  asm_version = BUILD_VERSION + ".0"
+  asm_version = build_number
   
   begin
     commit = `git log -1 --pretty=format:%H`
@@ -71,7 +71,7 @@ def waitfor(&block)
 end
 
 desc "Compiles the app"
-msbuild :compile => [:clean, :version] do |msb|
+msbuild :compile => [:restore_if_missing, :clean, :version] do |msb|
 	msb.command = File.join(ENV['windir'], 'Microsoft.NET', 'Framework', CLR_TOOLS_VERSION, 'MSBuild.exe')
 	msb.properties :configuration => COMPILE_TARGET
 	msb.solution = "src/HtmlTags.sln"
