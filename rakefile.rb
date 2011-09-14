@@ -10,14 +10,16 @@ COPYRIGHT = 'Copyright 2009-2011 Jeremy D. Miller, et al. All rights reserved.';
 COMMON_ASSEMBLY_INFO = 'src/CommonAssemblyInfo.cs';
 CLR_TOOLS_VERSION = "v4.0.30319"
 
-#buildsupportfiles = Dir["#{File.dirname(__FILE__)}/buildsupport/*.rb"]
-#raise "Run `git submodule update --init` to populate your buildsupport folder." unless buildsupportfiles.any?
-#buildsupportfiles.each { |ext| load ext }
+buildsupportfiles = Dir["#{File.dirname(__FILE__)}/buildsupport/*.rb"]
+raise "Run `git submodule update --init` to populate your buildsupport folder." unless buildsupportfiles.any?
+buildsupportfiles.each { |ext| load ext }
 
 
 tc_build_number = ENV["BUILD_NUMBER"]
 build_revision = tc_build_number || Time.new.strftime('5%H%M')
 build_number = "#{BUILD_VERSION}.#{build_revision}"
+BUILD_NUMBER = build_number 
+
 
 props = { :stage => File.expand_path("build"), :stage35 => File.expand_path("build35"), :artifacts => File.expand_path("artifacts") }
 
