@@ -391,7 +391,7 @@ namespace HtmlTags
             return _shouldRender && _isAuthorized;
         }
 
-        private void writeHtml(HtmlTextWriter html)
+        protected virtual void writeHtml(HtmlTextWriter html)
         {
             if (!WillBeRendered()) return;
 
