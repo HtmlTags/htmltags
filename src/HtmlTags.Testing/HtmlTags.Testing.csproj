@@ -80,6 +80,7 @@
     <Compile Include="HtmlTagExtendedAttributesTester.cs" />
     <Compile Include="HtmlTagTester.cs" />
     <Compile Include="JsonUtilTester.cs" />
+    <Compile Include="LiteralTagTester.cs" />
     <Compile Include="SelectTagTester.cs" />
     <Compile Include="TableTagTester.cs" />
     <Compile Include="TagBuilderExtensionsTester.cs" />

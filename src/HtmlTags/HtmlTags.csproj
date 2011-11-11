@@ -65,6 +65,7 @@
     <Compile Include="ITagSource.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="LinkTag.cs" />
+    <Compile Include="LiteralTag.cs" />
     <Compile Include="NoTag.cs" />
     <Compile Include="SelectTag.cs" />
     <Compile Include="SharedExtensions.cs" />
