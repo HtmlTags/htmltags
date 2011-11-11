@@ -73,12 +73,21 @@ def waitfor(&block)
 end
 
 desc "Compiles the app"
-msbuild :compile => [:restore_if_missing, :clean, :version] do |msb|
-	msb.command = File.join(ENV['windir'], 'Microsoft.NET', 'Framework', CLR_TOOLS_VERSION, 'MSBuild.exe')
-	msb.properties :configuration => COMPILE_TARGET
-	msb.solution = "src/HtmlTags.sln"
-    msb.targets :Rebuild
-    msb.log_level = :verbose
+task :compile => [:restore_if_missing, :clean, :version] do
+  MSBuildRunner.compile :compilemode => COMPILE_TARGET, :solutionfile => 'src/HtmlTags.sln', :clrversion => CLR_TOOLS_VERSION
+
+  
+  Dir.glob "src/HtmlTags/bin/#{COMPILE_TARGET}/HtmlTags.*" do |f|
+    cp f, props[:stage]
+  end
+end
+
+
+
+def copyOutputFiles(fromDir, filePattern, outDir)
+  Dir.glob(File.join(fromDir, filePattern)){|file| 		
+	copy(file, outDir) if File.file?(file)
+  } 
 end
 
 desc "Run unit tests"
@@ -115,7 +124,7 @@ namespace :fx35 do
 
   task :stage do
     Dir.glob "src/HtmlTags/bin/#{COMPILE_TARGET}35/HtmlTags.*" do |f|
-      cp f, props[:stage35]
+      cp f, props[:stage]
     end
   end
 end
