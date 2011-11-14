@@ -26,7 +26,7 @@ props = { :stage => File.expand_path("build"), :stage35 => File.expand_path("bui
 desc "**Default**, compiles and runs tests"
 task :default => [:compile, :unit_test, :stage]
 #task :default => [:compile, :unit_test, :stage, "fx35:compile", "fx35:unit_test", "fx35:stage"]
-task :ci => [:update_all_depencencies, :default, :history, :publish]
+task :ci => [:update_all_dependencies, :default, :history, :publish]
 
 desc "Update the version information for the build"
 assemblyinfo :version do |asm|
