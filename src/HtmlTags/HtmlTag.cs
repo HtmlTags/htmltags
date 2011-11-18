@@ -41,6 +41,7 @@ namespace HtmlTags
         private string _innerText = string.Empty;
         private bool _shouldRender = true;
         private string _tag;
+    	private bool _ignoreOpeningTag;
         private bool _ignoreClosingTag;
         private bool _isAuthorized = true;
 
@@ -403,40 +404,43 @@ namespace HtmlTags
         {
             if (!WillBeRendered()) return;
 
+			if (HasTag())
+			{
             _htmlAttributes.Each((key, attribute) =>
-            {
+				                     	{
                 if (attribute != null)
-                {
+				                     		{
                     var value = attribute.Value;
                     var stringValue = !(value is string) && key.StartsWith(DataPrefix) ? JsonUtil.ToJson(value) : value.ToString();
                     html.AddAttribute(key, stringValue, attribute.IsEncoded);
-                }
-            });
+				                     		}
+				                     	});
 
-            if (_cssClasses.Count > 0)
-            {
-                var classValue = _cssClasses.Join(" ");
-                html.AddAttribute(CssClassAttribute, classValue);
-            }
+				if (_cssClasses.Count > 0)
+				{
+					var classValue = _cssClasses.Join(" ");
+					html.AddAttribute(CssClassAttribute, classValue);
+				}
 
-            if (_metaData.Count > 0)
-            {
-                var metadataValue = JsonUtil.ToUnsafeJson(_metaData.Inner);
-                html.AddAttribute(MetadataAttribute, metadataValue);
-            }
+				if (_metaData.Count > 0)
+				{
+					var metadataValue = JsonUtil.ToUnsafeJson(_metaData.Inner);
+					html.AddAttribute(MetadataAttribute, metadataValue);
+				}
 
-            if (_customStyles.Count > 0)
-            {
-                var attValue = _customStyles
-                    .Select(x => x.Key + ":" + x.Value)
-                    .ToArray().Join(";");
+				if (_customStyles.Count > 0)
+				{
+					var attValue = _customStyles
+						.Select(x => x.Key + ":" + x.Value)
+						.ToArray().Join(";");
 
-                html.AddAttribute(CssStyleAttribute, attValue);
-            }
+					html.AddAttribute(CssStyleAttribute, attValue);
+				}
 
-            html.RenderBeginTag(_tag);
+				html.RenderBeginTag(_tag);
+			}
 
-            writeInnerText(html);
+        	writeInnerText(html);
 
             _children.Each(x => x.writeHtml(html));
 
@@ -628,11 +632,32 @@ namespace HtmlTags
             tags.Each(t => Children.Add(t));
         }
 
+		/// <summary>
+		/// Specify that the tag should render only its children and not itself.  
+		/// Used for declaring container/placeholder tags that should not affect the final markup.
+		/// </summary>
+		/// <returns></returns>
+		public HtmlTag NoTag()
+		{
+			_ignoreOpeningTag = true;
+			_ignoreClosingTag = true;
+			return this;
+		}
+
         public HtmlTag NoClosingTag()
         {
             _ignoreClosingTag = true;
             return this;
         }
+
+		/// <summary>
+		/// Get whether or not to render the tag itself or just the children of the tag. 
+		/// </summary>
+		/// <returns></returns>
+		public bool HasTag()
+		{
+			return !_ignoreOpeningTag;
+		}
 
         public bool HasClosingTag()
         {
