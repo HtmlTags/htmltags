@@ -25,7 +25,6 @@ props = { :stage => File.expand_path("build"), :stage35 => File.expand_path("bui
 
 desc "**Default**, compiles and runs tests"
 task :default => [:compile, :unit_test, :stage]
-#task :default => [:compile, :unit_test, :stage, "fx35:compile", "fx35:unit_test", "fx35:stage"]
 task :ci => [:update_all_dependencies, :default, :history, :publish]
 
 desc "Update the version information for the build"
@@ -90,14 +89,13 @@ def copyOutputFiles(fromDir, filePattern, outDir)
   } 
 end
 
-desc "Run unit tests"
-nunit :unit_test do |nunit|
-    nunit.command = 'lib/nunit/nunit-console.exe'
-    nunit.assemblies = ["src/HtmlTags.Testing/bin/#{COMPILE_TARGET}/HtmlTags.Testing.dll"]
 
-#  runner = NUnitRunner.new :compilemode => COMPILE_TARGET, :source => 'src'
-#  runner.executeTests ['HtmlTags.Testing']
+desc "Runs unit tests"
+task :unit_test => :compile do
+  runner = NUnitRunner.new :compilemode => COMPILE_TARGET, :source => 'src', :platform => 'x86'
+  runner.executeTests ['HtmlTags.Testing']
 end
+
 
 task :stage do
   Dir.glob "src/HtmlTags/bin/#{COMPILE_TARGET}/HtmlTags.*" do |f|

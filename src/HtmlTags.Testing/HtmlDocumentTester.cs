@@ -118,13 +118,13 @@ namespace HtmlTags.Testing
         [Test]
         public void add_javascript()
         {
-            document.AddJavaScript(@"
-alert('hello');
-alert('world');
-");
+            var script = String.Format("{0}alert('hello');{0}alert('world');{0}", Environment.NewLine);
+            document.AddJavaScript(script);
+			
             var expected = String.Format(
                 "</title><script type=\"text/javascript\">{0}{0}alert('hello');{0}alert('world');{0}{0}</script></head>",
                 Environment.NewLine);
+            
             document.ToString().ShouldContain(expected);
         }
 

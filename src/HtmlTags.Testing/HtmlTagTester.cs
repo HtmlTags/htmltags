@@ -4,6 +4,7 @@ using System.Linq;
 using FubuCore;
 using FubuTestingSupport;
 using NUnit.Framework;
+using System.Text;
 
 namespace HtmlTags.Testing
 {
@@ -63,9 +64,12 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div");
             new HtmlTag("p", tag).Id("intro").Text("Once upon a midnight...");
             
-            tag.ToPrettyString().ShouldEqual(@"<div>
-  <p id=""intro"">Once upon a midnight...</p>
-</div>");
+            var expected = new StringBuilder();
+            expected.AppendLine("<div>");
+            expected.AppendLine(@"  <p id=""intro"">Once upon a midnight...</p>");
+            expected.Append("</div>");
+			
+            tag.ToPrettyString().ShouldEqual(expected.ToString());
         }
 
         [Test]

@@ -19,3 +19,4 @@ _ReSharper.*
 *.pidb
 test-results
 src/packages
+results
