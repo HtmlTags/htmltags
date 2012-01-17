@@ -300,7 +300,7 @@ namespace HtmlTags.Testing
         public void add_multiple_classes_at_once_with_duplicates()
         {
             var tag = new HtmlTag("div").Text("text");
-            tag.AddClass("a b c a c");
+            tag.AddClasses2("a b c a b");
 
             tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
         }
@@ -309,7 +309,7 @@ namespace HtmlTags.Testing
         public void add_multiple_classes_at_once()
         {
             var tag = new HtmlTag("div").Text("text");
-            tag.AddClass("a b c");
+            tag.AddClasses2("a b c");
 
             tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
         }
@@ -318,7 +318,7 @@ namespace HtmlTags.Testing
         public void add_multiple_classes_at_once_with_multiple_spaces()
         {
             var tag = new HtmlTag("div").Text("text");
-            tag.AddClass("a    b  c d  e   ");
+            tag.AddClasses2("a    b  c d  e   ");
 
             tag.ToString().ShouldEqual("<div class=\"a b c d e\">text</div>");
         }
@@ -387,6 +387,62 @@ namespace HtmlTags.Testing
 
             tagClasses.ShouldHaveCount(2);
             tagClasses.Except(classes).ShouldHaveCount(0);
+        }
+
+        [Test]
+        public void do_not_allow_spaces_in_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("a b c"); });
+        }
+
+        [Test]
+        public void do_not_allow_special_characters_in_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("$test@@"); });
+        }
+
+        [Test]
+        public void do_not_allow_start_with_number_in_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("4test"); });
+        }
+
+        [Test]
+        public void do_not_allow_first_double_dashes_in_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("--test"); });
+        }
+
+        [Test]
+        public void class_name_must_have_at_least_two_chars_if_starts_with_dash()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("-"); });
+        }
+
+        [Test]
+        public void valid_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClass("-test");
+
+            tag.ToString().ShouldEqual("<div class=\"-test\">text</div>");
+
+            tag.AddClass("_test");
+
+            tag.ToString().ShouldEqual("<div class=\"-test _test\">text</div>");
+
+            tag.AddClass("TEST_2-test");
+
+            tag.ToString().ShouldEqual("<div class=\"-test _test TEST_2-test\">text</div>");
+
+            tag.AddClass("-just-4-test");
+
+            tag.ToString().ShouldEqual("<div class=\"-test _test TEST_2-test -just-4-test\">text</div>");
         }
 
         [Test]

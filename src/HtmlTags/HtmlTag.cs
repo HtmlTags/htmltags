@@ -461,7 +461,7 @@ namespace HtmlTags
             }
             if (isCssClassAttr(attribute))
             {
-                AddClass(value.ToString());
+                AddClasses2(value.ToString());
             }
             else
             {
@@ -525,30 +525,64 @@ namespace HtmlTags
 
         public HtmlTag AddClass(string className)
         {
-            IEnumerable<string> classes = parseClassName(className);
-            _cssClasses.UnionWith(classes);
+            className = className.Trim();
 
+            if (isInvalidClassName(className)) 
+                throw new ArgumentException("CSS class names is not valid. If you are attempting to add multiple classes separated with spaces, call AddClasses() or AddClasses2() instead. Problem class was '{0}'".ToFormat(className), "className");
+            
+            _cssClasses.Add(className); 
+            
             return this;
         }
 
         private static bool isInvalidClassName(string className)
         {
-            if (className.StartsWith("{") && className.EndsWith("}")) return false;
+            bool valid;
+            if (className.StartsWith("{") && className.EndsWith("}"))
+            {
+                // Allow JSON blobs.
 
-            return className.Contains(" ");
+                valid = true;
+            }
+            else
+            {
+                /*
+                 * Basically, a name must begin with an underscore (_), a dash (-), or a letter(a–z), 
+                 * followed by any number of dashes, underscores, letters, or numbers. 
+                 * There is a catch: if the first character is a dash, the second character must be a letter or underscore, 
+                 * and the name must be at least 2 characters long.
+                 * 
+                 * http://stackoverflow.com/questions/448981/what-characters-are-valid-in-css-class-names
+                 */
+
+                valid = Regex.IsMatch(className, @"^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$");
+            }
+
+            return !valid;
         }
 
         /// <summary>
         /// Parses a string which contains class name or multiple class names.
         /// </summary>
-        /// <param name="className">A string which contains class(-es)</param>
+        /// <param name="classes">A string which contains class(-es)</param>
         /// <returns>The list of classes</returns>
-        private static IEnumerable<string> parseClassName(string className)
+        private static IEnumerable<string> extractClasses(string classes)
         {
-            IEnumerable<string> classes = Regex.Split(className, "[ ]+")
+            IEnumerable<string> extracted = Regex.Split(classes, "[ ]+")
                                                 .Where(c => !string.IsNullOrWhiteSpace(c));
 
-            return classes;
+            return extracted;
+        }
+
+        /// <summary>
+        /// Parses the space-separated list of classes and registers them
+        /// </summary>
+        /// <param name="classes">The list of space-separated classes</param>
+        /// <returns>An HtmlTag reference</returns>
+        public HtmlTag AddClasses2(string classes)
+        {
+            IEnumerable<string> parsed = extractClasses(classes);
+            return AddClasses(parsed);
         }
 
         public HtmlTag AddClasses(params string[] classes)
