@@ -545,18 +545,8 @@ namespace HtmlTags
         /// <returns>The list of classes</returns>
         private static IEnumerable<string> parseClassName(string className)
         {
-            List<string> classes = new List<string>();
-            string[] extracts = Regex.Split(className, "[ ]+");
-            foreach (string extract in extracts)
-            {
-                if (string.IsNullOrWhiteSpace(extract))
-                    continue;
-
-                if (isInvalidClassName(extract))
-                    throw new ArgumentException("CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(extract), "className");
-                
-                classes.Add(extract);
-            }
+            IEnumerable<string> classes = Regex.Split(className, "[ ]+")
+                                                .Where(c => !string.IsNullOrWhiteSpace(c));
 
             return classes;
         }
