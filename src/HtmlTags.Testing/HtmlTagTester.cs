@@ -198,6 +198,18 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void attr_add_multiple_classes_with_multiple_space_separated_classes()
+        {
+            var tag = new HtmlTag("a");
+            tag.Attr("class", "test-class1     test-class2 test-class3  test-class4  ");
+            tag.HasClass("test-class1").ShouldBeTrue();
+            tag.HasClass("test-class2").ShouldBeTrue();
+            tag.HasClass("test-class3").ShouldBeTrue();
+            tag.HasClass("test-class4").ShouldBeTrue();
+            tag.HasClass(string.Empty).ShouldBeFalse();
+        }
+
+        [Test]
         public void replace_a_single_attribute()
         {
             var tag = new HtmlTag("table")
@@ -285,6 +297,33 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void add_multiple_classes_at_once_with_duplicates()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClass("a b c a c");
+
+            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+        }
+
+        [Test]
+        public void add_multiple_classes_at_once()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClass("a b c");
+
+            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+        }
+
+        [Test]
+        public void add_multiple_classes_at_once_with_multiple_spaces()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClass("a    b  c d  e   ");
+
+            tag.ToString().ShouldEqual("<div class=\"a b c d e\">text</div>");
+        }
+
+        [Test]
         public void render_multiple_classes()
         {
             var tag = new HtmlTag("div").Text("text");
@@ -348,13 +387,6 @@ namespace HtmlTags.Testing
 
             tagClasses.ShouldHaveCount(2);
             tagClasses.Except(classes).ShouldHaveCount(0);
-        }
-
-        [Test]
-        public void do_not_allow_spaces_in_class_names()
-        {
-            var tag = new HtmlTag("div").Text("text");
-            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("a b c"); });
         }
 
         [Test]

@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 
@@ -461,7 +461,7 @@ namespace HtmlTags
             }
             if (isCssClassAttr(attribute))
             {
-                AddClasses(value.ToString().Split(' '));
+                AddClass(value.ToString());
             }
             else
             {
@@ -525,9 +525,8 @@ namespace HtmlTags
 
         public HtmlTag AddClass(string className)
         {
-            if (isInvalidClassName(className)) throw new ArgumentException("CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(className), "className");
-
-            _cssClasses.Add(className);
+            IEnumerable<string> classes = parseClassName(className);
+            _cssClasses.UnionWith(classes);
 
             return this;
         }
@@ -539,6 +538,28 @@ namespace HtmlTags
             return className.Contains(" ");
         }
 
+        /// <summary>
+        /// Parses a string which contains class name or multiple class names.
+        /// </summary>
+        /// <param name="className">A string which contains class(-es)</param>
+        /// <returns>The list of classes</returns>
+        private static IEnumerable<string> parseClassName(string className)
+        {
+            List<string> classes = new List<string>();
+            string[] extracts = Regex.Split(className, "[ ]+");
+            foreach (string extract in extracts)
+            {
+                if (string.IsNullOrWhiteSpace(extract))
+                    continue;
+
+                if (isInvalidClassName(extract))
+                    throw new ArgumentException("CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(extract), "className");
+                
+                classes.Add(extract);
+            }
+
+            return classes;
+        }
 
         public HtmlTag AddClasses(params string[] classes)
         {
