@@ -538,9 +538,11 @@ namespace HtmlTags
         private static bool isInvalidClassName(string className)
         {
             bool valid;
-            if (className.StartsWith("{") && className.EndsWith("}"))
+            if (className.StartsWith("{") && className.EndsWith("}")
+                    || className.StartsWith("[") && className.EndsWith("]"))
             {
                 // Allow JSON blobs.
+                // http://stackoverflow.com/questions/7256142/way-to-quickly-check-if-string-is-xml-or-json-in-c-sharp
 
                 valid = true;
             }

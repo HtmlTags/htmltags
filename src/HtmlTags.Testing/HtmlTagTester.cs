@@ -450,6 +450,17 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div").AddClass("{a:1, a:2}");
             tag.ToString().ShouldContain("class=\"{a:1, a:2}\"");
+
+            tag = new HtmlTag("div").AddClass("[1, 2, 3]");
+            tag.ToString().ShouldContain("class=\"[1, 2, 3]\"");
+        }
+
+        [Test]
+        public void class_name_with_wrong_json()
+        {
+            var tag = new HtmlTag("div");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("[1,2,3}"); });
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("{a:1, a:2]"); });
         }
 
         //
