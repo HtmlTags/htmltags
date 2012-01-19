@@ -166,6 +166,20 @@ namespace HtmlTags.Testing
                 .ShouldEqual(expected);
         }
 
+        [Test]
+        public void check_thead_tbody_tfoot_access()
+        {
+            var expected = "<table><thead class=\"header\"></thead><tfoot class=\"footer\"></tfoot><tbody class=\"body\"></tbody></table>";
+
+            var table = new TableTag();
+            table.THead.AddClass("header");
+            table.TBody.AddClass("body");
+            table.TFoot.AddClass("footer").Render(true);
+
+            System.Diagnostics.Trace.TraceInformation(table.ToString());
+            table.ToString().ShouldEqual(expected);
+        }
+
         private static string getExpectedHtml(string theadContents, string tbodyContents, string tfoot)
         {
             return getExpectedHtml(null, theadContents, tbodyContents, tfoot);

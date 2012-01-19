@@ -9,6 +9,21 @@ namespace HtmlTags
         private readonly HtmlTag _header;
         private readonly HtmlTag _footer;
 
+        public HtmlTag THead
+        {
+            get { return _header; }
+        }
+
+        public HtmlTag TBody
+        {
+            get { return _body; }
+        }
+
+        public HtmlTag TFoot
+        {
+            get { return _footer; }
+        }
+
         public TableTag()
             : base("table")
         {
