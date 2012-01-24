@@ -909,6 +909,29 @@ namespace HtmlTags.Testing
         }
     }
 
+    [TestFixture]
+    public class metadataattribute_tests
+    {
+        [TearDown]
+        public void TearDown()
+        {
+            HtmlTag.UseMetadataSuffix(":");
+        }
+
+        [Test]
+        public void metadataattribute_value_ends_with_a_colon_char_by_default()
+        {
+            HtmlTag.MetadataAttribute.ShouldEqual("data-:");
+        }
+
+        [Test]
+        public void metadataattribute_value_ends_with_the_metadatasuffix_char()
+        {
+            HtmlTag.UseMetadataSuffix("*");
+            HtmlTag.MetadataAttribute.ShouldEqual("data-*");
+        }
+
+    }
 
     internal class ListValue
     {

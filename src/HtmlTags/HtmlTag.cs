@@ -23,7 +23,13 @@ namespace HtmlTags
         private const string CssClassAttribute = "class";
         private const string CssStyleAttribute = "style";
         private const string DataPrefix = "data-";
-        public static readonly string MetadataAttribute = DataPrefix + ":";
+        private static string _metadataSuffix = ":";
+        public static void UseMetadataSuffix(string suffix)
+        {
+            _metadataSuffix = suffix;
+        }
+        public static string MetadataAttribute { get { return DataPrefix + _metadataSuffix; } }
+
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
         private readonly IDictionary<string, string> _customStyles = new Dictionary<string, string>();
@@ -87,6 +93,7 @@ namespace HtmlTags
         }
 
         public IList<HtmlTag> Children { get { return _children; } }
+
 
         IEnumerable<HtmlTag> ITagSource.AllTags()
         {
