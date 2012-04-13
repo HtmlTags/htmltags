@@ -99,6 +99,25 @@ namespace HtmlTags.Testing
             new HtmlTag("div").NoClosingTag().HasClosingTag().ShouldBeFalse();
         }
 
+		[Test]
+		public void when_no_tag_do_not_write_opening_or_closing_tag()
+		{
+			new HtmlTag("div").NoTag().AppendHtml("Hello")
+				.ToString().ShouldEqual("Hello");
+		}
+
+		[Test]
+		public void when_no_tag_HasClosingTag_is_false()
+		{
+			new HtmlTag("div").NoTag().HasClosingTag().ShouldBeFalse();
+		}
+
+		[Test]
+		public void when_no_tag_HasTag_is_false()
+		{
+			new HtmlTag("div").NoTag().HasTag().ShouldBeFalse();
+		}
+
         [Test]
         public void initialize_tag_via_constructor()
         {
