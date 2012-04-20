@@ -11,7 +11,16 @@ COMMON_ASSEMBLY_INFO = 'src/CommonAssemblyInfo.cs';
 CLR_TOOLS_VERSION = "v4.0.30319"
 
 buildsupportfiles = Dir["#{File.dirname(__FILE__)}/buildsupport/*.rb"]
+
+if( ! buildsupportfiles.any? )
+  # no buildsupport, let's go get it for them.
+  sh 'git submodule update --init' unless buildsupportfiles.any?
+  buildsupportfiles = Dir["#{File.dirname(__FILE__)}/buildsupport/*.rb"]
+end
+
+# nope, we still don't have buildsupport. Something went wrong.
 raise "Run `git submodule update --init` to populate your buildsupport folder." unless buildsupportfiles.any?
+
 buildsupportfiles.each { |ext| load ext }
 
 
@@ -49,7 +58,7 @@ assemblyinfo :version do |asm|
 end
 
 desc "Prepares the working directory for a new build"
-task :clean do
+task :clean => [:update_buildsupport] do
 	#TODO: do any other tasks required to clean/prepare the working directory
 	FileUtils.rm_rf props[:stage]
 	FileUtils.rm_rf props[:stage35]
