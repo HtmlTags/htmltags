@@ -7,5 +7,10 @@ namespace HtmlTags
         {
             Id(id);
         }
+
+        public DivTag()
+            : base("div")
+        {
+        }
     }
 }
