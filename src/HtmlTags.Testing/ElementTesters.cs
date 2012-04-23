@@ -13,6 +13,12 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void create_a_div_without_an_id()
+        {
+            new DivTag().ToString().ShouldEqual("<div></div>");
+        }
+
+        [Test]
         public void create_a_hidden_input()
         {
             new HiddenTag().ToString().ShouldEqual("<input type=\"hidden\" />");
