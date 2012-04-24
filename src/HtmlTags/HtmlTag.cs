@@ -29,7 +29,7 @@ namespace HtmlTags
         private const string CssClassAttribute = "class";
         private const string CssStyleAttribute = "style";
         private const string DataPrefix = "data-";
-        private static string _metadataSuffix = ":";
+        private static string _metadataSuffix = "__";
         public static void UseMetadataSuffix(string suffix)
         {
             _metadataSuffix = suffix;
