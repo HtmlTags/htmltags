@@ -299,15 +299,15 @@ namespace HtmlTags
         }
 
         /// <summary>
-        /// Stores multiple JSON-encoded key/value pairs in a the "data-:" attribute. Useful when used with the jquery.metadata plugin
+        /// Stores multiple JSON-encoded key/value pairs in a the "data-__" attribute. Useful when used with the jquery.metadata plugin
         /// </summary>
         /// <param name="key">The name of the stored value</param>
         /// <param name="value">The value to store</param>
-        /// <remarks>You need to configure the the jquery.metadata plugin to read from the data-: attribute.
+        /// <remarks>You need to configure the the jquery.metadata plugin to read from the data-__ attribute.
         /// Add the following line after you have loaded jquery.metadata.js, but before you use its metadata() method:
         /// <code>
         /// if ($.metadata) {
-        ///    $.metadata.setType('attr', 'data-:');
+        ///    $.metadata.setType('attr', 'data-__');
         /// }
         /// </code>
         /// </remarks>
