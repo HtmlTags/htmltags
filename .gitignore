@@ -20,3 +20,4 @@ _ReSharper.*
 test-results
 src/packages
 results
+*DotSettings.user
