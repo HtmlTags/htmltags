@@ -133,11 +133,11 @@ Or you can serialize an entire settings object in a single value on the server t
 
 Notice we're passing an instance of an object (EditableOptions) as the value of the "editable" metadata. This will render:
 
-    <div data-:="{&quot;editable&quot;:{&quot;MultiLine&quot;:false,&quot;MaxLength&quot;:20,&quot;InputType&quot;:&quot;date&quot;}}"></div>
+    <div data-__="{&quot;editable&quot;:{&quot;MultiLine&quot;:false,&quot;MaxLength&quot;:20,&quot;InputType&quot;:&quot;date&quot;}}"></div>
 
 You can then drive logic on the client using this data:
 
-    $.metadata.setType('attr', 'data-:'); //once on your page
+    $.metadata.setType('attr', 'data-__'); //once on your page
     var o = $("div").metadata();
     alert(o.MultiLine); // # false
     alert(o.MaxLength); // # 20
