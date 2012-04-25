@@ -255,6 +255,18 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void attr_add_multiple_classes_with_multiple_space_separated_classes()
+        {
+            var tag = new HtmlTag("a");
+            tag.Attr("class", "test-class1     test-class2 test-class3  test-class4  ");
+            tag.HasClass("test-class1").ShouldBeTrue();
+            tag.HasClass("test-class2").ShouldBeTrue();
+            tag.HasClass("test-class3").ShouldBeTrue();
+            tag.HasClass("test-class4").ShouldBeTrue();
+            tag.HasClass(string.Empty).ShouldBeFalse();
+        }
+
+        [Test]
         public void replace_a_single_attribute()
         {
             var tag = new HtmlTag("table")
@@ -342,6 +354,33 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void add_multiple_classes_at_once_with_duplicates()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClasses2("a b c a b");
+
+            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+        }
+
+        [Test]
+        public void add_multiple_classes_at_once()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClasses2("a b c");
+
+            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+        }
+
+        [Test]
+        public void add_multiple_classes_at_once_with_multiple_spaces()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClasses2("a    b  c d  e   ");
+
+            tag.ToString().ShouldEqual("<div class=\"a b c d e\">text</div>");
+        }
+
+        [Test]
         public void render_multiple_classes()
         {
             var tag = new HtmlTag("div").Text("text");
@@ -415,10 +454,70 @@ namespace HtmlTags.Testing
         }
 
         [Test]
+        public void do_not_allow_special_characters_in_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("$test@@"); });
+        }
+
+        [Test]
+        public void do_not_allow_start_with_number_in_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("4test"); });
+        }
+
+        [Test]
+        public void do_not_allow_first_double_dashes_in_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("--test"); });
+        }
+
+        [Test]
+        public void class_name_must_have_at_least_two_chars_if_starts_with_dash()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("-"); });
+        }
+
+        [Test]
+        public void valid_class_names()
+        {
+            var tag = new HtmlTag("div").Text("text");
+            tag.AddClass("-test");
+
+            tag.ToString().ShouldEqual("<div class=\"-test\">text</div>");
+
+            tag.AddClass("_test");
+
+            tag.ToString().ShouldEqual("<div class=\"-test _test\">text</div>");
+
+            tag.AddClass("TEST_2-test");
+
+            tag.ToString().ShouldEqual("<div class=\"-test _test TEST_2-test\">text</div>");
+
+            tag.AddClass("-just-4-test");
+
+            tag.ToString().ShouldEqual("<div class=\"-test _test TEST_2-test -just-4-test\">text</div>");
+        }
+
+        [Test]
         public void do_allow_a_class_that_is_a_json_blob_with_spaces()
         {
             var tag = new HtmlTag("div").AddClass("{a:1, a:2}");
             tag.ToString().ShouldContain("class=\"{a:1, a:2}\"");
+
+            tag = new HtmlTag("div").AddClass("[1, 2, 3]");
+            tag.ToString().ShouldContain("class=\"[1, 2, 3]\"");
+        }
+
+        [Test]
+        public void class_name_with_wrong_json()
+        {
+            var tag = new HtmlTag("div");
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("[1,2,3}"); });
+            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("{a:1, a:2]"); });
         }
 
         //
