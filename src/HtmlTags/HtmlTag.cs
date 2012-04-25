@@ -21,6 +21,11 @@ namespace HtmlTags
             return new HtmlTag("span").Render(false);
         }
 
+        public static HtmlTag Placeholder()
+        {
+            return new HtmlTag().NoTag();
+        }
+
         private const string CssClassAttribute = "class";
         private const string CssStyleAttribute = "style";
         private const string DataPrefix = "data-";

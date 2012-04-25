@@ -119,6 +119,26 @@ namespace HtmlTags.Testing
 		}
 
         [Test]
+        public void when_placeholder_do_not_write_opening_or_closing_tag()
+        {
+
+            HtmlTag.Placeholder().AppendHtml("Hello")
+                .ToString().ShouldEqual("Hello");
+        }
+
+        [Test]
+        public void when_placeholder_HasClosingTag_is_false()
+        {
+            HtmlTag.Placeholder().HasClosingTag().ShouldBeFalse();
+        }
+
+        [Test]
+        public void when_placeholder_HasTag_is_false()
+        {
+            HtmlTag.Placeholder().HasTag().ShouldBeFalse();
+        }
+
+        [Test]
         public void initialize_tag_via_constructor()
         {
             var tag = new HtmlTag("div", x =>
