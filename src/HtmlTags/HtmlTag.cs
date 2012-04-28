@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using System.Web.UI;
@@ -489,8 +490,8 @@ namespace HtmlTags
             }
             if (isCssClassAttr(attribute))
             {
-                AddClasses(value.ToString().Split(' '));
-            }
+                AddClass(value.ToString());
+            }   
             else
             {
                 _htmlAttributes[attribute] = new HtmlAttribute(value.ToString(), encode);
@@ -553,20 +554,73 @@ namespace HtmlTags
 
         public HtmlTag AddClass(string className)
         {
-            if (isInvalidClassName(className)) throw new ArgumentException("CSS class names cannot contain spaces. If you are attempting to add multiple classes, call AddClasses() instead. Problem class was '{0}'".ToFormat(className), "className");
+            IEnumerable<string> classes = parseClassName(className);
+            foreach (string parsedClass in classes)
+            {
+                if (isInvalidClassName(parsedClass))
+                {
+                    throw new ArgumentException("CSS class names is not valid. Problem class was '{0}'".ToFormat(className), "className");
+                }
 
-            _cssClasses.Add(className);
+                _cssClasses.Add(parsedClass);
+            }
 
             return this;
         }
 
-        private static bool isInvalidClassName(string className)
+        private static bool isJsonClassName(string className)
         {
-            if (className.StartsWith("{") && className.EndsWith("}")) return false;
-
-            return className.Contains(" ");
+            return className.StartsWith("{") && className.EndsWith("}")
+                    || className.StartsWith("[") && className.EndsWith("]");
         }
 
+        private static bool isInvalidClassName(string className)
+        {
+            bool valid;
+            if (isJsonClassName(className))
+            {
+                // Allow JSON blobs.
+                // http://stackoverflow.com/questions/7256142/way-to-quickly-check-if-string-is-xml-or-json-in-c-sharp 
+
+                valid = true;
+            }
+            else
+            {
+                /*
+                 * Basically, a name must begin with an underscore (_), a dash (-), or a letter(a–z), 
+                 * followed by any number of dashes, underscores, letters, or numbers. 
+                 * There is a catch: if the first character is a dash, the second character must be a letter or underscore, 
+                 * and the name must be at least 2 characters long.
+                 * 
+                 * http://stackoverflow.com/questions/448981/what-characters-are-valid-in-css-class-names
+                 */
+
+                valid = Regex.IsMatch(className, @"^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$");
+            }
+
+            return !valid;
+        }
+
+        /// <summary>
+        /// Parses a string which contains class name or multiple class names.
+        /// </summary>
+        /// <param name="className">A string which contains class(-es)</param>
+        /// <returns>The list of classes</returns>
+        private static IEnumerable<string> parseClassName(string className)
+        {
+            IEnumerable<string> classes;
+            if (isJsonClassName(className))
+            {
+                classes = new List<string> { className };
+            }
+            else
+            {
+                classes = Regex.Split(className, "[ ]+")
+                               .Where(c => !string.IsNullOrWhiteSpace(c));
+            }
+
+            return classes;
+        }
 
         public HtmlTag AddClasses(params string[] classes)
         {
