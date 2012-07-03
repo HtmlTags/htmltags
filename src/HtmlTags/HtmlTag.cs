@@ -574,8 +574,6 @@ namespace HtmlTags
             return this;
         }
 
-        
-
         /// <summary>
         /// Parses a string which contains class name or multiple class names.
         /// </summary>
