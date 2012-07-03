@@ -66,5 +66,61 @@ namespace HtmlTags.Testing
             CssClassNameValidator.IsJsonClassName("[a, b, c]").ShouldBeTrue();
             CssClassNameValidator.IsJsonClassName("[a, b, c}").ShouldBeFalse();
         }
+
+        [Test]
+        public void do_nothing_if_already_valid_class_name()
+        {
+            CssClassNameValidator.SanitizeClassName("asdf").ShouldEqual("asdf");
+            CssClassNameValidator.SanitizeClassName("-test").ShouldEqual("-test");
+            CssClassNameValidator.SanitizeClassName("-_test").ShouldEqual("-_test");
+            CssClassNameValidator.SanitizeClassName("TEST_2-test").ShouldEqual("TEST_2-test");
+            CssClassNameValidator.SanitizeClassName("-just-4-test").ShouldEqual("-just-4-test");
+        }
+
+        [Test]
+        public void remove_leading_numbers()
+        {
+            CssClassNameValidator.SanitizeClassName("9asdf").ShouldEqual("asdf");
+        }
+
+        [Test]
+        public void should_handle_different_combos_of_leading_invalid_characters()
+        {
+            CssClassNameValidator.SanitizeClassName("9-9asdf").ShouldEqual("asdf");
+            CssClassNameValidator.SanitizeClassName("-99asdf").ShouldEqual("asdf");
+            CssClassNameValidator.SanitizeClassName("@-99asdf").ShouldEqual("asdf");
+            CssClassNameValidator.SanitizeClassName("@-99@asdf").ShouldEqual("asdf");
+        }
+
+        [Test]
+        public void remove_leading_hyphen_and_numbers_if_not_followed_by_an_underscore_or_alpha_char()
+        {
+            CssClassNameValidator.SanitizeClassName("-9asdf").ShouldEqual("asdf");
+        }
+
+        [Test]
+        public void remove_bogus_characters()
+        {
+            CssClassNameValidator.SanitizeClassName("a!@#$%^&*()`=':;?><|{}[]~sdf").ShouldEqual("asdf");
+        }
+
+        [Test]
+        public void return_default_if_null_input()
+        {
+            CssClassNameValidator.SanitizeClassName(null).ShouldEqual(CssClassNameValidator.DefaultClass);
+        }
+
+        [Test]
+        public void return_default_if_empty_input()
+        {
+            CssClassNameValidator.SanitizeClassName("").ShouldEqual(CssClassNameValidator.DefaultClass);
+        }
+
+        [Test]
+        public void return_default_if_completely_invalid_input()
+        {
+            CssClassNameValidator.SanitizeClassName("-99").ShouldEqual(CssClassNameValidator.DefaultClass);
+        }
+
     }
 }
