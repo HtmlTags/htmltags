@@ -5,6 +5,20 @@ namespace HtmlTags.Testing
 {
     public class CssClassNameValidatorTester
     {
+        [SetUp]
+        public void SetUp()
+        {
+            CssClassNameValidator.AllowInvalidCssClassNames = false;
+        }
+
+        [Test]
+        public void setting_AllowInvalidClassNames_to_true_should_disable_validation_altogether()
+        {
+            CssClassNameValidator.IsValidClassName("$test@@").ShouldBeFalse();
+            CssClassNameValidator.AllowInvalidCssClassNames = true;
+            CssClassNameValidator.IsValidClassName("$test@@").ShouldBeTrue();
+        }
+
         [Test]
         public void do_not_allow_special_characters_in_class_names()
         {
@@ -121,6 +135,5 @@ namespace HtmlTags.Testing
         {
             CssClassNameValidator.SanitizeClassName("-99").ShouldEqual(CssClassNameValidator.DefaultClass);
         }
-
     }
 }

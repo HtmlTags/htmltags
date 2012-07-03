@@ -9,6 +9,8 @@ namespace HtmlTags
         public const string InvalidStartRegex = @"^-?[^_a-zA-Z]+";
         public const string ValidClassChars = @"_a-zA-Z0-9-";
 
+        public static bool AllowInvalidCssClassNames { get; set; }
+
         public static bool IsJsonClassName(string className)
         {
             return className.StartsWith("{") && className.EndsWith("}")
@@ -18,7 +20,7 @@ namespace HtmlTags
         public static bool IsValidClassName(string className)
         {
             var pattern = string.Format(@"{0}[{1}]*$", ValidStartRegex, ValidClassChars);
-            return IsJsonClassName(className) || Regex.IsMatch(className, pattern);
+            return AllowInvalidCssClassNames || IsJsonClassName(className) || Regex.IsMatch(className, pattern);
         }
 
         public static string SanitizeClassName(string className)
