@@ -557,7 +557,7 @@ namespace HtmlTags
             IEnumerable<string> classes = parseClassName(className);
             foreach (string parsedClass in classes)
             {
-                if (isInvalidClassName(parsedClass))
+                if (!CssClassNameValidator.IsValidClassName(parsedClass))
                 {
                     throw new ArgumentException("CSS class names is not valid. Problem class was '{0}'".ToFormat(className), "className");
                 }
@@ -568,38 +568,7 @@ namespace HtmlTags
             return this;
         }
 
-        private static bool isJsonClassName(string className)
-        {
-            return className.StartsWith("{") && className.EndsWith("}")
-                    || className.StartsWith("[") && className.EndsWith("]");
-        }
-
-        private static bool isInvalidClassName(string className)
-        {
-            bool valid;
-            if (isJsonClassName(className))
-            {
-                // Allow JSON blobs.
-                // http://stackoverflow.com/questions/7256142/way-to-quickly-check-if-string-is-xml-or-json-in-c-sharp 
-
-                valid = true;
-            }
-            else
-            {
-                /*
-                 * Basically, a name must begin with an underscore (_), a dash (-), or a letter(a–z), 
-                 * followed by any number of dashes, underscores, letters, or numbers. 
-                 * There is a catch: if the first character is a dash, the second character must be a letter or underscore, 
-                 * and the name must be at least 2 characters long.
-                 * 
-                 * http://stackoverflow.com/questions/448981/what-characters-are-valid-in-css-class-names
-                 */
-
-                valid = Regex.IsMatch(className, @"^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$");
-            }
-
-            return !valid;
-        }
+        
 
         /// <summary>
         /// Parses a string which contains class name or multiple class names.
@@ -609,7 +578,7 @@ namespace HtmlTags
         private static IEnumerable<string> parseClassName(string className)
         {
             IEnumerable<string> classes;
-            if (isJsonClassName(className))
+            if (CssClassNameValidator.IsJsonClassName(className))
             {
                 classes = new List<string> { className };
             }
