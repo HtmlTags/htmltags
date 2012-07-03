@@ -552,6 +552,12 @@ namespace HtmlTags
             return _shouldRender;
         }
 
+        /// <summary>
+        /// Adds one or more classes (separated by spaces) to the tag
+        /// </summary>
+        /// <param name="className">Valid CSS class name, JSON object, JSON array, or multiple valid CSS class names separated by spaces</param>
+        /// <returns>The tag for method chaining</returns>
+        /// <exception cref="System.ArgumentException">One or more CSS class names were invalid (contained invalid characters)</exception>
         public HtmlTag AddClass(string className)
         {
             IEnumerable<string> classes = parseClassName(className);
