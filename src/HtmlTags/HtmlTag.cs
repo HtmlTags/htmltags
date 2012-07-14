@@ -66,12 +66,17 @@ namespace HtmlTags
 
         public HtmlTag(string tag, HtmlTag parent) : this(tag)
         {
-            if (parent != null) parent.Append(this);
+            if (parent != null)
+            {
+                _parent = parent;
+                parent.Append(this);
+            }
         }
 
         private bool _encodeInnerText = true;
         
         private HtmlTag _next;
+        private HtmlTag _parent;
 
         /// <summary>
         /// The sibling tag that immediately follows the current tag. 
@@ -102,7 +107,11 @@ namespace HtmlTags
 
         public IList<HtmlTag> Children { get { return _children; } }
 
-
+        public HtmlTag Parent
+        {
+            get { return _parent; }
+        }
+        
         IEnumerable<HtmlTag> ITagSource.AllTags()
         {
             yield return this;
@@ -397,8 +406,23 @@ namespace HtmlTags
 
         public string ToString(HtmlTextWriter html)
         {
-            writeHtml(html);
+            var tag = _renderFromTop ? walkToTop(this) : this;
+            tag.writeHtml(html);
             return html.InnerWriter.ToString();
+        }
+
+        private bool _renderFromTop;
+        public HtmlTag RenderFromTop()
+        {
+            _renderFromTop = true;
+            return this;
+        }
+
+        private HtmlTag walkToTop(HtmlTag htmlTag)
+        {
+            if (htmlTag.Parent == null)
+                return htmlTag;
+            return walkToTop(htmlTag.Parent);
         }
 
         public bool WillBeRendered()
@@ -412,15 +436,17 @@ namespace HtmlTags
 
 			if (HasTag())
 			{
-            _htmlAttributes.Each((key, attribute) =>
-				                     	{
-                if (attribute != null)
-				                     		{
-                    var value = attribute.Value;
-                    var stringValue = !(value is string) && key.StartsWith(DataPrefix) ? JsonUtil.ToJson(value) : value.ToString();
-                    html.AddAttribute(key, stringValue, attribute.IsEncoded);
-				                     		}
-				                     	});
+			    _htmlAttributes.Each((key, attribute) =>
+			    {
+			        if (attribute != null)
+			        {
+			            var value = attribute.Value;
+			            var stringValue = !(value is string) && key.StartsWith(DataPrefix)
+			                                  ? JsonUtil.ToJson(value)
+			                                  : value.ToString();
+			            html.AddAttribute(key, stringValue, attribute.IsEncoded);
+			        }
+			    });
 
 				if (_cssClasses.Count > 0)
 				{
