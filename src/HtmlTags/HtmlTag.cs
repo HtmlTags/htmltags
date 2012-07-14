@@ -454,6 +454,15 @@ namespace HtmlTags
             {
                 html.RenderEndTag();
             }
+            else
+            {
+                var currentInner = html.InnerWriter;
+                html.InnerWriter = new StringWriter();
+                if (!HasTag())
+                    html.RenderBeginTag("");
+                html.RenderEndTag();
+                html.InnerWriter = currentInner;
+            }
 
             if (_next != null) _next.writeHtml(html);
         }

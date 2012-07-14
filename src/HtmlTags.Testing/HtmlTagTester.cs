@@ -137,6 +137,15 @@ namespace HtmlTags.Testing
         {
             HtmlTag.Placeholder().HasTag().ShouldBeFalse();
         }
+        
+        [Test]
+        public void tag_with_NoClosingTag_should_be_wrapped_correctly_with_tag_with_closingTag()
+        {
+            var wrapper = new HtmlTag("div");
+            var tag = new HtmlTag("input").NoClosingTag();
+            wrapper.Append(tag);
+            wrapper.ToString().ShouldEqual("<div><input /></div>");
+        }
 
         [Test]
         public void initialize_tag_via_constructor()
