@@ -135,6 +135,7 @@ namespace HtmlTags
 
         public void InsertFirst(HtmlTag tag)
         {
+            tag._parent = this;
             _children.Insert(0, tag);
         }
 
@@ -202,8 +203,8 @@ namespace HtmlTags
         public T Add<T>() where T : HtmlTag, new()
         {
             var child = new T();
+            child._parent = this;
             _children.Add(child);
-
             return child;
         }
 
@@ -214,6 +215,7 @@ namespace HtmlTags
         /// <returns>The parent tag</returns>
         public HtmlTag Append(HtmlTag child)
         {
+            child._parent = this;
             _children.Add(child);
             return this;
         }
@@ -248,7 +250,11 @@ namespace HtmlTags
         /// <returns>The parent tag</returns>
         public HtmlTag Append(ITagSource tagSource)
         {
-            _children.AddRange(tagSource.AllTags());
+            tagSource.AllTags().Each(x =>
+            {
+                x._parent = this;
+                _children.Add(x);
+            });
             return this;
         }
 
@@ -259,7 +265,11 @@ namespace HtmlTags
         /// <returns>The parent tag</returns>
         public HtmlTag Append(IEnumerable<HtmlTag> tags)
         {
-            _children.AddRange(tags);
+            tags.Each(x =>
+            {
+                x._parent = this;
+                _children.Add(x);
+            });
             return this;
         }
 
@@ -696,7 +706,11 @@ namespace HtmlTags
         public void ReplaceChildren(params HtmlTag[] tags)
         {
             Children.Clear();
-            tags.Each(t => Children.Add(t));
+            tags.Each(t =>
+            {
+                t._parent = this;
+                Children.Add(t);
+            });
         }
 
 		/// <summary>
