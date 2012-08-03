@@ -10,7 +10,6 @@ namespace HtmlTags
         public FormTag() : base("form")
         {
             NoClosingTag();
-            Id("mainForm");
             Method("post");
         }
 
