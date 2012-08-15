@@ -54,6 +54,22 @@
     </Compile>
     <Compile Include="Cache.cs" />
     <Compile Include="CheckboxTag.cs" />
+    <Compile Include="Conventions\BuilderSet.cs" />
+    <Compile Include="Conventions\CategoryExpression.cs" />
+    <Compile Include="Conventions\ITagBuilder.cs" />
+    <Compile Include="Conventions\ITagBuildingExpression.cs" />
+    <Compile Include="Conventions\ITagGenerator.cs" />
+    <Compile Include="Conventions\ITagModifier.cs" />
+    <Compile Include="Conventions\ITagRequestActivator.cs" />
+    <Compile Include="Conventions\LambdaTagBuilder.cs" />
+    <Compile Include="Conventions\LambdaTagModifier.cs" />
+    <Compile Include="Conventions\TagCategory.cs" />
+    <Compile Include="Conventions\TagConstants.cs" />
+    <Compile Include="Conventions\TagGenerator.cs" />
+    <Compile Include="Conventions\TagLibrary.cs" />
+    <Compile Include="Conventions\TagPlan.cs" />
+    <Compile Include="Conventions\TagRequest.cs" />
+    <Compile Include="Conventions\TagSubject.cs" />
     <Compile Include="CssClassNameValidator.cs" />
     <Compile Include="DivTag.cs" />
     <Compile Include="DLTag.cs" />
