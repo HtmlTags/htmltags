@@ -285,5 +285,17 @@ namespace HtmlTags.Testing
             actualPath.ShouldEqual(actualTempFileName);
             actualContent.ShouldStartWith("<!DOCTYPE");
         }
+
+        [Test]
+        public void rewind_takes_you_back_to_the_beginning()
+        {
+            document.Push("div").Id("div1");
+            document.Push("div").Id("div2");
+            document.Push("div").Id("div3");
+
+            document.Rewind();
+
+            document.Current.ShouldBeTheSameAs(document.Body);
+        }
     }
 }

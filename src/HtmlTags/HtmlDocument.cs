@@ -180,5 +180,10 @@ namespace HtmlTags
                 .Attr("type", "text/css")
                 .Attr("rel", "stylesheet");
         }
+
+        public void Rewind()
+        {
+            _currentStack.Clear();
+        }
     }
 }
