@@ -1065,6 +1065,16 @@ namespace HtmlTags.Testing
                     Value = "1"
                 }).ToString().ShouldEqual("<div data-__=\"{&quot;listValue&quot;:{&quot;Display&quot;:&quot;a&quot;,&quot;Value&quot;:&quot;1&quot;}}\"></div>");
         }
+
+        [Test]
+        public void append_html()
+        {
+            var tag = new HtmlTag("div");
+            tag.AppendHtml("<span>Hello</span>").ShouldBeTheSameAs(tag);
+            tag.AppendHtml(" Hey!");
+
+            tag.ToString().ShouldEqual("<div><span>Hello</span> Hey!</div>");
+        }
     }
 
     [TestFixture]

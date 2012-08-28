@@ -232,6 +232,16 @@ namespace HtmlTags
         }
 
         /// <summary>
+        /// Adds a LiteralTag of unencoded html to this HtmlTag
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        public HtmlTag AppendHtml(string html)
+        {
+            return Append(new LiteralTag(html));       
+        }
+
+        /// <summary>
         /// Creates nested child tags, runs <paramref name="configuration"/> on the innermost tag, and returns the tag on which the method was called. Use <see cref="Add(string, Action{HtmlTag})"/> if you want to return the innermost tag.
         /// </summary>
         /// <param name="tagNames"></param>
