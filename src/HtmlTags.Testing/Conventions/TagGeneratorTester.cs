@@ -84,7 +84,7 @@ namespace HtmlTags.Testing.Conventions
         {
             expect(theSubject, category:"A", profile:TagConstants.Default);
 
-            ClassUnderTest.Build("A", theSubject).ShouldBeTheSameAs(theTag);
+            ClassUnderTest.Build(theSubject, "A", null).ShouldBeTheSameAs(theTag);
         }
 
         [Test]
@@ -94,7 +94,15 @@ namespace HtmlTags.Testing.Conventions
 
             expect(theSubject, category:"A", profile:"B");
 
-            ClassUnderTest.Build("A", theSubject).ShouldBeTheSameAs(theTag);
+            ClassUnderTest.Build(theSubject, "A", null).ShouldBeTheSameAs(theTag);
+        }
+
+        [Test]
+        public void call_build_with_both_category_and_non_default_profile_by_passing_in_the_default()
+        {
+            expect(theSubject, category: "A", profile: "B");
+
+            ClassUnderTest.Build(theSubject, "A", "B").ShouldBeTheSameAs(theTag);
         }
     }
 }

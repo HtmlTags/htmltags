@@ -16,16 +16,14 @@ namespace HtmlTags.Conventions
             _activators = activators.Where(x => x.Matches(typeof (T))).ToList();
         }
 
-        public HtmlTag Build(T request)
+        public HtmlTag Build(T request, string category = null, string profile = null)
         {
-            return Build(TagConstants.Default, request);
-        }
+            profile = profile ?? ActiveProfile;
+            category = category ?? TagConstants.Default;
 
-        public HtmlTag Build(string category, T request)
-        {
             var token = request.ToToken();
 
-            var plan = _library.PlanFor((T)token, ActiveProfile ?? TagConstants.Default, category);
+            var plan = _library.PlanFor((T)token, profile, category);
 
             _activators.Each(x => x.Activate(request));
 
