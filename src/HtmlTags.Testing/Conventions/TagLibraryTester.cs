@@ -55,12 +55,10 @@ namespace HtmlTags.Testing.Conventions
         private ITagBuilder<FakeSubject> b5;
         private ITagBuilder<FakeSubject> b6;
         private ITagBuilder<FakeSubject> b7;
-        private ITagBuilder<FakeSubject> b8;
         private ITagModifier<FakeSubject> m1;
         private ITagModifier<FakeSubject> m2;
         private ITagModifier<FakeSubject> m3;
         private ITagModifier<FakeSubject> m4;
-        private ITagModifier<FakeSubject> m5;
         private TagLibrary<FakeSubject> library1;
 
         [SetUp]
@@ -73,13 +71,11 @@ namespace HtmlTags.Testing.Conventions
             b5 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
             b6 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
             b7 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b8 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
 
             m1 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
             m2 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
             m3 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
             m4 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            m5 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
 
             library1 = new TagLibrary<FakeSubject>();
 
