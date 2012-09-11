@@ -71,6 +71,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CheckboxTagTester.cs" />
+    <Compile Include="Conventions\BuilderSetTester.cs" />
     <Compile Include="Conventions\Fake.cs" />
     <Compile Include="Conventions\FakeSubject.cs" />
     <Compile Include="Conventions\LambdaTagBuilderTester.cs" />

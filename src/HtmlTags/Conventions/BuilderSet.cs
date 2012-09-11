@@ -6,8 +6,8 @@ namespace HtmlTags.Conventions
     // Tested through the test for TagCategory and TagLibrary
     public class BuilderSet<T> : ITagBuildingExpression<T> where T : TagRequest
     {
-        private readonly IList<ITagBuilder<T>> _builders = new List<ITagBuilder<T>>();
-        private readonly IList<ITagModifier<T>> _modifiers = new List<ITagModifier<T>>();
+        private readonly List<ITagBuilder<T>> _builders = new List<ITagBuilder<T>>();
+        private readonly List<ITagModifier<T>> _modifiers = new List<ITagModifier<T>>();
 
         public IEnumerable<ITagBuilder<T>> Builders
         {
@@ -37,6 +37,12 @@ namespace HtmlTags.Conventions
         public CategoryExpression<T> If(Func<T, bool> matches)
         {
             return new CategoryExpression<T>(this, matches);
+        }
+
+        public void Import(BuilderSet<T> other)
+        {
+            _builders.AddRange(other._builders);
+            _modifiers.AddRange(other._modifiers);
         }
     }
 }
