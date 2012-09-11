@@ -23,6 +23,11 @@ namespace HtmlTags.Conventions
             get { return _defaults; }
         }
 
+        public BuilderSet<T> Profile(string name)
+        {
+            return _profiles[name];
+        }
+
         public TagPlan<T> PlanFor(T request, string profile = null)
         {
             var subject = new TagSubject<T>(profile, request);
@@ -83,6 +88,17 @@ namespace HtmlTags.Conventions
         public ITagBuildingExpression<T> ForProfile(string profile)
         {
             return _profiles[profile];
+        }
+
+        public void Import(TagCategory<T> other)
+        {
+            _defaults.Import(other._defaults);
+
+            var keys = _profiles.GetKeys().Union(other._profiles.GetKeys())
+                .Where(x => x != TagConstants.Default)
+                .Distinct();
+
+            keys.Each(key => _profiles[key].Import(other._profiles[key]));
         }
     }
 }
