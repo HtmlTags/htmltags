@@ -56,6 +56,7 @@
     <Compile Include="CheckboxTag.cs" />
     <Compile Include="Conventions\BuilderSet.cs" />
     <Compile Include="Conventions\CategoryExpression.cs" />
+    <Compile Include="Conventions\HtmlConventionLibrary.cs" />
     <Compile Include="Conventions\ITagBuilder.cs" />
     <Compile Include="Conventions\ITagBuildingExpression.cs" />
     <Compile Include="Conventions\ITagGenerator.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Conventions\TagCategory.cs" />
     <Compile Include="Conventions\TagConstants.cs" />
     <Compile Include="Conventions\TagGenerator.cs" />
+    <Compile Include="Conventions\TagGeneratorFactory.cs" />
     <Compile Include="Conventions\TagLibrary.cs" />
     <Compile Include="Conventions\TagPlan.cs" />
     <Compile Include="Conventions\TagRequest.cs" />

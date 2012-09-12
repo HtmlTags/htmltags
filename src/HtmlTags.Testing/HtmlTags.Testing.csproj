@@ -74,9 +74,11 @@
     <Compile Include="Conventions\BuilderSetTester.cs" />
     <Compile Include="Conventions\Fake.cs" />
     <Compile Include="Conventions\FakeSubject.cs" />
+    <Compile Include="Conventions\HtmlConventionLibraryTester.cs" />
     <Compile Include="Conventions\LambdaTagBuilderTester.cs" />
     <Compile Include="Conventions\LambdaTagModifierTester.cs" />
     <Compile Include="Conventions\TagCategoryTester.cs" />
+    <Compile Include="Conventions\TagGeneratorFactoryTester.cs" />
     <Compile Include="Conventions\TagGeneratorTester.cs" />
     <Compile Include="Conventions\TagLibraryTester.cs" />
     <Compile Include="Conventions\TagPlanTester.cs" />
