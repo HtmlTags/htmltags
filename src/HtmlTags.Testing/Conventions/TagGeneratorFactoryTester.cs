@@ -9,8 +9,6 @@ namespace HtmlTags.Testing.Conventions
     public class TagGeneratorFactoryTester : InteractionContext<TagGeneratorFactory>
     {
         private ITagRequestActivator[] theActivators;
-        private FakeSubject theSubject;
-        private HtmlTag theTag;
         private HtmlConventionLibrary theLibrary;
 
         protected override void beforeEach()
@@ -23,13 +21,6 @@ namespace HtmlTags.Testing.Conventions
             theActivators[3].Stub(x => x.Matches(typeof(FakeSubject))).Return(false);
             theActivators[4].Stub(x => x.Matches(typeof(FakeSubject))).Return(true);
 
-            theSubject = new FakeSubject
-            {
-                Name = "Jeremy",
-                Level = 10
-            };
-
-            theTag = new HtmlTag("div");
 
             theLibrary = new HtmlConventionLibrary();
 
