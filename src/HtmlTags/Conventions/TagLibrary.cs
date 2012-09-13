@@ -31,21 +31,45 @@ namespace HtmlTags.Conventions
             return _categories[TagConstants.Default].If(matches);
         }
 
+        /// <summary>
+        /// The modifiers and builders for a category of conventions 
+        /// </summary>
+        /// <param name="category">Example:  "Label", "Editor", "Display"</param>
+        /// <returns></returns>
         public TagCategory<T> Category(string category)
         {
             return _categories[category];
         }
 
+        public BuilderSet<T> BuilderSetFor(string category = null, string profile = null)
+        {
+            profile = profile ?? TagConstants.Default;
+            category = category ?? TagConstants.Default;
+
+            return _categories[category].Profile(profile);
+        }
+
+        /// <summary>
+        /// Adds a builder to the default category and profile
+        /// </summary>
+        /// <param name="builder"></param>
         public void Add(ITagBuilder<T> builder)
         {
             Default.Add(builder);
         }
 
+        /// <summary>
+        /// Adds a modifier to the default category and profile
+        /// </summary>
+        /// <param name="modifier"></param>
         public void Add(ITagModifier<T> modifier)
         {
             Default.Add(modifier);
         }
 
+        /// <summary>
+        /// Access to the default category
+        /// </summary>
         public TagCategory<T> Default
         {
             get
@@ -54,6 +78,11 @@ namespace HtmlTags.Conventions
             }
         }
 
+        /// <summary>
+        /// Add builders and modifiers by profile
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <returns></returns>
         public ITagBuildingExpression<T> ForProfile(string profile)
         {
             return _categories[TagConstants.Default].ForProfile(profile);
