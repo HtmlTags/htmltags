@@ -81,6 +81,7 @@
     <Compile Include="HtmlDocument.cs" />
     <Compile Include="HtmlTag.cs" />
     <Compile Include="Extended\AttributesExtensions.cs" />
+    <Compile Include="HtmlTagExtensions.cs" />
     <Compile Include="ITagSource.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="LinkTag.cs" />
