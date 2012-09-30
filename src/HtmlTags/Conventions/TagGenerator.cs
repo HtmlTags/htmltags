@@ -3,22 +3,33 @@ using System.Linq;
 
 namespace HtmlTags.Conventions
 {
+    public class ActiveProfile
+    {
+        public ActiveProfile()
+        {
+            Name = TagConstants.Default;
+        }
+        
+        public string Name { get; set; }
+    }
+
     public class TagGenerator<T> : ITagGenerator<T> where T : TagRequest
     {
         private readonly ITagLibrary<T> _library;
+        private readonly ActiveProfile _profile;
         private readonly IEnumerable<ITagRequestActivator> _activators;
         
 
-        public TagGenerator(ITagLibrary<T> library, IEnumerable<ITagRequestActivator> activators)
+        public TagGenerator(ITagLibrary<T> library, IEnumerable<ITagRequestActivator> activators, ActiveProfile profile)
         {
-            ActiveProfile = TagConstants.Default;
             _library = library;
+            _profile = profile;
             _activators = activators.Where(x => x.Matches(typeof (T))).ToList();
         }
 
         public HtmlTag Build(T request, string category = null, string profile = null)
         {
-            profile = profile ?? ActiveProfile;
+            profile = profile ?? _profile.Name ?? TagConstants.Default;
             category = category ?? TagConstants.Default;
 
             var token = request.ToToken();
@@ -30,6 +41,9 @@ namespace HtmlTags.Conventions
             return plan.Build(request);
         }
 
-        public string ActiveProfile {get; set;}
+        public string ActiveProfile
+        {
+            get { return _profile.Name; }
+        }
     }
 }
