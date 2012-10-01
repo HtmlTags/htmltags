@@ -6,6 +6,8 @@ namespace HtmlTags.Conventions
     public class HtmlConventionLibrary
     {
         private readonly Cache<Type, object> _libraries = new Cache<Type, object>();
+        private readonly Cache<string, ServiceBuilder> _services = new Cache<string, ServiceBuilder>(key => new ServiceBuilder());
+        private readonly ServiceBuilder _defaultBuilder;
 
         public HtmlConventionLibrary()
         {
@@ -14,6 +16,33 @@ namespace HtmlTags.Conventions
                 var libType = typeof (TagLibrary<>).MakeGenericType(type);
                 return Activator.CreateInstance(libType);
             };
+
+            _defaultBuilder = _services[TagConstants.Default];
+        }
+
+        public T Get<T>(string profile = null)
+        {
+            profile = profile ?? TagConstants.Default;
+            var builder = _services[profile];
+            if (builder.Has(typeof(T))) return builder.Build<T>();
+
+            if (profile != TagConstants.Default && _defaultBuilder.Has(typeof(T)))
+            {
+                return _defaultBuilder.Build<T>();
+            }
+
+            throw new ArgumentOutOfRangeException("T","No service implementation is registered for type " + typeof(T).FullName);
+        }
+
+        public void RegisterService<T, TImplementation>(string profile = null) where TImplementation : T, new()
+        {
+            RegisterService<T>(() => new TImplementation());
+        }
+
+        public void RegisterService<T>(Func<T> builder, string profile = null)
+        {
+            profile = profile ?? TagConstants.Default;
+            _services[profile].Add(builder);
         }
 
         public TagLibrary<T> For<T>() where T : TagRequest
@@ -28,21 +57,6 @@ namespace HtmlTags.Conventions
                 .Select(t => typeof(HtmlConventionLibraryImporter<>).MakeGenericType(t))
                 .Select(t => (IHtmlConventionLibraryImporter)Activator.CreateInstance(t))
                 .Each(x => x.Import(this, library));
-        }
-
-        
-    }
-
-    public interface IHtmlConventionLibraryImporter
-    {
-        void Import(HtmlConventionLibrary target, HtmlConventionLibrary source);
-    }
-
-    public class HtmlConventionLibraryImporter<T> : IHtmlConventionLibraryImporter where T : TagRequest
-    {
-        public void Import(HtmlConventionLibrary target, HtmlConventionLibrary source)
-        {
-            target.For<T>().Import(source.For<T>());
         }
     }
 }

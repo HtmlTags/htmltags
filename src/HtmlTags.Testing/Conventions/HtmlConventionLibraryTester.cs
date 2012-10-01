@@ -48,6 +48,70 @@ namespace HtmlTags.Testing.Conventions
             lib1.For<FakeSubject>().Default.Defaults.Builders.ShouldHaveTheSameElementsAs(b1, b2, b3);
             lib1.For<SecondSubject>().Default.Defaults.Builders.ShouldHaveTheSameElementsAs(b4, b5, b6);
         }
+
+        [Test]
+        public void get_with_no_prior_definition_will_happily_blow_up()
+        {
+            Exception<ArgumentOutOfRangeException>.ShouldBeThrownBy(() => {
+                new HtmlConventionLibrary().Get<IFoo>();
+            }).Message.ShouldContain("No service implementation is registered for type " + typeof(IFoo).FullName);
+        }
+
+        [Test]
+        public void simple_registration_of_service_by_type()
+        {
+            var library = new HtmlConventionLibrary();
+            library.RegisterService<IFoo, Foo>();
+
+            library.Get<IFoo>().ShouldBeOfType<Foo>();
+        }
+
+        [Test]
+        public void registration_of_service_by_func()
+        {
+            var library = new HtmlConventionLibrary();
+            library.RegisterService<IFoo>(() => new ColoredFoo{Color = "Red"});
+
+            library.Get<IFoo>().ShouldBeOfType<ColoredFoo>()
+                .Color.ShouldEqual("Red");
+        }
+
+        [Test]
+        public void if_not_explicitly_specified_assume_the_profile_is_default()
+        {
+            var library = new HtmlConventionLibrary();
+            library.RegisterService<IFoo, Foo>(TagConstants.Default);
+
+            library.Get<IFoo>().ShouldBeOfType<Foo>();
+        }
+
+        [Test]
+        public void register_and_build_by_profile()
+        {
+            var library = new HtmlConventionLibrary();
+            library.RegisterService<IFoo, Foo>(TagConstants.Default);
+
+            library.RegisterService<IFoo, DifferentFoo>("Profile1");
+
+            library.Get<IFoo>("Profile1").ShouldBeOfType<DifferentFoo>();
+        }
+
+        [Test]
+        public void fetching_by_profile_should_fall_back_to_default_if_not_specific_implementation_is_used()
+        {
+            var library = new HtmlConventionLibrary();
+            library.RegisterService<IFoo, Foo>(TagConstants.Default);
+
+            library.Get<IFoo>("Profile1").ShouldBeOfType<Foo>();
+        }
+    }
+
+    public interface IFoo{}
+    public class Foo : IFoo{}
+    public class DifferentFoo : IFoo{}
+    public class ColoredFoo : IFoo
+    {
+        public string Color { get; set; }
     }
 
     public class SecondSubject : TagRequest
