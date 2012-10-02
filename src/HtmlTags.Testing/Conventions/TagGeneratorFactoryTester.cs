@@ -30,7 +30,7 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void sets_the_active_profile_to_the_child_generators()
         {
-            MockFor<ActiveProfile>().Name = "Blue";
+            MockFor<ActiveProfile>().Push("Blue");
 
             ClassUnderTest.GeneratorFor<FakeSubject>().ActiveProfile.ShouldEqual("Blue");
             ClassUnderTest.GeneratorFor<SecondSubject>().ActiveProfile.ShouldEqual("Blue");

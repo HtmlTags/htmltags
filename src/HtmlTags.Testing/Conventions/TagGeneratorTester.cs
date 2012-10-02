@@ -72,7 +72,7 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void call_build_with_the_profile_set()
         {
-            MockFor<ActiveProfile>().Name = "A";
+            MockFor<ActiveProfile>().Push("A");
 
             expect(theSubject, category: TagConstants.Default, profile: "A");
 
@@ -90,7 +90,7 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void call_build_with_both_category_and_non_default_profile()
         {
-            MockFor<ActiveProfile>().Name = "B";
+            MockFor<ActiveProfile>().Push("B");
 
             expect(theSubject, category:"A", profile:"B");
 
