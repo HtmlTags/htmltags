@@ -454,6 +454,12 @@ namespace HtmlTags
         {
             if (!WillBeRendered()) return;
 
+            if(_tag == "br")
+            {
+                new BrTag().writeHtml(html);
+                return;
+            }
+
 			if (HasTag())
 			{
 			    _htmlAttributes.Each((key, attribute) =>

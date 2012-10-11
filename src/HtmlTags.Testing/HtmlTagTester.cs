@@ -587,6 +587,12 @@ namespace HtmlTags.Testing
     [TestFixture]
     public class children_tests
     {
+        [TearDown]
+        public void Teardown()
+        {
+            BrTag.ComplianceMode = BrTag.ComplianceModes.AspNet;
+        }
+
         [Test]
         public void add_a_child_tag()
         {
@@ -628,6 +634,17 @@ namespace HtmlTags.Testing
             var parent = new HtmlTag("div");
             parent.Append(tagSource);
             parent.ToString().ShouldEqual("<div><br></br><hr /></div>");
+        }
+
+        [Test]
+        public void can_control_br_tag_behavior_even_if_using_regular_html_tag()
+        {
+            BrTag.ComplianceMode = BrTag.ComplianceModes.Xhtml;
+            var tagSource = new TagList(new[] { new HtmlTag("br"), new HtmlTag("hr") });
+            var parent = new HtmlTag("div");
+            parent.Append(tagSource);
+            parent.ToString().ShouldEqual("<div><br /><hr /></div>");
+            
         }
 
         [Test]

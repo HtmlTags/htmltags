@@ -77,4 +77,36 @@ namespace HtmlTags.Testing
         }
 
     }
+
+    [TestFixture]
+    public class BrTagTester
+    {
+        [SetUp]
+        public void Setup()
+        {
+            BrTag.ComplianceMode = BrTag.ComplianceModes.AspNet;
+        }
+        [Test]
+        public void default_renders_with_open_close_tags()
+        {
+            var tag = new BrTag();
+            tag.ToString().ShouldEqual("<br></br>");
+        }
+
+        [Test]
+        public void xhtml_mode_renders_with_self_closing_tag()
+        {
+            BrTag.ComplianceMode = BrTag.ComplianceModes.Xhtml;
+            var tag = new BrTag();
+            tag.ToString().ShouldEqual("<br />");
+        }
+
+        [Test]
+        public void html5_mode_renders_with_single_tag()
+        {
+            BrTag.ComplianceMode = BrTag.ComplianceModes.Html5;
+            var tag = new BrTag();
+            tag.ToString().ShouldEqual("<br>");
+        }
+    }
 }
