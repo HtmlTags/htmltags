@@ -465,7 +465,12 @@ namespace HtmlTags
 			                                  ? JsonUtil.ToJson(value)
 			                                  : value.ToString();
 			            html.AddAttribute(key, stringValue, attribute.IsEncoded);
-			        }
+                    }
+                    else
+                    {
+                        // HtmlTextWriter treats a null value as an attribute with no value (e.g., <input required />).
+                        html.AddAttribute(key, null, false);
+                    }
 			    });
 
 				if (_cssClasses.Count > 0)
@@ -530,6 +535,15 @@ namespace HtmlTags
         public HtmlTag Attr(string attribute, object value)
         {
             return buildAttr(attribute, value);
+        }
+
+        public HtmlTag BooleanAttr(string attribute) {
+            if (isCssClassAttr(attribute)) {
+                return buildAttr(attribute, null);
+            }
+
+            _htmlAttributes[attribute] = null;
+            return this;
         }
 
         public HtmlTag UnencodedAttr(string attribute, object value)
