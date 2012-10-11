@@ -55,6 +55,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BrTag.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="CheckboxTag.cs" />
     <Compile Include="Conventions\BuilderSet.cs" />
