@@ -27,7 +27,8 @@ namespace HtmlTags
                     break;
                 case ComplianceModes.AspNet:
                 default:
-                    base.writeHtml(html);
+                    html.RenderBeginTag("br");
+                    html.RenderEndTag();
                     break;
             }
         }
