@@ -322,16 +322,6 @@ namespace HtmlTags.Testing
         }
 
         [Test]
-        public void set_an_attribute_to_empty_string_should_remove_the_attribute()
-        {
-            var tag = new HtmlTag("div");
-            tag.Attr("name", "bill");
-            tag.HasAttr("name").ShouldBeTrue();
-            tag.Attr("name", "");
-            tag.HasAttr("name").ShouldBeFalse();
-        }
-
-        [Test]
         public void set_the_class_attribute_to_null_should_remove_all_classes()
         {
             var tag = new HtmlTag("div");
@@ -386,6 +376,27 @@ namespace HtmlTags.Testing
         public void render_boolean_attr() {
             var tag = new HtmlTag("input").BooleanAttr("required");
             tag.ToString().ShouldEqual("<input required />");
+		}
+		
+        public void set_an_attribute_to_empty_string_should_not_remove_the_attribute() {
+            var tag = new HtmlTag("div");
+            tag.Attr("name", "bill");
+            tag.HasAttr("name").ShouldBeTrue();
+            tag.Attr("name", string.Empty);
+            tag.HasAttr("name").ShouldBeTrue();
+        }
+
+        [Test]
+        public void retrieve_an_empty_attr_should_return_an_empty_string() {
+            var tag = new HtmlTag("option");
+            tag.Attr("value", string.Empty);
+            tag.Attr("value").ShouldEqual(string.Empty);
+        }
+
+        [Test]
+        public void render_empty_attr() {
+            var tag = new HtmlTag("option").Attr("value", string.Empty);
+            tag.ToString().ShouldEqual("<option value=\"\"></option>");
         }
 
         //
