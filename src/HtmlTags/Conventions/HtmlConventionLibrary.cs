@@ -36,7 +36,7 @@ namespace HtmlTags.Conventions
 
         public void RegisterService<T, TImplementation>(string profile = null) where TImplementation : T, new()
         {
-            RegisterService<T>(() => new TImplementation());
+            RegisterService<T>(() => new TImplementation(), profile);
         }
 
         public void RegisterService<T>(Func<T> builder, string profile = null)
@@ -57,6 +57,8 @@ namespace HtmlTags.Conventions
                 .Select(t => typeof(HtmlConventionLibraryImporter<>).MakeGenericType(t))
                 .Select(t => (IHtmlConventionLibraryImporter)Activator.CreateInstance(t))
                 .Each(x => x.Import(this, library));
+
+            library._services.Each((key, builder) => builder.FillInto(_services[key]));
         }
     }
 }

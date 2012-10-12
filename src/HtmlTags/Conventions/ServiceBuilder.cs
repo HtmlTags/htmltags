@@ -21,5 +21,12 @@ namespace HtmlTags.Conventions
         {
             _services[typeof (T)] = func;
         }
+
+        public void FillInto(ServiceBuilder serviceBuilder)
+        {
+            _services.Each((type, o) => {
+                serviceBuilder._services.Fill(type, o);
+            });
+        }
     }
 }
