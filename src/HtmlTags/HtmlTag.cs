@@ -539,14 +539,18 @@ namespace HtmlTags
 
         private HtmlTag buildAttr(string attribute, object value, bool encode = true)
         {
-            if (value == null || value.Equals(string.Empty))
+            if (value == null)
+            {
+                return RemoveAttr(attribute);
+            }
+            if (value.Equals(string.Empty) && (isCssClassAttr(attribute) || isCssStyleAttr(attribute) || isMetadataAttr(attribute)))
             {
                 return RemoveAttr(attribute);
             }
             if (isCssClassAttr(attribute))
             {
                 AddClass(value.ToString());
-            }   
+            }
             else
             {
                 _htmlAttributes[attribute] = new HtmlAttribute(value.ToString(), encode);
