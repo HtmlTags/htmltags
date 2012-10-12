@@ -376,6 +376,18 @@ namespace HtmlTags.Testing
             new HtmlTag("div").Attr("new").ShouldEqual(string.Empty);
         }
 
+        [Test]
+        public void boolean_attr() {
+            var tag = new HtmlTag("input").BooleanAttr("required");
+            tag.HasAttr("required").ShouldBeTrue();
+        }
+
+        [Test]
+        public void render_boolean_attr() {
+            var tag = new HtmlTag("input").BooleanAttr("required");
+            tag.ToString().ShouldEqual("<input required />");
+        }
+
         //
         // CSS classes
         //
