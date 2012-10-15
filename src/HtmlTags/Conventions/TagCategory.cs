@@ -37,12 +37,15 @@ namespace HtmlTags.Conventions
         private TagPlan<T> buildPlan(TagSubject<T> subject)
         {
             var sets = setsFor(subject.Profile);
-            var builder = sets.SelectMany(x => x.Builders).FirstOrDefault(x => x.Matches(subject.Subject));
-
-            if (builder == null)
+            var policy = sets.SelectMany(x => x.Policies).FirstOrDefault(x => x.Matches(subject.Subject));
+            if (policy == null)
             {
-                throw new ArgumentOutOfRangeException("Unable to select a TagBuilder for subject " + subject);
+                throw new ArgumentOutOfRangeException("Unable to select a TagBuilderPolicy for subject " + subject);
             }
+
+            var builder = policy.BuilderFor(subject.Subject);
+
+
 
             var modifiers = sets.SelectMany(x => x.Modifiers).Where(x => x.Matches(subject.Subject));
 
@@ -64,9 +67,14 @@ namespace HtmlTags.Conventions
             _plans.ClearAll();
         }
 
-        public void Add(ITagBuilder<T> builder)
+        public void Add(Func<T, bool> filter, ITagBuilder<T> builder)
         {
-            _profiles[TagConstants.Default].Add(builder);
+            Add(new ConditionalTagBuilderPolicy<T>(filter, builder));
+        }
+
+        public void Add(ITagBuilderPolicy<T> policy)
+        {
+            _profiles[TagConstants.Default].Add(policy);
         }
 
         public void Add(ITagModifier<T> modifier)

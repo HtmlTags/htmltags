@@ -21,7 +21,7 @@ namespace HtmlTags.Conventions
 
         public void Build(Func<T, HtmlTag> build)
         {
-            _parent.Add(new LambdaTagBuilder<T>(_matcher, build));
+            _parent.Add(new ConditionalTagBuilderPolicy<T>(_matcher, build));
         }
     }
 }

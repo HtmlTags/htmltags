@@ -48,13 +48,13 @@ namespace HtmlTags.Testing.Conventions
     [TestFixture]
     public class TagLibrary_Import_Tester
     {
-        private ITagBuilder<FakeSubject> b1;
-        private ITagBuilder<FakeSubject> b2;
-        private ITagBuilder<FakeSubject> b3;
-        private ITagBuilder<FakeSubject> b4;
-        private ITagBuilder<FakeSubject> b5;
-        private ITagBuilder<FakeSubject> b6;
-        private ITagBuilder<FakeSubject> b7;
+        private ITagBuilderPolicy<FakeSubject> b1;
+        private ITagBuilderPolicy<FakeSubject> b2;
+        private ITagBuilderPolicy<FakeSubject> b3;
+        private ITagBuilderPolicy<FakeSubject> b4;
+        private ITagBuilderPolicy<FakeSubject> b5;
+        private ITagBuilderPolicy<FakeSubject> b6;
+        private ITagBuilderPolicy<FakeSubject> b7;
         private ITagModifier<FakeSubject> m1;
         private ITagModifier<FakeSubject> m2;
         private ITagModifier<FakeSubject> m3;
@@ -64,13 +64,13 @@ namespace HtmlTags.Testing.Conventions
         [SetUp]
         public void SetUp()
         {
-            b1 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b2 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b3 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b4 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b5 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b6 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b7 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
+            b1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b4 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b5 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b6 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b7 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
 
             m1 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
             m2 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
@@ -105,19 +105,19 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void imports_defaults()
         {
-            library1.Default.Defaults.Builders.ShouldHaveTheSameElementsAs(b1, b5);
+            library1.Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b5);
         }
 
         [Test]
         public void imports_category_that_both_libraries_have()
         {
-            library1.Category("Cat1").Defaults.Builders.ShouldHaveTheSameElementsAs(b3, b7);
+            library1.Category("Cat1").Defaults.Policies.ShouldHaveTheSameElementsAs(b3, b7);
         }
 
         [Test]
         public void imports_category_from_the_second_library_not_originally_in_the_first()
         {
-            library1.Category("Cat2").Defaults.Builders.ShouldHaveTheSameElementsAs(b6);
+            library1.Category("Cat2").Defaults.Policies.ShouldHaveTheSameElementsAs(b6);
         }
 
 

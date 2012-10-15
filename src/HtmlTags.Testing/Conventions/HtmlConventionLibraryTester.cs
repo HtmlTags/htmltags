@@ -25,12 +25,12 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void importing_test()
         {
-            var b1 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            var b2 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            var b3 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            var b4 = MockRepository.GenerateMock<ITagBuilder<SecondSubject>>();
-            var b5 = MockRepository.GenerateMock<ITagBuilder<SecondSubject>>();
-            var b6 = MockRepository.GenerateMock<ITagBuilder<SecondSubject>>();
+            var b1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var b2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var b3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var b4 = MockRepository.GenerateMock<ITagBuilderPolicy<SecondSubject>>();
+            var b5 = MockRepository.GenerateMock<ITagBuilderPolicy<SecondSubject>>();
+            var b6 = MockRepository.GenerateMock<ITagBuilderPolicy<SecondSubject>>();
 
 
             var lib1 = new HtmlConventionLibrary();
@@ -45,8 +45,8 @@ namespace HtmlTags.Testing.Conventions
 
             lib1.Import(lib2);
 
-            lib1.For<FakeSubject>().Default.Defaults.Builders.ShouldHaveTheSameElementsAs(b1, b2, b3);
-            lib1.For<SecondSubject>().Default.Defaults.Builders.ShouldHaveTheSameElementsAs(b4, b5, b6);
+            lib1.For<FakeSubject>().Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b2, b3);
+            lib1.For<SecondSubject>().Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b4, b5, b6);
         }
 
         [Test]

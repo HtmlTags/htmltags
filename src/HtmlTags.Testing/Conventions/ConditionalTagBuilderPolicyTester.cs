@@ -5,12 +5,12 @@ using NUnit.Framework;
 namespace HtmlTags.Testing.Conventions
 {
     [TestFixture]
-    public class LambdaTagBuilderTester
+    public class ConditionalTagBuilderPolicyTester
     {
         [Test]
         public void matches_delegates()
         {
-            var builder = new LambdaTagBuilder<FakeSubject>(x => x.Level > 10, x => new HtmlTag("div"));
+            var builder = new ConditionalTagBuilderPolicy<FakeSubject>(x => x.Level > 10, x => new HtmlTag("div"));
 
             builder.Matches(new FakeSubject{Level = 5}).ShouldBeFalse();
             builder.Matches(new FakeSubject{Level = 11}).ShouldBeTrue();
@@ -19,11 +19,13 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void build_delegates()
         {
-            var builder = new LambdaTagBuilder<FakeSubject>(x => x.Level > 10, x => new HtmlTag("div").Text(x.Name));
+            var builder = new ConditionalTagBuilderPolicy<FakeSubject>(x => x.Level > 10, x => new HtmlTag("div").Text(x.Name));
 
-            builder.Build(new FakeSubject{
+            var subject = new FakeSubject
+            {
                 Name = "Max"
-            })
+            };
+            builder.BuilderFor(subject).Build(subject)
                 .ToString()
                 .ShouldEqual("<div>Max</div>");
         }

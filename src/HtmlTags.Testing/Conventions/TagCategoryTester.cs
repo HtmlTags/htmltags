@@ -261,14 +261,14 @@ namespace HtmlTags.Testing.Conventions
     [TestFixture]
     public class when_importing_one_category_into_another
     {
-        private ITagBuilder<FakeSubject> b1;
-        private ITagBuilder<FakeSubject> b2;
-        private ITagBuilder<FakeSubject> b3;
-        private ITagBuilder<FakeSubject> b4;
-        private ITagBuilder<FakeSubject> b5;
-        private ITagBuilder<FakeSubject> b6;
-        private ITagBuilder<FakeSubject> b7;
-        private ITagBuilder<FakeSubject> b8;
+        private ITagBuilderPolicy<FakeSubject> b1;
+        private ITagBuilderPolicy<FakeSubject> b2;
+        private ITagBuilderPolicy<FakeSubject> b3;
+        private ITagBuilderPolicy<FakeSubject> b4;
+        private ITagBuilderPolicy<FakeSubject> b5;
+        private ITagBuilderPolicy<FakeSubject> b6;
+        private ITagBuilderPolicy<FakeSubject> b7;
+        private ITagBuilderPolicy<FakeSubject> b8;
         private ITagModifier<FakeSubject> m1;
         private ITagModifier<FakeSubject> m2;
         private ITagModifier<FakeSubject> m3;
@@ -279,14 +279,14 @@ namespace HtmlTags.Testing.Conventions
         [SetUp]
         public void SetUp()
         {
-            b1 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b2 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b3 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b4 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b5 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b6 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b7 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            b8 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
+            b1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b4 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b5 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b6 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b7 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b8 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
 
             m1 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
             m2 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
@@ -322,22 +322,22 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void should_import_the_default_profile()
         {
-            category1.Defaults.Builders.ShouldHaveTheSameElementsAs(b1, b2, b5);
+            category1.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b2, b5);
             category1.Defaults.Modifiers.ShouldHaveTheSameElementsAs(m1, m2, m4);
         }
 
         [Test]
         public void does_not_change_profile_held_by_first_category_but_not_the_second()
         {
-            category1.Profile("D").Builders.ShouldHaveTheSameElementsAs(b8);
+            category1.Profile("D").Policies.ShouldHaveTheSameElementsAs(b8);
             category1.Profile("D").Modifiers.Any().ShouldBeFalse();
         }
 
         [Test]
         public void import_profile_held_by_both_categories()
         {
-            category1.Profile("A").Builders.ShouldHaveTheSameElementsAs(b3, b6);
-            category1.Profile("B").Builders.ShouldHaveTheSameElementsAs(b4);
+            category1.Profile("A").Policies.ShouldHaveTheSameElementsAs(b3, b6);
+            category1.Profile("B").Policies.ShouldHaveTheSameElementsAs(b4);
 
             category1.Profile("A").Modifiers.ShouldHaveTheSameElementsAs(m3);
             category1.Profile("B").Modifiers.ShouldHaveTheSameElementsAs(m5);
@@ -346,7 +346,7 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void import_profile_held_by_second_profile_but_not_the_first()
         {
-            category1.Profile("C").Builders.ShouldHaveTheSameElementsAs(b7);
+            category1.Profile("C").Policies.ShouldHaveTheSameElementsAs(b7);
         }
     }
 }

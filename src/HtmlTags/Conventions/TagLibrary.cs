@@ -31,6 +31,11 @@ namespace HtmlTags.Conventions
             return _categories[TagConstants.Default].If(matches);
         }
 
+        public void Add(Func<T, bool> filter, ITagBuilder<T> builder)
+        {
+            Add(new ConditionalTagBuilderPolicy<T>(filter, builder));
+        }
+
         /// <summary>
         /// The modifiers and builders for a category of conventions 
         /// </summary>
@@ -50,12 +55,12 @@ namespace HtmlTags.Conventions
         }
 
         /// <summary>
-        /// Adds a builder to the default category and profile
+        /// Adds a builder policy to the default category and profile
         /// </summary>
-        /// <param name="builder"></param>
-        public void Add(ITagBuilder<T> builder)
+        /// <param name="policy"> </param>
+        public void Add(ITagBuilderPolicy<T> policy)
         {
-            Default.Add(builder);
+            Default.Add(policy);
         }
 
         /// <summary>

@@ -7,7 +7,8 @@ namespace HtmlTags.Conventions
         CategoryExpression<T> Always { get; }
         CategoryExpression<T> If(Func<T, bool> matches);
 
-        void Add(ITagBuilder<T> builder);
+        void Add(Func<T, bool> filter, ITagBuilder<T> builder);
+        void Add(ITagBuilderPolicy<T> policy);
         void Add(ITagModifier<T> modifier);
     }
 }

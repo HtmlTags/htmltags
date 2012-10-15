@@ -6,12 +6,12 @@ namespace HtmlTags.Conventions
     // Tested through the test for TagCategory and TagLibrary
     public class BuilderSet<T> : ITagBuildingExpression<T> where T : TagRequest
     {
-        private readonly List<ITagBuilder<T>> _builders = new List<ITagBuilder<T>>();
+        private readonly List<ITagBuilderPolicy<T>> _policies = new List<ITagBuilderPolicy<T>>();
         private readonly List<ITagModifier<T>> _modifiers = new List<ITagModifier<T>>();
 
-        public IEnumerable<ITagBuilder<T>> Builders
+        public IEnumerable<ITagBuilderPolicy<T>> Policies
         {
-            get { return _builders; }
+            get { return _policies; }
         }
 
         public IEnumerable<ITagModifier<T>> Modifiers
@@ -19,9 +19,14 @@ namespace HtmlTags.Conventions
             get { return _modifiers; }
         }
 
-        public void Add(ITagBuilder<T> builder)
+        public void Add(Func<T, bool> filter, ITagBuilder<T> builder)
         {
-            _builders.Add(builder);
+            _policies.Add(new ConditionalTagBuilderPolicy<T>(filter, builder));
+        }
+
+        public void Add(ITagBuilderPolicy<T> policy)
+        {
+            _policies.Add(policy);
         }
 
         public void Add(ITagModifier<T> modifier)
@@ -41,7 +46,7 @@ namespace HtmlTags.Conventions
 
         public void Import(BuilderSet<T> other)
         {
-            _builders.AddRange(other._builders);
+            _policies.AddRange(other._policies);
             _modifiers.AddRange(other._modifiers);
         }
     }

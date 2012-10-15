@@ -11,9 +11,9 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void import_puts_the_second_set_stuff_in_the_back()
         {
-            var builder1 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            var builder2 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
-            var builder3 = MockRepository.GenerateMock<ITagBuilder<FakeSubject>>();
+            var builder1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var builder2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var builder3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
 
             var m1 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
             var m2 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
@@ -35,9 +35,19 @@ namespace HtmlTags.Testing.Conventions
 
             set1.Import(set2);
 
-            set1.Builders.ShouldHaveTheSameElementsAs(builder1, builder2, builder3);
+            set1.Policies.ShouldHaveTheSameElementsAs(builder1, builder2, builder3);
             set1.Modifiers.ShouldHaveTheSameElementsAs(m1, m2, m3, m4, m5);
         }
+    }
+
+    public class SomethingSubject : TagRequest
+    {
+        public override object ToToken()
+        {
+            return this;
+        }
+
+        public int Level { get; set; }
     }
 
 }
