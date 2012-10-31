@@ -1,5 +1,4 @@
 using System;
-using FubuCore;
 
 namespace HtmlTags.Conventions
 {
@@ -14,7 +13,7 @@ namespace HtmlTags.Conventions
 
         public T Build<T>()
         {
-            return _services[typeof (T)].As<Func<T>>()();
+            return ((Func<T>) _services[typeof (T)])();
         }
 
         public void Add<T>(Func<T> func)
