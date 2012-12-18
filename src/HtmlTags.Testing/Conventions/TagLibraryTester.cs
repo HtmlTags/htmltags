@@ -66,7 +66,22 @@ namespace HtmlTags.Testing.Conventions
             visitor.AssertWasCalled(x => x.BuilderSet("b2", b2));
         }
 
+        [Test]
+        public void accept_convention_visitor()
+        {
+            var topVisitor = MockRepository.GenerateMock<IHtmlConventionVisitor>();
+            var childVisitor = MockRepository.GenerateMock<ITagLibraryVisitor<FakeSubject>>();
 
+            var library = MockRepository.GenerateMock<TagLibrary<FakeSubject>>();
+
+            library.Expect(x => x.AcceptVisitor(childVisitor));
+
+            topVisitor.Stub(x => x.VisitorFor<FakeSubject>()).Return(childVisitor);
+
+            library.AcceptVisitor(topVisitor);
+
+            library.AssertWasCalled(x => x.AcceptVisitor(childVisitor));
+        }
         
     }
 

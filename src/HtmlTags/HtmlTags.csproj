@@ -67,6 +67,7 @@
     <Compile Include="Conventions\ITagLibraryVisitor.cs" />
     <Compile Include="Conventions\ITagModifier.cs" />
     <Compile Include="Conventions\ITagRequestActivator.cs" />
+    <Compile Include="Conventions\IVisitable.cs" />
     <Compile Include="Conventions\LambdaTagBuilder.cs" />
     <Compile Include="Conventions\LambdaTagModifier.cs" />
     <Compile Include="Conventions\ServiceBuilder.cs" />

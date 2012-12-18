@@ -20,6 +20,14 @@ namespace HtmlTags.Conventions
             _defaultBuilder = _services[TagConstants.Default];
         }
 
+        public void AcceptVisitor(IHtmlConventionVisitor visitor)
+        {
+            foreach (IVisitable visitable in _libraries)
+            {
+                visitable.AcceptVisitor(visitor);
+            }   
+        }
+
         public T Get<T>(string profile = null)
         {
             profile = profile ?? TagConstants.Default;
