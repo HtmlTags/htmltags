@@ -99,5 +99,13 @@ namespace HtmlTags.Conventions
 
             keys.Each(key => _categories[key].Import(other._categories[key]));
         }
+
+        public void AcceptVisitor(ITagLibraryVisitor<T> visitor)
+        {
+            _categories.Each((name, category) => {
+                visitor.Category(name, category);
+                category.AcceptVisitor(visitor);
+            });
+        }
     }
 }

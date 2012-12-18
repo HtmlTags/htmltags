@@ -60,9 +60,11 @@
     <Compile Include="Conventions\HtmlConventionLibrary.cs" />
     <Compile Include="Conventions\HtmlConventionLibraryImporter.cs" />
     <Compile Include="Conventions\IHtmlConventionLibraryImporter.cs" />
+    <Compile Include="Conventions\IHtmlConventionVisitor.cs" />
     <Compile Include="Conventions\ITagBuilder.cs" />
     <Compile Include="Conventions\ITagBuildingExpression.cs" />
     <Compile Include="Conventions\ITagGenerator.cs" />
+    <Compile Include="Conventions\ITagLibraryVisitor.cs" />
     <Compile Include="Conventions\ITagModifier.cs" />
     <Compile Include="Conventions\ITagRequestActivator.cs" />
     <Compile Include="Conventions\LambdaTagBuilder.cs" />

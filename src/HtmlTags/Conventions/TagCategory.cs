@@ -108,5 +108,10 @@ namespace HtmlTags.Conventions
 
             keys.Each(key => _profiles[key].Import(other._profiles[key]));
         }
+
+        public void AcceptVisitor(ITagLibraryVisitor<T> visitor)
+        {
+            _profiles.Each(visitor.BuilderSet);
+        }
     }
 }
