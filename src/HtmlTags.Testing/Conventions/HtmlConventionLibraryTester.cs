@@ -81,6 +81,20 @@ namespace HtmlTags.Testing.Conventions
             library1.Get<IFoo>("different").ShouldBeOfType<BigFoo>();
         }
 
+        [Test]
+        public void services_are_not_overwritten_while_importing()
+        {
+            var library1 = new HtmlConventionLibrary();
+            library1.RegisterService<IFoo, LittleFoo>();
+
+            var library2 = new HtmlConventionLibrary();
+            library2.RegisterService<IFoo, BigFoo>();
+
+            library1.Import(library2);
+
+            library1.Get<IFoo>().ShouldBeOfType<LittleFoo>();
+        }
+
 
         [Test]
         public void get_with_no_prior_definition_will_happily_blow_up()
