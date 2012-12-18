@@ -38,6 +38,22 @@ namespace HtmlTags.Testing.Conventions
             set1.Policies.ShouldHaveTheSameElementsAs(builder1, builder2, builder3);
             set1.Modifiers.ShouldHaveTheSameElementsAs(m1, m2, m3, m4, m5);
         }
+
+        [Test]
+        public void insert_builder()
+        {
+            var builder1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var builder2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var builder3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+
+            var set1 = new BuilderSet<FakeSubject>();
+            set1.Add(builder2);
+            set1.Add(builder3);
+
+            set1.InsertFirst(builder1);
+            set1.Policies.ShouldHaveTheSameElementsAs(builder1, builder2, builder3);
+
+        }
     }
 
     public class SomethingSubject : TagRequest
