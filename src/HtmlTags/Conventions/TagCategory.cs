@@ -54,7 +54,7 @@ namespace HtmlTags.Conventions
 
         private IEnumerable<BuilderSet<T>> setsFor(string profile)
         {
-            if (!string.IsNullOrEmpty(profile))
+            if (!string.IsNullOrEmpty(profile) && profile != TagConstants.Default)
             {
                 yield return _profiles[profile];
             }
