@@ -13,15 +13,15 @@ namespace HtmlTags.Conventions
     {
         private readonly ActiveProfile _profile;
         private readonly HtmlConventionLibrary _library;
-        private readonly IEnumerable<ITagRequestActivator> _activators;
+        private readonly ITagRequestBuilder _tagRequestBuilder;
         private readonly IDictionary<Type, object> _generators = new Dictionary<Type, object>();
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
-        public TagGeneratorFactory(ActiveProfile profile, HtmlConventionLibrary library, IEnumerable<ITagRequestActivator> activators)
+        public TagGeneratorFactory(ActiveProfile profile, HtmlConventionLibrary library, ITagRequestBuilder tagRequestBuilder)
         {
             _profile = profile;
             _library = library;
-            _activators = activators;
+            _tagRequestBuilder = tagRequestBuilder;
         }
 
         public ITagGenerator<T> GeneratorFor<T>() where T : TagRequest
@@ -35,7 +35,7 @@ namespace HtmlTags.Conventions
 
         private void buildNew<T>() where T : TagRequest
         {
-            var generator = new TagGenerator<T>(_library.For<T>(), _activators, _profile);
+            var generator = new TagGenerator<T>(_library.For<T>(), _tagRequestBuilder, _profile);
             _generators.Add(typeof(T), generator);
         }
     }

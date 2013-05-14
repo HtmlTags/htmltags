@@ -31,15 +31,15 @@ namespace HtmlTags.Conventions
     public class TagGenerator<T> : ITagGenerator<T> where T : TagRequest
     {
         private readonly ITagLibrary<T> _library;
+        private readonly ITagRequestBuilder _tagRequestBuilder;
         private readonly ActiveProfile _profile;
-        private readonly IEnumerable<ITagRequestActivator> _activators;
         
 
-        public TagGenerator(ITagLibrary<T> library, IEnumerable<ITagRequestActivator> activators, ActiveProfile profile)
+        public TagGenerator(ITagLibrary<T> library, ITagRequestBuilder tagRequestBuilder, ActiveProfile profile)
         {
             _library = library;
+            _tagRequestBuilder = tagRequestBuilder;
             _profile = profile;
-            _activators = activators.Where(x => x.Matches(typeof (T))).ToList();
         }
 
         public HtmlTag Build(T request, string category = null, string profile = null)
@@ -51,7 +51,7 @@ namespace HtmlTags.Conventions
 
             var plan = _library.PlanFor((T)token, profile, category);
 
-            _activators.Each(x => x.Activate(request));
+            _tagRequestBuilder.Build(request);
 
             return plan.Build(request);
         }
