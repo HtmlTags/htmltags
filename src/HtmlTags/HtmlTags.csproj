@@ -81,6 +81,7 @@
     <Compile Include="Conventions\TagLibrary.cs" />
     <Compile Include="Conventions\TagPlan.cs" />
     <Compile Include="Conventions\TagRequest.cs" />
+    <Compile Include="Conventions\TagRequestBuilder.cs" />
     <Compile Include="Conventions\TagSubject.cs" />
     <Compile Include="CssClassNameValidator.cs" />
     <Compile Include="DivTag.cs" />

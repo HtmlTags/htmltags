@@ -8,19 +8,11 @@ namespace HtmlTags.Testing.Conventions
     [TestFixture]
     public class TagGeneratorTester : InteractionContext<TagGenerator<FakeSubject>>
     {
-        private ITagRequestActivator[] theActivators;
         private FakeSubject theSubject;
         private HtmlTag theTag;
 
         protected override void beforeEach()
         {
-            theActivators = Services.CreateMockArrayFor<ITagRequestActivator>(5);
-
-            theActivators[0].Stub(x => x.Matches(typeof (FakeSubject))).Return(true);    
-            theActivators[1].Stub(x => x.Matches(typeof (FakeSubject))).Return(false);    
-            theActivators[2].Stub(x => x.Matches(typeof (FakeSubject))).Return(true);    
-            theActivators[3].Stub(x => x.Matches(typeof (FakeSubject))).Return(false);    
-            theActivators[4].Stub(x => x.Matches(typeof (FakeSubject))).Return(true);
 
             theSubject = new FakeSubject{
                 Name = "Jeremy",
@@ -39,6 +31,8 @@ namespace HtmlTags.Testing.Conventions
 
 
             thePlan.Stub(x => x.Build(theSubject)).Return(theTag);
+
+            MockFor<ITagRequestBuilder>().Stub(x => x.Build(theSubject)).IgnoreArguments();
         }
 
         [Test]
@@ -48,17 +42,14 @@ namespace HtmlTags.Testing.Conventions
         }
 
         [Test]
-        public void only_calls_the_activators_that_match_on_the_subject_type()
+        public void ensure_tag_requests_are_always_built()
         {
             expect(theSubject, TagConstants.Default, TagConstants.Default);
 
             ClassUnderTest.Build(theSubject);
 
-            theActivators[0].AssertWasCalled(x => x.Activate(theSubject));
-            theActivators[1].AssertWasNotCalled(x => x.Activate(theSubject));
-            theActivators[2].AssertWasCalled(x => x.Activate(theSubject));
-            theActivators[3].AssertWasNotCalled(x => x.Activate(theSubject));
-            theActivators[4].AssertWasCalled(x => x.Activate(theSubject));
+            MockFor<ITagRequestBuilder>().AssertWasCalled(x => x.Build(theSubject));
+            
         }
 
         [Test]
