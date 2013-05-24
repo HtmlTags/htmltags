@@ -38,3 +38,14 @@ RippleOperation: htmltags (master)
           3.) ProcessDirectives           Process directives from nugets                 
           4.) FixReferences               Fix References                                 
 
+5/24/2013 8:56:18 AM: [Info] Restoring dependencies for solution htmltags to C:\code\htmltags\src\packages
+5/24/2013 8:56:18 AM: [Debug] 
+=========================================================================================
+RippleOperation: htmltags (master)
+=========================================================================================
+     ** Ripple Steps
+          1.) DownloadMissingNugets       Download missing nugets for htmltags           
+          2.) ExplodeDownloadedNugets     Explode nugets at C:\code\htmltags\src\packages
+          3.) ProcessDirectives           Process directives from nugets                 
+          4.) FixReferences               Fix References                                 
+

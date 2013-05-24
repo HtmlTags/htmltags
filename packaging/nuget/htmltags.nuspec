@@ -14,6 +14,5 @@
   </metadata>
   <files>
 	<file src="..\..\src\HtmlTags\bin\release\HtmlTags.dll" target="lib\4.0" />
-	<file src="..\..\src\HtmlTags\**\*.cs" target="src" />
   </files>
 </package>
