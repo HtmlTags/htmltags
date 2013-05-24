@@ -21,3 +21,4 @@ test-results
 src/packages
 results
 *DotSettings.user
+Gemfile.lock

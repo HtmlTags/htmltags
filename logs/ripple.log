@@ -1,0 +1,29 @@
+5/24/2013 8:23:44 AM: [Info] Restoring dependencies for solution htmltags to C:\code\htmltags\src\packages
+5/24/2013 8:23:45 AM: [Debug] 
+=========================================================================================
+RippleOperation: htmltags (master)
+=========================================================================================
+     ** Ripple Steps
+          1.) DownloadMissingNugets       Download missing nugets for htmltags           
+          2.) ExplodeDownloadedNugets     Explode nugets at C:\code\htmltags\src\packages
+          3.) ProcessDirectives           Process directives from nugets                 
+          4.) FixReferences               Fix References                                 
+
+5/24/2013 8:23:50 AM: [Debug] Downloading Download and cache FubuTestingSupport.1.1.0.246.nupkg
+5/24/2013 8:23:53 AM: [Debug] Downloading From filesystem: C:\Users\jeremill\AppData\Roaming\ripple\RhinoMocks.3.6.0.0.nupkg
+5/24/2013 8:23:55 AM: [Debug] Downloading From filesystem: C:\Users\jeremill\AppData\Roaming\ripple\structuremap.automocking.2.6.3.0.nupkg
+5/24/2013 8:23:56 AM: [Debug] Downloading From filesystem: C:\Users\jeremill\AppData\Roaming\ripple\NUnit.2.5.10.11092.nupkg
+5/24/2013 8:23:58 AM: [Debug] Downloading From filesystem: C:\Users\jeremill\AppData\Roaming\ripple\structuremap.2.6.3.0.nupkg
+5/24/2013 8:23:58 AM: [Debug] Downloading Download and cache FubuCore.1.1.0.246.nupkg
+5/24/2013 8:23:59 AM: [Debug] Exploding Name: FubuTestingSupport, Version: 1.1.0.246, IsPreRelease: False
+5/24/2013 8:23:59 AM: [Info] Exploding to C:\code\htmltags\src\packages\FubuTestingSupport
+5/24/2013 8:23:59 AM: [Debug] Exploding Name: RhinoMocks, Version: 3.6.0.0, IsPreRelease: False
+5/24/2013 8:23:59 AM: [Info] Exploding to C:\code\htmltags\src\packages\RhinoMocks
+5/24/2013 8:23:59 AM: [Debug] Exploding Name: structuremap.automocking, Version: 2.6.3.0, IsPreRelease: False
+5/24/2013 8:23:59 AM: [Info] Exploding to C:\code\htmltags\src\packages\structuremap.automocking
+5/24/2013 8:23:59 AM: [Debug] Exploding Name: NUnit, Version: 2.5.10.11092, IsPreRelease: False
+5/24/2013 8:23:59 AM: [Info] Exploding to C:\code\htmltags\src\packages\NUnit
+5/24/2013 8:24:00 AM: [Debug] Exploding Name: structuremap, Version: 2.6.3.0, IsPreRelease: False
+5/24/2013 8:24:00 AM: [Info] Exploding to C:\code\htmltags\src\packages\structuremap
+5/24/2013 8:24:00 AM: [Debug] Exploding Name: FubuCore, Version: 1.1.0.246, IsPreRelease: False
+5/24/2013 8:24:00 AM: [Info] Exploding to C:\code\htmltags\src\packages\FubuCore
