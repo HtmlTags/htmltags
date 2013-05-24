@@ -9,7 +9,7 @@
     <projectUrl>http://htmltags.fubu-project.org/</projectUrl>
     <iconUrl>https://github.com/DarthFubuMVC/fubu-collateral/raw/master/Icons/FubuHtml_256.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Package description</description>
+    <description>Easy generation of html with a jquery inspired object model</description>
     <tags>html</tags>
   </metadata>
   <files>

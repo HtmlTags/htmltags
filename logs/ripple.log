@@ -27,3 +27,14 @@ RippleOperation: htmltags (master)
 5/24/2013 8:24:00 AM: [Info] Exploding to C:\code\htmltags\src\packages\structuremap
 5/24/2013 8:24:00 AM: [Debug] Exploding Name: FubuCore, Version: 1.1.0.246, IsPreRelease: False
 5/24/2013 8:24:00 AM: [Info] Exploding to C:\code\htmltags\src\packages\FubuCore
+5/24/2013 8:48:53 AM: [Info] Restoring dependencies for solution htmltags to C:\code\htmltags\src\packages
+5/24/2013 8:48:53 AM: [Debug] 
+=========================================================================================
+RippleOperation: htmltags (master)
+=========================================================================================
+     ** Ripple Steps
+          1.) DownloadMissingNugets       Download missing nugets for htmltags           
+          2.) ExplodeDownloadedNugets     Explode nugets at C:\code\htmltags\src\packages
+          3.) ProcessDirectives           Process directives from nugets                 
+          4.) FixReferences               Fix References                                 
+
