@@ -53,7 +53,8 @@ namespace HtmlTags
 
         public void SelectByValue(object value)
         {
-            var child = Children.FirstOrDefault(x => x.Attr("value").Equals(value));
+            var valueToMatch = value.ToString();
+            var child = Children.FirstOrDefault(x => x.Attr("value").Equals(valueToMatch));
 
             if (child != null)
             {
