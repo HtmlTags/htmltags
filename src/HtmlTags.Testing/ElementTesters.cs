@@ -45,37 +45,42 @@ namespace HtmlTags.Testing
         public void form_tag_creates_the_opening_element_of_a_form_with_id_mainForm()
         {
             var tag = new FormTag();
-            tag.ToString().ShouldEqual("<form method=\"post\">");
+            tag.Attr("method").ShouldEqual("post");
         }
 
         [Test]
         public void form_id_can_be_customized()
         {
             var tag = new FormTag().Id("other-form");
-            tag.ToString().ShouldEqual("<form method=\"post\" id=\"other-form\">");
+            tag.Id().ShouldEqual("other-form");
         }
 
         [Test]
         public void form_method_can_be_customized()
         {
             var tag = new FormTag().Method("get");
-            tag.ToString().ShouldEqual("<form method=\"get\">");
+            tag.Attr("method").ShouldEqual("get");
         }
 
         [Test]
         public void form_action_can_be_specified()
         {
             var tag = new FormTag().Action("/user/create");
-            tag.ToString().ShouldEqual("<form method=\"post\" action=\"/user/create\">");
+            tag.Attr("action").ShouldEqual("/user/create");
         }
 
         [Test]
         public void form_action_can_be_specified_via_constructor()
         {
             var tag = new FormTag("/user/create");
-            tag.ToString().ShouldEqual("<form method=\"post\" action=\"/user/create\">");
+            tag.Attr("action").ShouldEqual("/user/create");
         }
 
+        [Test]
+        public void form_tag_has_closing_tag_by_default()
+        {
+            new FormTag().HasClosingTag().ShouldBeTrue();
+        }
     }
 
     [TestFixture]
