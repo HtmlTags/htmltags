@@ -22,3 +22,4 @@ src/packages
 results
 *DotSettings.user
 Gemfile.lock
+logs/ripple.log
