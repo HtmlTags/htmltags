@@ -782,6 +782,12 @@ namespace HtmlTags
             return this;
         }
 
+        public HtmlTag UseClosingTag()
+        {
+            _ignoreClosingTag = false;
+            return this;
+        }
+
         /// <summary>
         /// Get whether or not to render the tag itself or just the children of the tag. 
         /// </summary>
