@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,11 +29,16 @@ namespace HtmlTags
         private const string CssStyleAttribute = "style";
         private const string DataPrefix = "data-";
         private static string _metadataSuffix = "__";
+
         public static void UseMetadataSuffix(string suffix)
         {
             _metadataSuffix = suffix;
         }
-        public static string MetadataAttribute { get { return DataPrefix + _metadataSuffix; } }
+
+        public static string MetadataAttribute
+        {
+            get { return DataPrefix + _metadataSuffix; }
+        }
 
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
@@ -46,11 +50,13 @@ namespace HtmlTags
         private string _innerText = string.Empty;
         private bool _shouldRender = true;
         private string _tag;
-    	private bool _ignoreOpeningTag;
+        private bool _ignoreOpeningTag;
         private bool _ignoreClosingTag;
         private bool _isAuthorized = true;
 
-        private HtmlTag() { }
+        private HtmlTag()
+        {
+        }
 
         public HtmlTag(string tag) : this()
         {
@@ -73,7 +79,7 @@ namespace HtmlTags
         }
 
         private bool _encodeInnerText = true;
-        
+
         private HtmlTag _next;
         private HtmlTag _parent;
 
@@ -81,7 +87,11 @@ namespace HtmlTags
         /// The sibling tag that immediately follows the current tag. 
         /// Setting this value will remove any existing value. Use <see cref="After(HtmlTag)"/> if you wish to insert a new sibling before any existing sibling.
         /// </summary>
-        public HtmlTag Next { get { return _next; } set { _next = value; } }
+        public HtmlTag Next
+        {
+            get { return _next; }
+            set { _next = value; }
+        }
 
         /// <summary>
         /// Inserts a sibling tag immediately after the current tag. Any existing sibling will follow the inserted tag.
@@ -104,13 +114,16 @@ namespace HtmlTags
             return _next;
         }
 
-        public IList<HtmlTag> Children { get { return _children; } }
+        public IList<HtmlTag> Children
+        {
+            get { return _children; }
+        }
 
         public HtmlTag Parent
         {
             get { return _parent; }
         }
-        
+
         IEnumerable<HtmlTag> ITagSource.AllTags()
         {
             yield return this;
@@ -237,7 +250,7 @@ namespace HtmlTags
         /// <returns></returns>
         public HtmlTag AppendHtml(string html)
         {
-            return Append(new LiteralTag(html));       
+            return Append(new LiteralTag(html));
         }
 
         /// <summary>
@@ -310,7 +323,7 @@ namespace HtmlTags
         {
             var dataKey = DataPrefix + key;
             if (!_htmlAttributes.Has(dataKey)) return this;
-            var value = (T)_htmlAttributes[dataKey].Value;
+            var value = (T) _htmlAttributes[dataKey].Value;
             configure(value);
             return this;
         }
@@ -357,7 +370,7 @@ namespace HtmlTags
         public HtmlTag MetaData<T>(string key, Action<T> configure) where T : class
         {
             if (!_metaData.Has(key)) return this;
-            var value = (T)_metaData[key];
+            var value = (T) _metaData[key];
             configure(value);
 
             return this;
@@ -405,9 +418,9 @@ namespace HtmlTags
 
         public override string ToString()
         {
-            return WillBeRendered() ? 
-                ToString(new HtmlTextWriter(new StringWriter(), string.Empty) { NewLine = string.Empty }) :
-                string.Empty;
+            return WillBeRendered()
+                ? ToString(new HtmlTextWriter(new StringWriter(), string.Empty) {NewLine = string.Empty})
+                : string.Empty;
         }
 
         public string ToHtmlString()
@@ -417,9 +430,9 @@ namespace HtmlTags
 
         public string ToPrettyString()
         {
-            return WillBeRendered() ?
-                ToString(new HtmlTextWriter(new StringWriter(), "  ") { NewLine = Environment.NewLine }) :
-                string.Empty;
+            return WillBeRendered()
+                ? ToString(new HtmlTextWriter(new StringWriter(), "  ") {NewLine = Environment.NewLine})
+                : string.Empty;
         }
 
 
@@ -431,6 +444,7 @@ namespace HtmlTags
         }
 
         private bool _renderFromTop;
+
         public HtmlTag RenderFromTop()
         {
             _renderFromTop = true;
@@ -453,56 +467,56 @@ namespace HtmlTags
         {
             if (!WillBeRendered()) return;
 
-            if(_tag == "br")
+            if (_tag == "br")
             {
                 new BrTag().writeHtml(html);
                 return;
             }
 
-			if (HasTag())
-			{
-			    _htmlAttributes.Each((key, attribute) =>
-			    {
-			        if (attribute != null)
-			        {
-			            var value = attribute.Value;
-			            var stringValue = !(value is string) && key.StartsWith(DataPrefix)
-			                                  ? JsonUtil.ToJson(value)
-			                                  : value.ToString();
-			            html.AddAttribute(key, stringValue, attribute.IsEncoded);
-			        }
+            if (HasTag())
+            {
+                _htmlAttributes.Each((key, attribute) =>
+                {
+                    if (attribute != null)
+                    {
+                        var value = attribute.Value;
+                        var stringValue = !(value is string) && key.StartsWith(DataPrefix)
+                            ? JsonUtil.ToJson(value)
+                            : value.ToString();
+                        html.AddAttribute(key, stringValue, attribute.IsEncoded);
+                    }
                     else
                     {
                         // HtmlTextWriter treats a null value as an attribute with no value (e.g., <input required />).
                         html.AddAttribute(key, null, false);
                     }
-			    });
+                });
 
-				if (_cssClasses.Count > 0)
-				{
-					var classValue = _cssClasses.Join(" ");
-					html.AddAttribute(CssClassAttribute, classValue);
-				}
+                if (_cssClasses.Count > 0)
+                {
+                    var classValue = _cssClasses.Join(" ");
+                    html.AddAttribute(CssClassAttribute, classValue);
+                }
 
-				if (_metaData.Count > 0)
-				{
-					var metadataValue = JsonUtil.ToUnsafeJson(_metaData.Inner);
-					html.AddAttribute(MetadataAttribute, metadataValue);
-				}
+                if (_metaData.Count > 0)
+                {
+                    var metadataValue = JsonUtil.ToUnsafeJson(_metaData.Inner);
+                    html.AddAttribute(MetadataAttribute, metadataValue);
+                }
 
-				if (_customStyles.Count > 0)
-				{
-					var attValue = _customStyles
-						.Select(x => x.Key + ":" + x.Value)
-						.ToArray().Join(";");
+                if (_customStyles.Count > 0)
+                {
+                    var attValue = _customStyles
+                        .Select(x => x.Key + ":" + x.Value)
+                        .ToArray().Join(";");
 
-					html.AddAttribute(CssStyleAttribute, attValue);
-				}
+                    html.AddAttribute(CssStyleAttribute, attValue);
+                }
 
-				html.RenderBeginTag(_tag);
-			}
+                html.RenderBeginTag(_tag);
+            }
 
-        	writeInnerText(html);
+            writeInnerText(html);
 
             _children.Each(x => x.writeHtml(html));
 
@@ -542,8 +556,10 @@ namespace HtmlTags
             return buildAttr(attribute, value);
         }
 
-        public HtmlTag BooleanAttr(string attribute) {
-            if (isCssClassAttr(attribute)) {
+        public HtmlTag BooleanAttr(string attribute)
+        {
+            if (isCssClassAttr(attribute))
+            {
                 return buildAttr(attribute, null);
             }
 
@@ -562,7 +578,8 @@ namespace HtmlTags
             {
                 return RemoveAttr(attribute);
             }
-            if (value.Equals(string.Empty) && (isCssClassAttr(attribute) || isCssStyleAttr(attribute) || isMetadataAttr(attribute)))
+            if (value.Equals(string.Empty) &&
+                (isCssClassAttr(attribute) || isCssStyleAttr(attribute) || isMetadataAttr(attribute)))
             {
                 return RemoveAttr(attribute);
             }
@@ -662,7 +679,7 @@ namespace HtmlTags
             IEnumerable<string> classes;
             if (CssClassNameValidator.IsJsonClassName(className))
             {
-                classes = new List<string> { className };
+                classes = new List<string> {className};
             }
             else
             {
@@ -745,17 +762,17 @@ namespace HtmlTags
             });
         }
 
-		/// <summary>
-		/// Specify that the tag should render only its children and not itself.  
-		/// Used for declaring container/placeholder tags that should not affect the final markup.
-		/// </summary>
-		/// <returns></returns>
-		public HtmlTag NoTag()
-		{
-			_ignoreOpeningTag = true;
-			_ignoreClosingTag = true;
-			return this;
-		}
+        /// <summary>
+        /// Specify that the tag should render only its children and not itself.  
+        /// Used for declaring container/placeholder tags that should not affect the final markup.
+        /// </summary>
+        /// <returns></returns>
+        public HtmlTag NoTag()
+        {
+            _ignoreOpeningTag = true;
+            _ignoreClosingTag = true;
+            return this;
+        }
 
         public HtmlTag NoClosingTag()
         {
@@ -763,14 +780,20 @@ namespace HtmlTags
             return this;
         }
 
-		/// <summary>
-		/// Get whether or not to render the tag itself or just the children of the tag. 
-		/// </summary>
-		/// <returns></returns>
-		public bool HasTag()
-		{
-			return !_ignoreOpeningTag;
-		}
+        public HtmlTag UseClosingTag()
+        {
+            _ignoreClosingTag = false;
+            return this;
+        }
+
+        /// <summary>
+        /// Get whether or not to render the tag itself or just the children of the tag. 
+        /// </summary>
+        /// <returns></returns>
+        public bool HasTag()
+        {
+            return !_ignoreOpeningTag;
+        }
 
         public bool HasClosingTag()
         {
