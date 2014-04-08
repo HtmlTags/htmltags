@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using System.Web.UI;
@@ -667,8 +666,7 @@ namespace HtmlTags
             }
             else
             {
-                classes = Regex.Split(className, "[ ]+")
-                               .Where(c => !string.IsNullOrWhiteSpace(c));
+                classes = className.Split(' ').Where(c => !string.IsNullOrWhiteSpace(c));
             }
 
             return classes;
