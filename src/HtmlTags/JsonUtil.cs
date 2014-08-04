@@ -11,7 +11,11 @@ namespace HtmlTags
 #pragma warning disable 618,612
         public static string ToJson(object objectToSerialize)
         {
-            return new JavaScriptSerializer().Serialize(objectToSerialize);
+            var serializer = new JavaScriptSerializer
+            {
+                MaxJsonLength = int.MaxValue
+            };
+            return serializer.Serialize(objectToSerialize);
         }
 
         /// <summary>
@@ -22,6 +26,7 @@ namespace HtmlTags
         public static string ToUnsafeJson(object objectToSerialize)
         {
             var serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = int.MaxValue;
             serializer.RegisterConverters(new JavaScriptConverter[]{new JavascriptFunctionConverter()});
             var output = serializer.Serialize(objectToSerialize);
             const string pattern = @"\{""__jsfunction"":""(?<function>\w+)""}";
@@ -30,7 +35,11 @@ namespace HtmlTags
 
         public static T Get<T>(string rawJson)
         {
-            return new JavaScriptSerializer().Deserialize<T>(rawJson);
+            var serializer = new JavaScriptSerializer
+            {
+                MaxJsonLength = int.MaxValue
+            };
+            return serializer.Deserialize<T>(rawJson);
         }
 
         public static T Get<T>(byte[] rawJson)
@@ -41,7 +50,11 @@ namespace HtmlTags
 
         public static object Get(string rawJson)
         {
-            return new JavaScriptSerializer().DeserializeObject(rawJson);
+            var serializer = new JavaScriptSerializer
+            {
+                MaxJsonLength = int.MaxValue
+            };
+            return serializer.DeserializeObject(rawJson);
         }
 
         public class JavascriptFunctionConverter : JavaScriptConverter

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Text;
 using FubuTestingSupport;
 using NUnit.Framework;
@@ -35,10 +37,51 @@ namespace HtmlTags.Testing
 
             JsonUtil.Get<JsonUtilTarget>(bytes).Name.ShouldEqual("Jeremy");
         }
+
+        [Test]
+        public void get_by_bytes_large_data()
+        {
+            var guids = new List<Guid>();
+            for (var i = 0; i < 60000; i++)
+            {
+                 guids.Add(Guid.NewGuid());
+            }
+            var largeTarget = new JsonLargeUtilTarget
+            {
+                Guids = guids
+            };
+            var json = JsonUtil.ToJson(largeTarget);
+            var bytes = Encoding.Default.GetBytes(json);
+            JsonUtil.Get<JsonLargeUtilTarget>(bytes).Guids.Count.ShouldEqual(60000);
+        }
+
+        [Test]
+        public void can_handle_large_data_objects()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                var guids = new List<Guid>();
+                for (var i = 0; i < 60000; i++)
+                {
+                    guids.Add(Guid.NewGuid());
+                }
+                var large = new JsonLargeUtilTarget
+                {
+                    Guids = guids
+                };
+                JsonUtil.ToJson(large).ShouldNotBeEmpty();
+            });
+        }
     }
 
     public class JsonUtilTarget
     {
         public string Name { get; set; }
     }
+
+    public class JsonLargeUtilTarget
+    {
+        public List<Guid> Guids { get; set; }
+    }
+
 }
