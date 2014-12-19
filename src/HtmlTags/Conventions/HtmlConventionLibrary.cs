@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace HtmlTags.Conventions
 {
+    using UI;
+
     public class HtmlConventionLibrary
     {
         private readonly Cache<Type, object> _libraries = new Cache<Type, object>();
