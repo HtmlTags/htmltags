@@ -6,6 +6,20 @@ using HtmlTags.Conventions;
 
 namespace HtmlTags.UI.Elements
 {
+    public static class ElementGeneratorFactory
+    {
+        public static IElementGenerator<T> GeneratorFor<T>(HtmlConventionLibrary library,
+            params ITagRequestActivator[] tagRequestActivators)
+            where T : class
+        {
+            return new ElementGenerator<T>(
+                new TagGeneratorFactory(
+                    new ActiveProfile(), 
+                    library,
+                    new TagRequestBuilder(tagRequestActivators)));
+        }
+    }
+
     public class ElementGenerator<T> : IElementGenerator<T> where T : class
     {
         private readonly ITagGenerator<ElementRequest> _tags;

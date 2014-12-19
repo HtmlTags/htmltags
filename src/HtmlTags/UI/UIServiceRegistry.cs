@@ -22,8 +22,6 @@
 
 //            AddService<IActivator>(typeof(DisplayConversionRegistryActivator));
 
-//            SetServiceIfNone<IPartialInvoker, PartialInvoker>();
-
 //            SetServiceIfNone(typeof (IElementGenerator<>), typeof (ElementGenerator<>));
 
 //            SetServiceIfNone(typeof (ITagGenerator<>), typeof (TagGenerator<>));
