@@ -8,7 +8,7 @@ namespace HtmlTags.Conventions
         ITagPlan PlanFor(ElementRequest subject, string profile = null, string category = null);
     }
 
-    public class TagLibrary : ITagBuildingExpression, ITagLibrary, IVisitable
+    public class TagLibrary : ITagBuildingExpression, ITagLibrary
     {
         private readonly Cache<string, TagCategory> _categories =
             new Cache<string, TagCategory>(name => new TagCategory());
@@ -98,20 +98,6 @@ namespace HtmlTags.Conventions
             var keys = _categories.GetKeys().Union(other._categories.GetKeys()).Distinct();
 
             keys.Each(key => _categories[key].Import(other._categories[key]));
-        }
-
-        // virtual for mocking
-        public virtual void AcceptVisitor(ITagLibraryVisitor visitor)
-        {
-            _categories.Each((name, category) => {
-                visitor.Category(name, category);
-                category.AcceptVisitor(visitor);
-            });
-        }
-
-        public void AcceptVisitor(IHtmlConventionVisitor visitor)
-        {
-            AcceptVisitor(visitor.VisitorFor());
         }
     }
 }

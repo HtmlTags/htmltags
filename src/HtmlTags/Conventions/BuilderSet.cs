@@ -3,11 +3,19 @@ using System.Collections.Generic;
 
 namespace HtmlTags.Conventions
 {
+    using Elements;
+
     // Tested through the test for TagCategory and TagLibrary
     public class BuilderSet : ITagBuildingExpression
     {
         private readonly List<ITagBuilderPolicy> _policies = new List<ITagBuilderPolicy>();
         private readonly List<ITagModifier> _modifiers = new List<ITagModifier>();
+        private IElementNamingConvention _elementNamingConvention;
+
+        public BuilderSet()
+        {
+            _elementNamingConvention = new DefaultElementNamingConvention();
+        }
 
         public IEnumerable<ITagBuilderPolicy> Policies
         {
@@ -17,6 +25,11 @@ namespace HtmlTags.Conventions
         public IEnumerable<ITagModifier> Modifiers
         {
             get { return _modifiers; }
+        }
+
+        public IElementNamingConvention ElementNamingConvention
+        {
+            get { return _elementNamingConvention; }
         }
 
         public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder)
@@ -32,6 +45,11 @@ namespace HtmlTags.Conventions
         public void Add(ITagModifier modifier)
         {
             _modifiers.Add(modifier);
+        }
+
+        public void NamingConvention(IElementNamingConvention elementNamingConvention)
+        {
+            _elementNamingConvention = elementNamingConvention;
         }
 
         public CategoryExpression Always

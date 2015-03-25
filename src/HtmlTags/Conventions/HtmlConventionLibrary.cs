@@ -1,11 +1,11 @@
 using System;
-using System.Linq;
 
 namespace HtmlTags.Conventions
 {
+    using Elements;
+
     public class HtmlConventionLibrary
     {
-        // TODO: Collapse into one library
         private readonly Cache<string, ServiceBuilder> _services = new Cache<string, ServiceBuilder>(key => new ServiceBuilder());
         private readonly ServiceBuilder _defaultBuilder;
 
@@ -17,11 +17,6 @@ namespace HtmlTags.Conventions
         }
 
         public TagLibrary TagLibrary { get; private set; }
-
-        public void AcceptVisitor(IHtmlConventionVisitor visitor)
-        {
-            TagLibrary.AcceptVisitor(visitor);
-        }
 
         public T Get<T>(string profile = null)
         {
@@ -52,6 +47,11 @@ namespace HtmlTags.Conventions
         {
             TagLibrary.Import(library.TagLibrary);
             library._services.Each((key, builder) => builder.FillInto(_services[key]));
+        }
+
+        public IElementGenerator<T> GeneratorFor<T>() where T : class
+        {
+            return ElementGenerator<T>.For(this);
         }
     }
 }

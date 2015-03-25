@@ -40,49 +40,6 @@ namespace HtmlTags.Testing.Conventions
             build(subject, category:"b").ToString().ShouldEqual("<b>Lindsey</b>");
             build(subject, profile:"profile1").ToString().ShouldEqual("<p>Lindsey</p>");
         }
-
-        [Test]
-        public void accept_visitor()
-        {
-            var categoryA = theLibrary.Category("a");
-            var categoryB = theLibrary.Category("b");
-
-            var a1 = categoryA.Profile("a1");
-            var a2 = categoryA.Profile("a2");
-
-            var b1 = categoryB.Profile("b1");
-            var b2 = categoryB.Profile("b2");
-
-            var visitor = MockRepository.GenerateMock<ITagLibraryVisitor>();
-
-            theLibrary.AcceptVisitor(visitor);
-
-            visitor.AssertWasCalled(x => x.Category("a", categoryA));
-            visitor.AssertWasCalled(x => x.BuilderSet("a1", a1));
-            visitor.AssertWasCalled(x => x.BuilderSet("a2", a2));
-
-            visitor.AssertWasCalled(x => x.Category("b", categoryB));
-            visitor.AssertWasCalled(x => x.BuilderSet("b1", b1));
-            visitor.AssertWasCalled(x => x.BuilderSet("b2", b2));
-        }
-
-        [Test]
-        public void accept_convention_visitor()
-        {
-            var topVisitor = MockRepository.GenerateMock<IHtmlConventionVisitor>();
-            var childVisitor = MockRepository.GenerateMock<ITagLibraryVisitor>();
-
-            var library = MockRepository.GenerateMock<TagLibrary>();
-
-            library.Expect(x => x.AcceptVisitor(childVisitor));
-
-            topVisitor.Stub(x => x.VisitorFor()).Return(childVisitor);
-
-            library.AcceptVisitor(topVisitor);
-
-            library.AssertWasCalled(x => x.AcceptVisitor(childVisitor));
-        }
-        
     }
 
     [TestFixture]

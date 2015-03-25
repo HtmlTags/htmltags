@@ -36,7 +36,7 @@ namespace HtmlTags.Conventions
 
         private TagPlan buildPlan(TagSubject subject)
         {
-            var sets = setsFor(subject.Profile);
+            var sets = setsFor(subject.Profile).ToList();
             var policy = sets.SelectMany(x => x.Policies).FirstOrDefault(x => x.Matches(subject.Subject));
             if (policy == null)
             {
@@ -45,11 +45,11 @@ namespace HtmlTags.Conventions
 
             var builder = policy.BuilderFor(subject.Subject);
 
-
-
             var modifiers = sets.SelectMany(x => x.Modifiers).Where(x => x.Matches(subject.Subject));
 
-            return new TagPlan(builder, modifiers);
+            var elementNamingConvention = sets.Select(x => x.ElementNamingConvention).FirstOrDefault();
+
+            return new TagPlan(builder, modifiers, elementNamingConvention);
         }
 
         private IEnumerable<BuilderSet> setsFor(string profile)
@@ -107,11 +107,6 @@ namespace HtmlTags.Conventions
                 .Distinct();
 
             keys.Each(key => _profiles[key].Import(other._profiles[key]));
-        }
-
-        public void AcceptVisitor(ITagLibraryVisitor visitor)
-        {
-            _profiles.Each(visitor.BuilderSet);
         }
     }
 }

@@ -5,30 +5,12 @@ namespace HtmlTags.Conventions
     using Elements;
     using Reflection;
 
-    public class ElementGeneratorFactory
-    {
-
-        public IElementGenerator<T> GeneratorFor<T>(HtmlConventionLibrary library)
-            where T : class
-        {
-            return new ElementGenerator<T>(
-                new TagGeneratorFactory(
-                    new ActiveProfile(), 
-                    library));
-        }
-    }
-
     public class ElementGenerator<T> : IElementGenerator<T> where T : class
     {
         private readonly ITagGenerator _tags;
         private Lazy<T> _model;
 
-        public ElementGenerator(ITagGeneratorFactory factory)
-            : this(factory.GeneratorFor())
-        {
-        }
-
-        private ElementGenerator(ITagGenerator tags)
+        public ElementGenerator(ITagGenerator tags)
         {
             _tags = tags;
         }

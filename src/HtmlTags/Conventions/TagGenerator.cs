@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace HtmlTags.Conventions
 {
+    using Elements;
+
     public class ActiveProfile
     {
         private readonly Stack<string> _profiles = new Stack<string>();
@@ -56,9 +58,11 @@ namespace HtmlTags.Conventions
 
         private void ActivateRequest(ElementRequest request)
         {
-    //        request.ElementId = string.IsNullOrEmpty(request.ElementId)
-    //? _naming.GetName(request.HolderType(), request.Accessor)
-    //: request.ElementId;
+            //var namingConvention = request.Get<IElementNamingConvention>() ?? new DefaultElementNamingConvention();
+            // TODO: add the element id and service location stuff here
+            //        request.ElementId = string.IsNullOrEmpty(request.ElementId)
+            //? _naming.GetName(request.HolderType(), request.Accessor)
+            //: request.ElementId;
 
         }
 
