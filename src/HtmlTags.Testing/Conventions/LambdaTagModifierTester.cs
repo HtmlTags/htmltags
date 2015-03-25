@@ -10,7 +10,7 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void matches_delegates()
         {
-            var modifier = new LambdaTagModifier<FakeSubject>(x => x.Level > 10, x => { });
+            var modifier = new LambdaTagModifier(x => ((FakeSubject)x).Level > 10, x => { });
 
             modifier.Matches(new FakeSubject { Level = 5 }).ShouldBeFalse();
             modifier.Matches(new FakeSubject { Level = 11 }).ShouldBeTrue();
@@ -19,7 +19,7 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void modify_delegates()
         {
-            var builder = new LambdaTagModifier<FakeSubject>(x => x.Level > 10, x => x.CurrentTag.AddClass("foo"));
+            var builder = new LambdaTagModifier(x => ((FakeSubject)x).Level > 10, x => x.CurrentTag.AddClass("foo"));
 
             var subject = new FakeSubject
                               {

@@ -3,10 +3,9 @@ using System.Linq;
 
 namespace HtmlTags.Conventions
 {
-    using UI;
-
     public class HtmlConventionLibrary
     {
+        // TODO: Collapse into one library
         private readonly Cache<Type, object> _libraries = new Cache<Type, object>();
         private readonly Cache<string, ServiceBuilder> _services = new Cache<string, ServiceBuilder>(key => new ServiceBuilder());
         private readonly ServiceBuilder _defaultBuilder;
@@ -15,7 +14,7 @@ namespace HtmlTags.Conventions
         {
             _libraries.OnMissing = type =>
             {
-                var libType = typeof (TagLibrary<>).MakeGenericType(type);
+                var libType = typeof (TagLibrary);
                 return Activator.CreateInstance(libType);
             };
 
@@ -55,16 +54,16 @@ namespace HtmlTags.Conventions
             _services[profile].Add(builder);
         }
 
-        public TagLibrary<T> For<T>() where T : TagRequest
+        public TagLibrary For()
         {
-            return (TagLibrary<T>) _libraries[typeof (T)];
+            return (TagLibrary) _libraries[typeof (ElementRequest)];
         }
 
         public void Import(HtmlConventionLibrary library)
         {
             var types = library._libraries.GetKeys().Union(_libraries.GetKeys()).Distinct();
             types
-                .Select(t => typeof(HtmlConventionLibraryImporter<>).MakeGenericType(t))
+                .Select(t => typeof(HtmlConventionLibraryImporter))
                 .Select(t => (IHtmlConventionLibraryImporter)Activator.CreateInstance(t))
                 .Each(x => x.Import(this, library));
 

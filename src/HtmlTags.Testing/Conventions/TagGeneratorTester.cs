@@ -6,7 +6,7 @@ using Rhino.Mocks;
 namespace HtmlTags.Testing.Conventions
 {
     [TestFixture]
-    public class TagGeneratorTester : InteractionContext<TagGenerator<FakeSubject>>
+    public class TagGeneratorTester : InteractionContext<TagGenerator>
     {
         private FakeSubject theSubject;
         private HtmlTag theTag;
@@ -24,15 +24,13 @@ namespace HtmlTags.Testing.Conventions
 
         private void expect(FakeSubject subject, string category = null, string profile = null)
         {
-            var thePlan = MockFor<ITagPlan<FakeSubject>>();
+            var thePlan = MockFor<ITagPlan>();
 
-            MockFor<ITagLibrary<FakeSubject>>().Stub(x => x.PlanFor(subject, profile: profile, category: category))
+            MockFor<ITagLibrary>().Stub(x => x.PlanFor(subject, profile: profile, category: category))
                 .Return(thePlan);
 
 
             thePlan.Stub(x => x.Build(theSubject)).Return(theTag);
-
-            MockFor<ITagRequestBuilder>().Stub(x => x.Build(theSubject)).IgnoreArguments();
         }
 
         [Test]
@@ -46,10 +44,7 @@ namespace HtmlTags.Testing.Conventions
         {
             expect(theSubject, TagConstants.Default, TagConstants.Default);
 
-            ClassUnderTest.Build(theSubject);
-
-            MockFor<ITagRequestBuilder>().AssertWasCalled(x => x.Build(theSubject));
-            
+            ClassUnderTest.Build(theSubject);            
         }
 
         [Test]

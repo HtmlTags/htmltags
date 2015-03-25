@@ -10,8 +10,8 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void build_tag_with_multiple_modifiers()
         {
-            var plan = new TagPlan<FakeSubject>(new ByNameBuilder(),
-                                                new ITagModifier<FakeSubject>[]
+            var plan = new TagPlan(new ByNameBuilder(),
+                                                new ITagModifier[]
                                                 {new FakeAddClass(1, "a"), new FakeAddClass(2, "b")});
 
             plan.Build(new FakeSubject{
@@ -23,8 +23,8 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void build_tag_with_wrapper()
         {
-            var plan = new TagPlan<FakeSubject>(new ByNameBuilder(),
-                                                new ITagModifier<FakeSubject>[] { new FakeAddClass(1, "a"), new FakeAddClass(2, "b"), new WrapWithDiv() });
+            var plan = new TagPlan(new ByNameBuilder(),
+                                                new ITagModifier[] { new FakeAddClass(1, "a"), new FakeAddClass(2, "b"), new WrapWithDiv() });
 
             plan.Build(new FakeSubject
             {
@@ -34,14 +34,14 @@ namespace HtmlTags.Testing.Conventions
         }
     }
 
-    public class WrapWithDiv : ITagModifier<FakeSubject>
+    public class WrapWithDiv : ITagModifier
     {
-        public bool Matches(FakeSubject token)
+        public bool Matches(ElementRequest token)
         {
             return true;
         }
 
-        public void Modify(FakeSubject request)
+        public void Modify(ElementRequest request)
         {
             request.WrapWith(new HtmlTag("div").AddClass("wrapper"));
         }

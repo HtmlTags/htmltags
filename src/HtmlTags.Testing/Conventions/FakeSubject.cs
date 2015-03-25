@@ -2,21 +2,23 @@ using HtmlTags.Conventions;
 
 namespace HtmlTags.Testing.Conventions
 {
-    public class ByNameBuilder : ITagBuilder<FakeSubject>
+    using Reflection;
+
+    public class ByNameBuilder : ITagBuilder
     {
-        public bool Matches(FakeSubject subject)
+        public bool Matches(ElementRequest subject)
         {
             return true;
         }
 
-        public HtmlTag Build(FakeSubject request)
+        public HtmlTag Build(ElementRequest request)
         {
-            return new HtmlTag("div").Id(request.Name);
+            return new HtmlTag("div").Id(((FakeSubject)request).Name);
         }
     }
 
 
-    public class FakeBuilder : ITagBuilder<FakeSubject>
+    public class FakeBuilder : ITagBuilder
     {
         private readonly int _level;
         private readonly string _id;
@@ -32,13 +34,13 @@ namespace HtmlTags.Testing.Conventions
             return subject.Level == _level;
         }
 
-        public HtmlTag Build(FakeSubject request)
+        public HtmlTag Build(ElementRequest request)
         {
             return new HtmlTag("div").Id(_id);
         }
     }
 
-    public class FakeAddClass : ITagModifier<FakeSubject>
+    public class FakeAddClass : ITagModifier
     {
         private readonly int _level;
         private readonly string _class;
@@ -49,22 +51,22 @@ namespace HtmlTags.Testing.Conventions
             _class = @class;
         }
 
-        public bool Matches(FakeSubject token)
+        public bool Matches(ElementRequest token)
         {
-            return token.Level <= _level;
+            return ((FakeSubject)token).Level <= _level;
         }
 
-        public void Modify(FakeSubject request)
+        public void Modify(ElementRequest request)
         {
             request.CurrentTag.AddClass(_class);
         }
     }
 
-    public class FakeSubject : TagRequest
+    public class FakeSubject : ElementRequest
     {
-        public override object ToToken()
+        public FakeSubject()
+            : base(SingleProperty.Build<FakeSubject>(m => m.ElementId))
         {
-            return this;
         }
 
         public string Name { get; set; }

@@ -8,12 +8,12 @@ namespace HtmlTags.Testing.Conventions
     [TestFixture]
     public class TagLibraryTester
     {
-        private TagLibrary<FakeSubject> theLibrary;
+        private TagLibrary theLibrary;
 
         [SetUp]
         public void SetUp()
         {
-            theLibrary = new TagLibrary<FakeSubject>();
+            theLibrary = new TagLibrary();
         }
 
         private HtmlTag build(FakeSubject subject, string category = null,string profile = null)
@@ -25,11 +25,11 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void builds_default_if_no_category_or_profile_is_specified()
         {
-            theLibrary.Always.Build(x => new HtmlTag("div").Text(x.Name));
-            theLibrary.Category("a").Always.Build(x => new HtmlTag("a").Text(x.Name));
-            theLibrary.Category("b").Always.Build(x => new HtmlTag("b").Text(x.Name));
-        
-            theLibrary.ForProfile("profile1").Always.Build(x => new HtmlTag("p").Text(x.Name));
+            theLibrary.Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
+            theLibrary.Category("a").Always.Build(x => new HtmlTag("a").Text(((FakeSubject)x).Name));
+            theLibrary.Category("b").Always.Build(x => new HtmlTag("b").Text(((FakeSubject)x).Name));
+
+            theLibrary.ForProfile("profile1").Always.Build(x => new HtmlTag("p").Text(((FakeSubject)x).Name));
             theLibrary.Category("a").ForProfile("a-1").Always.Modify(x => x.CurrentTag.AddClass("a-1"));
 
             var subject = new FakeSubject { Name = "Lindsey" };
@@ -53,7 +53,7 @@ namespace HtmlTags.Testing.Conventions
             var b1 = categoryB.Profile("b1");
             var b2 = categoryB.Profile("b2");
 
-            var visitor = MockRepository.GenerateMock<ITagLibraryVisitor<FakeSubject>>();
+            var visitor = MockRepository.GenerateMock<ITagLibraryVisitor>();
 
             theLibrary.AcceptVisitor(visitor);
 
@@ -70,13 +70,13 @@ namespace HtmlTags.Testing.Conventions
         public void accept_convention_visitor()
         {
             var topVisitor = MockRepository.GenerateMock<IHtmlConventionVisitor>();
-            var childVisitor = MockRepository.GenerateMock<ITagLibraryVisitor<FakeSubject>>();
+            var childVisitor = MockRepository.GenerateMock<ITagLibraryVisitor>();
 
-            var library = MockRepository.GenerateMock<TagLibrary<FakeSubject>>();
+            var library = MockRepository.GenerateMock<TagLibrary>();
 
             library.Expect(x => x.AcceptVisitor(childVisitor));
 
-            topVisitor.Stub(x => x.VisitorFor<FakeSubject>()).Return(childVisitor);
+            topVisitor.Stub(x => x.VisitorFor()).Return(childVisitor);
 
             library.AcceptVisitor(topVisitor);
 
@@ -88,36 +88,36 @@ namespace HtmlTags.Testing.Conventions
     [TestFixture]
     public class TagLibrary_Import_Tester
     {
-        private ITagBuilderPolicy<FakeSubject> b1;
-        private ITagBuilderPolicy<FakeSubject> b2;
-        private ITagBuilderPolicy<FakeSubject> b3;
-        private ITagBuilderPolicy<FakeSubject> b4;
-        private ITagBuilderPolicy<FakeSubject> b5;
-        private ITagBuilderPolicy<FakeSubject> b6;
-        private ITagBuilderPolicy<FakeSubject> b7;
-        private ITagModifier<FakeSubject> m1;
-        private ITagModifier<FakeSubject> m2;
-        private ITagModifier<FakeSubject> m3;
-        private ITagModifier<FakeSubject> m4;
-        private TagLibrary<FakeSubject> library1;
+        private ITagBuilderPolicy b1;
+        private ITagBuilderPolicy b2;
+        private ITagBuilderPolicy b3;
+        private ITagBuilderPolicy b4;
+        private ITagBuilderPolicy b5;
+        private ITagBuilderPolicy b6;
+        private ITagBuilderPolicy b7;
+        private ITagModifier m1;
+        private ITagModifier m2;
+        private ITagModifier m3;
+        private ITagModifier m4;
+        private TagLibrary library1;
 
         [SetUp]
         public void SetUp()
         {
-            b1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b4 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b5 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b6 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b7 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b4 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b5 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b6 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b7 = MockRepository.GenerateMock<ITagBuilderPolicy>();
 
-            m1 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            m2 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            m3 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            m4 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
+            m1 = MockRepository.GenerateMock<ITagModifier>();
+            m2 = MockRepository.GenerateMock<ITagModifier>();
+            m3 = MockRepository.GenerateMock<ITagModifier>();
+            m4 = MockRepository.GenerateMock<ITagModifier>();
 
-            library1 = new TagLibrary<FakeSubject>();
+            library1 = new TagLibrary();
 
 
             library1.Add(b1);
@@ -132,7 +132,7 @@ namespace HtmlTags.Testing.Conventions
             library1.Category("Cat1").Profile("A").Add(b4);
 
 
-            var library2 = new TagLibrary<FakeSubject>();
+            var library2 = new TagLibrary();
             library2.Add(b5);
             library2.Add(m4);
 

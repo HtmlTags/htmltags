@@ -1,8 +1,8 @@
 namespace HtmlTags.Conventions
 {
-    public interface ITagGenerator<T> where T : TagRequest
+    public interface ITagGenerator
     {
-        HtmlTag Build(T request, string category = null, string profile = null);
+        HtmlTag Build(ElementRequest request, string category = null, string profile = null);
         string ActiveProfile { get; }
     }
 }

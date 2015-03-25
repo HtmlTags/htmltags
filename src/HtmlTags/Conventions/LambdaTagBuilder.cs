@@ -2,16 +2,16 @@ using System;
 
 namespace HtmlTags.Conventions
 {
-    public class LambdaTagBuilder<T> : ITagBuilder<T> where T : TagRequest
+    public class LambdaTagBuilder : ITagBuilder
     {
-        private readonly Func<T, HtmlTag> _build;
+        private readonly Func<ElementRequest, HtmlTag> _build;
 
-        public LambdaTagBuilder(Func<T, HtmlTag> build)
+        public LambdaTagBuilder(Func<ElementRequest, HtmlTag> build)
         {
             _build = build;
         }
 
-        public HtmlTag Build(T request)
+        public HtmlTag Build(ElementRequest request)
         {
             return _build(request);
         }

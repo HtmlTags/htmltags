@@ -3,17 +3,17 @@ using System.Linq;
 
 namespace HtmlTags.Conventions
 {
-    public interface ITagLibrary<T> where T : TagRequest
+    public interface ITagLibrary
     {
-        ITagPlan<T> PlanFor(T subject, string profile = null, string category = null);
+        ITagPlan PlanFor(ElementRequest subject, string profile = null, string category = null);
     }
 
-    public class TagLibrary<T> : ITagBuildingExpression<T>, ITagLibrary<T>, IVisitable where T : TagRequest
+    public class TagLibrary : ITagBuildingExpression, ITagLibrary, IVisitable
     {
-        private readonly Cache<string, TagCategory<T>> _categories =
-            new Cache<string, TagCategory<T>>(name => new TagCategory<T>());
+        private readonly Cache<string, TagCategory> _categories =
+            new Cache<string, TagCategory>(name => new TagCategory());
 
-        public ITagPlan<T> PlanFor(T subject, string profile = null, string category = null)
+        public ITagPlan PlanFor(ElementRequest subject, string profile = null, string category = null)
         {
             profile = profile ?? TagConstants.Default;
             category = category ?? TagConstants.Default;
@@ -21,19 +21,19 @@ namespace HtmlTags.Conventions
             return _categories[category].PlanFor(subject, profile);
         }
 
-        public CategoryExpression<T> Always
+        public CategoryExpression Always
         {
             get { return _categories[TagConstants.Default].Always; }
         }
 
-        public CategoryExpression<T> If(Func<T, bool> matches)
+        public CategoryExpression If(Func<ElementRequest, bool> matches)
         {
             return _categories[TagConstants.Default].If(matches);
         }
 
-        public void Add(Func<T, bool> filter, ITagBuilder<T> builder)
+        public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder)
         {
-            Add(new ConditionalTagBuilderPolicy<T>(filter, builder));
+            Add(new ConditionalTagBuilderPolicy(filter, builder));
         }
 
         /// <summary>
@@ -41,12 +41,12 @@ namespace HtmlTags.Conventions
         /// </summary>
         /// <param name="category">Example:  "Label", "Editor", "Display"</param>
         /// <returns></returns>
-        public TagCategory<T> Category(string category)
+        public TagCategory Category(string category)
         {
             return _categories[category];
         }
 
-        public BuilderSet<T> BuilderSetFor(string category = null, string profile = null)
+        public BuilderSet BuilderSetFor(string category = null, string profile = null)
         {
             profile = profile ?? TagConstants.Default;
             category = category ?? TagConstants.Default;
@@ -58,7 +58,7 @@ namespace HtmlTags.Conventions
         /// Adds a builder policy to the default category and profile
         /// </summary>
         /// <param name="policy"> </param>
-        public void Add(ITagBuilderPolicy<T> policy)
+        public void Add(ITagBuilderPolicy policy)
         {
             Default.Add(policy);
         }
@@ -67,7 +67,7 @@ namespace HtmlTags.Conventions
         /// Adds a modifier to the default category and profile
         /// </summary>
         /// <param name="modifier"></param>
-        public void Add(ITagModifier<T> modifier)
+        public void Add(ITagModifier modifier)
         {
             Default.Add(modifier);
         }
@@ -75,7 +75,7 @@ namespace HtmlTags.Conventions
         /// <summary>
         /// Access to the default category
         /// </summary>
-        public TagCategory<T> Default
+        public TagCategory Default
         {
             get
             {
@@ -88,12 +88,12 @@ namespace HtmlTags.Conventions
         /// </summary>
         /// <param name="profile"></param>
         /// <returns></returns>
-        public ITagBuildingExpression<T> ForProfile(string profile)
+        public ITagBuildingExpression ForProfile(string profile)
         {
             return _categories[TagConstants.Default].ForProfile(profile);
         }
 
-        public void Import(TagLibrary<T> other)
+        public void Import(TagLibrary other)
         {
             var keys = _categories.GetKeys().Union(other._categories.GetKeys()).Distinct();
 
@@ -101,7 +101,7 @@ namespace HtmlTags.Conventions
         }
 
         // virtual for mocking
-        public virtual void AcceptVisitor(ITagLibraryVisitor<T> visitor)
+        public virtual void AcceptVisitor(ITagLibraryVisitor visitor)
         {
             _categories.Each((name, category) => {
                 visitor.Category(name, category);
@@ -111,7 +111,7 @@ namespace HtmlTags.Conventions
 
         public void AcceptVisitor(IHtmlConventionVisitor visitor)
         {
-            AcceptVisitor(visitor.VisitorFor<T>());
+            AcceptVisitor(visitor.VisitorFor());
         }
     }
 }

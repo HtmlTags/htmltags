@@ -6,37 +6,36 @@ namespace HtmlTags.Conventions
 {
     public interface ITagGeneratorFactory
     {
-        ITagGenerator<T> GeneratorFor<T>() where T : TagRequest;
+        ITagGenerator GeneratorFor();
     }
 
     public class TagGeneratorFactory : ITagGeneratorFactory
     {
         private readonly ActiveProfile _profile;
         private readonly HtmlConventionLibrary _library;
-        private readonly ITagRequestBuilder _tagRequestBuilder;
+        // TODO: Make this only one generator
         private readonly IDictionary<Type, object> _generators = new Dictionary<Type, object>();
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
-        public TagGeneratorFactory(ActiveProfile profile, HtmlConventionLibrary library, ITagRequestBuilder tagRequestBuilder)
+        public TagGeneratorFactory(ActiveProfile profile, HtmlConventionLibrary library)
         {
             _profile = profile;
             _library = library;
-            _tagRequestBuilder = tagRequestBuilder;
         }
 
-        public ITagGenerator<T> GeneratorFor<T>() where T : TagRequest
+        public ITagGenerator GeneratorFor()
         {
-            var generator = _lock.MaybeWrite<TagGenerator<T>>(answer: () => (TagGenerator<T>) _generators[typeof (T)],
-                                             missingTest: () => !_generators.ContainsKey(typeof (T)),
-                                             write: buildNew<T>);
+            var generator = _lock.MaybeWrite(answer: () => (TagGenerator) _generators[typeof (ElementRequest)],
+                                             missingTest: () => !_generators.ContainsKey(typeof (ElementRequest)),
+                                             write: buildNew);
 
             return generator;
         }
 
-        private void buildNew<T>() where T : TagRequest
+        private void buildNew()
         {
-            var generator = new TagGenerator<T>(_library.For<T>(), _tagRequestBuilder, _profile);
-            _generators.Add(typeof(T), generator);
+            var generator = new TagGenerator(_library.For(), _profile);
+            _generators.Add(typeof(ElementRequest), generator);
         }
     }
 

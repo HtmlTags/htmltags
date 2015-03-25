@@ -28,32 +28,38 @@ namespace HtmlTags.Conventions
         }
     }
 
-    public class TagGenerator<T> : ITagGenerator<T> where T : TagRequest
+    public class TagGenerator : ITagGenerator
     {
-        private readonly ITagLibrary<T> _library;
-        private readonly ITagRequestBuilder _tagRequestBuilder;
+        private readonly ITagLibrary _library;
         private readonly ActiveProfile _profile;
         
 
-        public TagGenerator(ITagLibrary<T> library, ITagRequestBuilder tagRequestBuilder, ActiveProfile profile)
+        public TagGenerator(ITagLibrary library, ActiveProfile profile)
         {
             _library = library;
-            _tagRequestBuilder = tagRequestBuilder;
             _profile = profile;
         }
 
-        public HtmlTag Build(T request, string category = null, string profile = null)
+        public HtmlTag Build(ElementRequest request, string category = null, string profile = null)
         {
             profile = profile ?? _profile.Name ?? TagConstants.Default;
             category = category ?? TagConstants.Default;
 
             var token = request.ToToken();
 
-            var plan = _library.PlanFor((T)token, profile, category);
+            var plan = _library.PlanFor(token, profile, category);
 
-            _tagRequestBuilder.Build(request);
+            ActivateRequest(request);
 
             return plan.Build(request);
+        }
+
+        private void ActivateRequest(ElementRequest request)
+        {
+    //        request.ElementId = string.IsNullOrEmpty(request.ElementId)
+    //? _naming.GetName(request.HolderType(), request.Accessor)
+    //: request.ElementId;
+
         }
 
         public string ActiveProfile

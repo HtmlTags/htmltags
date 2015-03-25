@@ -1,8 +1,8 @@
 namespace HtmlTags.Conventions
 {
-    public interface ITagLibraryVisitor<T> where T : TagRequest
+    public interface ITagLibraryVisitor
     {
-        void Category(string name, TagCategory<T> category);
-        void BuilderSet(string profile, BuilderSet<T> builders);
+        void Category(string name, TagCategory category);
+        void BuilderSet(string profile, BuilderSet builders);
     }
 }

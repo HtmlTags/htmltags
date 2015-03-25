@@ -5,29 +5,31 @@ using FubuTestingSupport;
 
 namespace HtmlTags.Testing.Conventions
 {
+    using Reflection;
+
     [TestFixture]
     public class BuilderSetTester
     {
         [Test]
         public void import_puts_the_second_set_stuff_in_the_back()
         {
-            var builder1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            var builder2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            var builder3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var builder1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var builder2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var builder3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
 
-            var m1 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            var m2 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            var m3 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            var m4 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            var m5 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
+            var m1 = MockRepository.GenerateMock<ITagModifier>();
+            var m2 = MockRepository.GenerateMock<ITagModifier>();
+            var m3 = MockRepository.GenerateMock<ITagModifier>();
+            var m4 = MockRepository.GenerateMock<ITagModifier>();
+            var m5 = MockRepository.GenerateMock<ITagModifier>();
 
-            var set1 = new BuilderSet<FakeSubject>();
+            var set1 = new BuilderSet();
             set1.Add(builder1);
             set1.Add(m1);
             set1.Add(m2);
             set1.Add(m3);
 
-            var set2 = new BuilderSet<FakeSubject>();
+            var set2 = new BuilderSet();
             set2.Add(builder2);
             set2.Add(builder3);
             set2.Add(m4);
@@ -42,11 +44,11 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void insert_builder()
         {
-            var builder1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            var builder2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            var builder3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            var builder1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var builder2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var builder3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
 
-            var set1 = new BuilderSet<FakeSubject>();
+            var set1 = new BuilderSet();
             set1.Add(builder2);
             set1.Add(builder3);
 
@@ -56,14 +58,13 @@ namespace HtmlTags.Testing.Conventions
         }
     }
 
-    public class SomethingSubject : TagRequest
+    public class SomethingSubject : ElementRequest
     {
-        public override object ToToken()
-        {
-            return this;
-        }
-
         public int Level { get; set; }
+
+        public SomethingSubject(Accessor accessor) : base(accessor)
+        {
+        }
     }
 
 }

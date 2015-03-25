@@ -1,10 +1,10 @@
 namespace HtmlTags.Conventions
 {
-    public class HtmlConventionLibraryImporter<T> : IHtmlConventionLibraryImporter where T : TagRequest
+    public class HtmlConventionLibraryImporter : IHtmlConventionLibraryImporter
     {
         public void Import(HtmlConventionLibrary target, HtmlConventionLibrary source)
         {
-            target.For<T>().Import(source.For<T>());
+            target.For().Import(source.For());
         }
     }
 }

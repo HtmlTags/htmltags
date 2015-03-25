@@ -4,53 +4,53 @@ using System.Collections.Generic;
 namespace HtmlTags.Conventions
 {
     // Tested through the test for TagCategory and TagLibrary
-    public class BuilderSet<T> : ITagBuildingExpression<T> where T : TagRequest
+    public class BuilderSet : ITagBuildingExpression
     {
-        private readonly List<ITagBuilderPolicy<T>> _policies = new List<ITagBuilderPolicy<T>>();
-        private readonly List<ITagModifier<T>> _modifiers = new List<ITagModifier<T>>();
+        private readonly List<ITagBuilderPolicy> _policies = new List<ITagBuilderPolicy>();
+        private readonly List<ITagModifier> _modifiers = new List<ITagModifier>();
 
-        public IEnumerable<ITagBuilderPolicy<T>> Policies
+        public IEnumerable<ITagBuilderPolicy> Policies
         {
             get { return _policies; }
         }
 
-        public IEnumerable<ITagModifier<T>> Modifiers
+        public IEnumerable<ITagModifier> Modifiers
         {
             get { return _modifiers; }
         }
 
-        public void Add(Func<T, bool> filter, ITagBuilder<T> builder)
+        public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder)
         {
-            _policies.Add(new ConditionalTagBuilderPolicy<T>(filter, builder));
+            _policies.Add(new ConditionalTagBuilderPolicy(filter, builder));
         }
 
-        public void Add(ITagBuilderPolicy<T> policy)
+        public void Add(ITagBuilderPolicy policy)
         {
             _policies.Add(policy);
         }
 
-        public void Add(ITagModifier<T> modifier)
+        public void Add(ITagModifier modifier)
         {
             _modifiers.Add(modifier);
         }
 
-        public CategoryExpression<T> Always
+        public CategoryExpression Always
         {
-            get { return new CategoryExpression<T>(this, x => true); }
+            get { return new CategoryExpression(this, x => true); }
         }
 
-        public CategoryExpression<T> If(Func<T, bool> matches)
+        public CategoryExpression If(Func<ElementRequest, bool> matches)
         {
-            return new CategoryExpression<T>(this, matches);
+            return new CategoryExpression(this, matches);
         }
 
-        public void Import(BuilderSet<T> other)
+        public void Import(BuilderSet other)
         {
             _policies.AddRange(other._policies);
             _modifiers.AddRange(other._modifiers);
         }
 
-        public void InsertFirst(ITagBuilderPolicy<T> policy)
+        public void InsertFirst(ITagBuilderPolicy policy)
         {
             _policies.Insert(0, policy);
         }

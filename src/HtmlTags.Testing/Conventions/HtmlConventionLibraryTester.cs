@@ -6,6 +6,8 @@ using Rhino.Mocks;
 
 namespace HtmlTags.Testing.Conventions
 {
+    using Reflection;
+
     [TestFixture]
     public class HtmlConventionLibraryTester
     {
@@ -13,40 +15,40 @@ namespace HtmlTags.Testing.Conventions
         public void for_returns_the_same_result()
         {
             var library = new HtmlConventionLibrary();
-            var lib1 = library.For<FakeSubject>();
-            var lib2 = library.For<FakeSubject>();
+            var lib1 = library.For();
+            var lib2 = library.For();
 
             lib1.ShouldBeTheSameAs(lib2);
 
 
-            library.For<SecondSubject>().ShouldBeTheSameAs(library.For<SecondSubject>());
+            library.For().ShouldBeTheSameAs(library.For());
         }
 
         [Test]
         public void importing_test()
         {
-            var b1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            var b2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            var b3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            var b4 = MockRepository.GenerateMock<ITagBuilderPolicy<SecondSubject>>();
-            var b5 = MockRepository.GenerateMock<ITagBuilderPolicy<SecondSubject>>();
-            var b6 = MockRepository.GenerateMock<ITagBuilderPolicy<SecondSubject>>();
+            var b1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var b2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var b3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var b4 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var b5 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var b6 = MockRepository.GenerateMock<ITagBuilderPolicy>();
 
 
             var lib1 = new HtmlConventionLibrary();
-            lib1.For<FakeSubject>().Add(b1);
-            lib1.For<FakeSubject>().Add(b2);
+            lib1.For().Add(b1);
+            lib1.For().Add(b2);
 
             var lib2 = new HtmlConventionLibrary();
-            lib2.For<FakeSubject>().Add(b3);
-            lib2.For<SecondSubject>().Add(b4);
-            lib2.For<SecondSubject>().Add(b5);
-            lib2.For<SecondSubject>().Add(b6);
+            lib2.For().Add(b3);
+            lib2.For().Add(b4);
+            lib2.For().Add(b5);
+            lib2.For().Add(b6);
 
             lib1.Import(lib2);
 
-            lib1.For<FakeSubject>().Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b2, b3);
-            lib1.For<SecondSubject>().Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b4, b5, b6);
+            lib1.For().Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b2, b3);
+            lib1.For().Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b4, b5, b6);
         }
 
         [Test]
@@ -164,11 +166,11 @@ namespace HtmlTags.Testing.Conventions
     public class BigFoo : IFoo { }
     public class LittleFoo : IFoo { }
 
-    public class SecondSubject : TagRequest
+    public class SecondSubject : ElementRequest
     {
-        public override object ToToken()
+        public SecondSubject() : base(SingleProperty.Build<SecondSubject>(m => m.ElementId))
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
