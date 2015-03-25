@@ -1,11 +1,11 @@
 namespace HtmlTags.Conventions
 {
-    public class TagSubject<T> where T : TagRequest
+    public class TagSubject
     {
         private readonly string _profile;
-        private readonly T _subject;
+        private readonly ElementRequest _subject;
 
-        public TagSubject(string profile, T subject)
+        public TagSubject(string profile, ElementRequest subject)
         {
             _profile = profile ?? TagConstants.Default;
             _subject = subject;
@@ -16,12 +16,12 @@ namespace HtmlTags.Conventions
             get { return _profile; }
         }
 
-        public T Subject
+        public ElementRequest Subject
         {
             get { return _subject; }
         }
 
-        public bool Equals(TagSubject<T> other)
+        public bool Equals(TagSubject other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -32,8 +32,8 @@ namespace HtmlTags.Conventions
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (TagSubject<T>)) return false;
-            return Equals((TagSubject<T>) obj);
+            if (obj.GetType() != typeof (TagSubject)) return false;
+            return Equals((TagSubject) obj);
         }
 
         public override int GetHashCode()

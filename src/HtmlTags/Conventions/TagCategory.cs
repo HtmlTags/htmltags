@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace HtmlTags.Conventions
 {
-    public class TagCategory<T> : ITagBuildingExpression<T> where T : TagRequest
+    public class TagCategory : ITagBuildingExpression
     {
-        private readonly BuilderSet<T> _defaults = new BuilderSet<T>();
-        private readonly Cache<TagSubject<T>, TagPlan<T>> _plans = new Cache<TagSubject<T>, TagPlan<T>>();
+        private readonly BuilderSet _defaults = new BuilderSet();
+        private readonly Cache<TagSubject, TagPlan> _plans = new Cache<TagSubject, TagPlan>();
 
-        private readonly Cache<string, BuilderSet<T>> _profiles =
-            new Cache<string, BuilderSet<T>>(name => new BuilderSet<T>());
+        private readonly Cache<string, BuilderSet> _profiles =
+            new Cache<string, BuilderSet>(name => new BuilderSet());
 
         public TagCategory()
         {
@@ -18,25 +18,25 @@ namespace HtmlTags.Conventions
             _plans.OnMissing = buildPlan;
         }
 
-        public BuilderSet<T> Defaults
+        public BuilderSet Defaults
         {
             get { return _defaults; }
         }
 
-        public BuilderSet<T> Profile(string name)
+        public BuilderSet Profile(string name)
         {
             return _profiles[name];
         }
 
-        public TagPlan<T> PlanFor(T request, string profile = null)
+        public TagPlan PlanFor(ElementRequest request, string profile = null)
         {
-            var subject = new TagSubject<T>(profile, request);
+            var subject = new TagSubject(profile, request);
             return _plans[subject];
         }
 
-        private TagPlan<T> buildPlan(TagSubject<T> subject)
+        private TagPlan buildPlan(TagSubject subject)
         {
-            var sets = setsFor(subject.Profile);
+            var sets = setsFor(subject.Profile).ToList();
             var policy = sets.SelectMany(x => x.Policies).FirstOrDefault(x => x.Matches(subject.Subject));
             if (policy == null)
             {
@@ -45,14 +45,14 @@ namespace HtmlTags.Conventions
 
             var builder = policy.BuilderFor(subject.Subject);
 
-
-
             var modifiers = sets.SelectMany(x => x.Modifiers).Where(x => x.Matches(subject.Subject));
 
-            return new TagPlan<T>(builder, modifiers);
+            var elementNamingConvention = sets.Select(x => x.ElementNamingConvention).FirstOrDefault();
+
+            return new TagPlan(builder, modifiers, elementNamingConvention);
         }
 
-        private IEnumerable<BuilderSet<T>> setsFor(string profile)
+        private IEnumerable<BuilderSet> setsFor(string profile)
         {
             if (!string.IsNullOrEmpty(profile) && profile != TagConstants.Default)
             {
@@ -67,38 +67,38 @@ namespace HtmlTags.Conventions
             _plans.ClearAll();
         }
 
-        public void Add(Func<T, bool> filter, ITagBuilder<T> builder)
+        public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder)
         {
-            Add(new ConditionalTagBuilderPolicy<T>(filter, builder));
+            Add(new ConditionalTagBuilderPolicy(filter, builder));
         }
 
-        public void Add(ITagBuilderPolicy<T> policy)
+        public void Add(ITagBuilderPolicy policy)
         {
             _profiles[TagConstants.Default].Add(policy);
         }
 
-        public void Add(ITagModifier<T> modifier)
+        public void Add(ITagModifier modifier)
         {
             _profiles[TagConstants.Default].Add(modifier);
         }
 
 
-        public CategoryExpression<T> Always
+        public CategoryExpression Always
         {
             get { return _defaults.Always; }
         }
 
-        public CategoryExpression<T> If(Func<T, bool> matches)
+        public CategoryExpression If(Func<ElementRequest, bool> matches)
         {
             return _defaults.If(matches);
         }
 
-        public ITagBuildingExpression<T> ForProfile(string profile)
+        public ITagBuildingExpression ForProfile(string profile)
         {
             return _profiles[profile];
         }
 
-        public void Import(TagCategory<T> other)
+        public void Import(TagCategory other)
         {
             _defaults.Import(other._defaults);
 
@@ -107,11 +107,6 @@ namespace HtmlTags.Conventions
                 .Distinct();
 
             keys.Each(key => _profiles[key].Import(other._profiles[key]));
-        }
-
-        public void AcceptVisitor(ITagLibraryVisitor<T> visitor)
-        {
-            _profiles.Each(visitor.BuilderSet);
         }
     }
 }

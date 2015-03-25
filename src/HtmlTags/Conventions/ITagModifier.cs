@@ -1,8 +1,8 @@
 namespace HtmlTags.Conventions
 {
-    public interface ITagModifier<T> where T : TagRequest
+    public interface ITagModifier
     {
-        bool Matches(T token);
-        void Modify(T request);
+        bool Matches(ElementRequest token);
+        void Modify(ElementRequest request);
     }
 }

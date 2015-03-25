@@ -2,13 +2,13 @@ using System;
 
 namespace HtmlTags.Conventions
 {
-    public interface ITagBuildingExpression<T> where T : TagRequest
+    public interface ITagBuildingExpression
     {
-        CategoryExpression<T> Always { get; }
-        CategoryExpression<T> If(Func<T, bool> matches);
+        CategoryExpression Always { get; }
+        CategoryExpression If(Func<ElementRequest, bool> matches);
 
-        void Add(Func<T, bool> filter, ITagBuilder<T> builder);
-        void Add(ITagBuilderPolicy<T> policy);
-        void Add(ITagModifier<T> modifier);
+        void Add(Func<ElementRequest, bool> filter, ITagBuilder builder);
+        void Add(ITagBuilderPolicy policy);
+        void Add(ITagModifier modifier);
     }
 }

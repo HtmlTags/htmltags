@@ -3,25 +3,25 @@ using System;
 namespace HtmlTags.Conventions
 {
     // Tested through the tests for TagCategory and TagLibrary
-    public class CategoryExpression<T> where T : TagRequest
+    public class CategoryExpression
     {
-        private readonly BuilderSet<T> _parent;
-        private readonly Func<T, bool> _matcher;
+        private readonly BuilderSet _parent;
+        private readonly Func<ElementRequest, bool> _matcher;
 
-        public CategoryExpression(BuilderSet<T> parent, Func<T, bool> matcher)
+        public CategoryExpression(BuilderSet parent, Func<ElementRequest, bool> matcher)
         {
             _parent = parent;
             _matcher = matcher;
         }
 
-        public void Modify(Action<T> modify)
+        public void Modify(Action<ElementRequest> modify)
         {
-            _parent.Add(new LambdaTagModifier<T>(_matcher, modify));
+            _parent.Add(new LambdaTagModifier(_matcher, modify));
         }
 
-        public void Build(Func<T, HtmlTag> build)
+        public void Build(Func<ElementRequest, HtmlTag> build)
         {
-            _parent.Add(new ConditionalTagBuilderPolicy<T>(_matcher, build));
+            _parent.Add(new ConditionalTagBuilderPolicy(_matcher, build));
         }
     }
 }

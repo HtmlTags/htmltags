@@ -10,12 +10,12 @@ namespace HtmlTags.Testing.Conventions
     [TestFixture]
     public class TagCategoryTester
     {
-        private TagCategory<FakeSubject> theCategory;
+        private TagCategory theCategory;
 
         [SetUp]
         public void SetUp()
         {
-            theCategory = new TagCategory<FakeSubject>();
+            theCategory = new TagCategory();
 
             
         }
@@ -29,7 +29,7 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void build_default_profile_simple()
         {
-            theCategory.Always.Build(x => new HtmlTag("div").Text(x.Name));
+            theCategory.Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
 
             build(new FakeSubject{
                 Name = "Jeremy"
@@ -40,8 +40,8 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void build_default_profile_where_it_has_to_select_builder()
         {
-            theCategory.If(x => x.Level < 10).Build(x => new HtmlTag("h4").Text(x.Name));
-            theCategory.If(x => x.Level >= 10).Build(x => new HtmlTag("h1").Text(x.Name));
+            theCategory.If(x => ((FakeSubject)x).Level < 10).Build(x => new HtmlTag("h4").Text(((FakeSubject)x).Name));
+            theCategory.If(x => ((FakeSubject)x).Level >= 10).Build(x => new HtmlTag("h1").Text(((FakeSubject)x).Name));
 
             build(new FakeSubject{
                 Name = "Jeremy",
@@ -58,9 +58,9 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void build_default_with_matching_modifiers()
         {
-            theCategory.Always.Build(x => new HtmlTag("div").Text(x.Name));
-            theCategory.If(x => x.Level < 10).Modify(x => x.CurrentTag.AddClass("little"));
-            theCategory.If(x => x.Level >= 10).Modify(x => x.CurrentTag.AddClass("big"));
+            theCategory.Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
+            theCategory.If(x => ((FakeSubject)x).Level < 10).Modify(x => x.CurrentTag.AddClass("little"));
+            theCategory.If(x => ((FakeSubject)x).Level >= 10).Modify(x => x.CurrentTag.AddClass("big"));
 
             build(new FakeSubject
             {
@@ -78,9 +78,9 @@ namespace HtmlTags.Testing.Conventions
         [Test]
         public void build_default_profile_with_multiple_modifiers()
         {
-            theCategory.Always.Build(x => new HtmlTag("div").Text(x.Name));
-            theCategory.If(x => x.Level < 10).Modify(x => x.CurrentTag.AddClass("little"));
-            theCategory.If(x => x.Level >= 10).Modify(x => x.CurrentTag.AddClass("big"));
+            theCategory.Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
+            theCategory.If(x => ((FakeSubject)x).Level < 10).Modify(x => x.CurrentTag.AddClass("little"));
+            theCategory.If(x => ((FakeSubject)x).Level >= 10).Modify(x => x.CurrentTag.AddClass("big"));
             theCategory.Always.Modify(x => x.CurrentTag.AddClass("more"));
 
             build(new FakeSubject
@@ -102,7 +102,7 @@ namespace HtmlTags.Testing.Conventions
         public void build_a_profile_simple()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
-            theCategory.ForProfile("A").Always.Build(x => new HtmlTag("div").Text(x.Name));
+            theCategory.ForProfile("A").Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
 
             build(new FakeSubject
             {
@@ -115,8 +115,8 @@ namespace HtmlTags.Testing.Conventions
         public void build_a_profile_where_it_has_to_select_builder()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
-            theCategory.ForProfile("A").If(x => x.Level < 10).Build(x => new HtmlTag("h4").Text(x.Name));
-            theCategory.ForProfile("A").If(x => x.Level >= 10).Build(x => new HtmlTag("h1").Text(x.Name));
+            theCategory.ForProfile("A").If(x => ((FakeSubject)x).Level < 10).Build(x => new HtmlTag("h4").Text(((FakeSubject)x).Name));
+            theCategory.ForProfile("A").If(x => ((FakeSubject)x).Level >= 10).Build(x => new HtmlTag("h1").Text(((FakeSubject)x).Name));
 
             build(new FakeSubject
             {
@@ -135,9 +135,9 @@ namespace HtmlTags.Testing.Conventions
         public void build_a_profile_with_matching_modifiers()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
-            theCategory.ForProfile("A").Always.Build(x => new HtmlTag("div").Text(x.Name));
-            theCategory.ForProfile("A").If(x => x.Level < 10).Modify(x => x.CurrentTag.AddClass("little"));
-            theCategory.ForProfile("A").If(x => x.Level >= 10).Modify(x => x.CurrentTag.AddClass("big"));
+            theCategory.ForProfile("A").Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
+            theCategory.ForProfile("A").If(x => ((FakeSubject)x).Level < 10).Modify(x => x.CurrentTag.AddClass("little"));
+            theCategory.ForProfile("A").If(x => ((FakeSubject)x).Level >= 10).Modify(x => x.CurrentTag.AddClass("big"));
 
             build(new FakeSubject
             {
@@ -156,9 +156,9 @@ namespace HtmlTags.Testing.Conventions
         public void build_a_profile_with_multiple_modifiers()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
-            theCategory.ForProfile("A").Always.Build(x => new HtmlTag("div").Text(x.Name));
-            theCategory.ForProfile("A").If(x => x.Level < 10).Modify(x => x.CurrentTag.AddClass("little"));
-            theCategory.ForProfile("A").If(x => x.Level >= 10).Modify(x => x.CurrentTag.AddClass("big"));
+            theCategory.ForProfile("A").Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
+            theCategory.ForProfile("A").If(x => ((FakeSubject)x).Level < 10).Modify(x => x.CurrentTag.AddClass("little"));
+            theCategory.ForProfile("A").If(x => ((FakeSubject)x).Level >= 10).Modify(x => x.CurrentTag.AddClass("big"));
             theCategory.ForProfile("A").Always.Modify(x => x.CurrentTag.AddClass("more"));
 
             build(new FakeSubject
@@ -261,40 +261,40 @@ namespace HtmlTags.Testing.Conventions
     [TestFixture]
     public class when_importing_one_category_into_another
     {
-        private ITagBuilderPolicy<FakeSubject> b1;
-        private ITagBuilderPolicy<FakeSubject> b2;
-        private ITagBuilderPolicy<FakeSubject> b3;
-        private ITagBuilderPolicy<FakeSubject> b4;
-        private ITagBuilderPolicy<FakeSubject> b5;
-        private ITagBuilderPolicy<FakeSubject> b6;
-        private ITagBuilderPolicy<FakeSubject> b7;
-        private ITagBuilderPolicy<FakeSubject> b8;
-        private ITagModifier<FakeSubject> m1;
-        private ITagModifier<FakeSubject> m2;
-        private ITagModifier<FakeSubject> m3;
-        private ITagModifier<FakeSubject> m4;
-        private ITagModifier<FakeSubject> m5;
-        private TagCategory<FakeSubject> category1;
+        private ITagBuilderPolicy b1;
+        private ITagBuilderPolicy b2;
+        private ITagBuilderPolicy b3;
+        private ITagBuilderPolicy b4;
+        private ITagBuilderPolicy b5;
+        private ITagBuilderPolicy b6;
+        private ITagBuilderPolicy b7;
+        private ITagBuilderPolicy b8;
+        private ITagModifier m1;
+        private ITagModifier m2;
+        private ITagModifier m3;
+        private ITagModifier m4;
+        private ITagModifier m5;
+        private TagCategory category1;
 
         [SetUp]
         public void SetUp()
         {
-            b1 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b2 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b3 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b4 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b5 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b6 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b7 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
-            b8 = MockRepository.GenerateMock<ITagBuilderPolicy<FakeSubject>>();
+            b1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b4 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b5 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b6 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b7 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b8 = MockRepository.GenerateMock<ITagBuilderPolicy>();
 
-            m1 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            m2 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            m3 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            m4 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
-            m5 = MockRepository.GenerateMock<ITagModifier<FakeSubject>>();
+            m1 = MockRepository.GenerateMock<ITagModifier>();
+            m2 = MockRepository.GenerateMock<ITagModifier>();
+            m3 = MockRepository.GenerateMock<ITagModifier>();
+            m4 = MockRepository.GenerateMock<ITagModifier>();
+            m5 = MockRepository.GenerateMock<ITagModifier>();
 
-            category1 = new TagCategory<FakeSubject>();
+            category1 = new TagCategory();
             category1.Add(b1);
             category1.Add(b2);
             category1.Add(m1);
@@ -308,7 +308,7 @@ namespace HtmlTags.Testing.Conventions
             category1.ForProfile("D").Add(b8);
 
 
-            var category2 = new TagCategory<FakeSubject>();
+            var category2 = new TagCategory();
             category2.Add(b5);
             category2.Add(m4);
             category2.ForProfile("A").Add(b6);

@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace HtmlTags.Conventions
 {
+    using System;
+    using Elements;
+
     public class ActiveProfile
     {
         private readonly Stack<string> _profiles = new Stack<string>();
@@ -28,30 +31,30 @@ namespace HtmlTags.Conventions
         }
     }
 
-    public class TagGenerator<T> : ITagGenerator<T> where T : TagRequest
+    public class TagGenerator : ITagGenerator
     {
-        private readonly ITagLibrary<T> _library;
-        private readonly ITagRequestBuilder _tagRequestBuilder;
+        private readonly ITagLibrary _library;
         private readonly ActiveProfile _profile;
-        
+        private readonly Func<Type, object> _serviceLocator;
 
-        public TagGenerator(ITagLibrary<T> library, ITagRequestBuilder tagRequestBuilder, ActiveProfile profile)
+
+        public TagGenerator(ITagLibrary library, ActiveProfile profile, Func<Type, object> serviceLocator)
         {
             _library = library;
-            _tagRequestBuilder = tagRequestBuilder;
             _profile = profile;
+            _serviceLocator = serviceLocator;
         }
 
-        public HtmlTag Build(T request, string category = null, string profile = null)
+        public HtmlTag Build(ElementRequest request, string category = null, string profile = null)
         {
             profile = profile ?? _profile.Name ?? TagConstants.Default;
             category = category ?? TagConstants.Default;
 
             var token = request.ToToken();
 
-            var plan = _library.PlanFor((T)token, profile, category);
+            var plan = _library.PlanFor(token, profile, category);
 
-            _tagRequestBuilder.Build(request);
+            request.Attach(_serviceLocator);
 
             return plan.Build(request);
         }

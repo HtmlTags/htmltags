@@ -48,7 +48,7 @@ namespace HtmlTags
         private readonly Cache<string, HtmlAttribute> _htmlAttributes = new Cache<string, HtmlAttribute>(key => null);
 
         private readonly Cache<string, object> _metaData = new Cache<string, object>();
-        private string _innerText = string.Empty;
+        private string _innerText = String.Empty;
         private bool _shouldRender = true;
         private string _tag;
         private bool _ignoreOpeningTag;
@@ -420,8 +420,8 @@ namespace HtmlTags
         public override string ToString()
         {
             return WillBeRendered()
-                ? ToString(new HtmlTextWriter(new StringWriter(), string.Empty) {NewLine = string.Empty})
-                : string.Empty;
+                ? ToString(new HtmlTextWriter(new StringWriter(), String.Empty) {NewLine = String.Empty})
+                : String.Empty;
         }
 
         public string ToHtmlString()
@@ -433,7 +433,7 @@ namespace HtmlTags
         {
             return WillBeRendered()
                 ? ToString(new HtmlTextWriter(new StringWriter(), "  ") {NewLine = Environment.NewLine})
-                : string.Empty;
+                : String.Empty;
         }
 
 
@@ -579,7 +579,7 @@ namespace HtmlTags
             {
                 return RemoveAttr(attribute);
             }
-            if (value.Equals(string.Empty) &&
+            if (value.Equals(String.Empty) &&
                 (isCssClassAttr(attribute) || isCssStyleAttr(attribute) || isMetadataAttr(attribute)))
             {
                 return RemoveAttr(attribute);
@@ -613,7 +613,7 @@ namespace HtmlTags
         public string Attr(string attribute)
         {
             var attrVal = _htmlAttributes[attribute];
-            return attrVal == null ? string.Empty : attrVal.ToString();
+            return attrVal == null ? String.Empty : attrVal.ToString();
         }
 
         public HtmlTag RemoveAttr(string attribute)
@@ -685,7 +685,7 @@ namespace HtmlTags
             else
             {
                 classes = Regex.Split(className, "[ ]+")
-                               .Where(c => !string.IsNullOrWhiteSpace(c));
+                               .Where(c => !String.IsNullOrWhiteSpace(c));
             }
 
             return classes;
@@ -866,8 +866,34 @@ namespace HtmlTags
 
             public override string ToString()
             {
-                return Value != null ? Value.ToString() : string.Empty;
+                return Value != null ? Value.ToString() : String.Empty;
             }
+        }
+
+        public HtmlTag ForChild(string tagName)
+        {
+            return ((ITagSource)this).AllTags().First(child => child.TagName().EqualsIgnoreCase(tagName));
+        }
+
+        public HtmlTag TextIfEmpty(string defaultText)
+        {
+            if (TagName().EqualsIgnoreCase("input")) throw new InvalidOperationException("You are attempting to set the inner text on an INPUT tag. If you wanted a textarea, call MultilineMode() first.");
+            if (Text().IsEmpty())
+            {
+                Text(defaultText);
+            }
+
+            return this;
+        }
+
+        public HtmlTag Name(string name)
+        {
+            return Attr("name", name);
+        }
+
+        public HtmlTag Value(string value)
+        {
+            return Attr("value", value);
         }
     }
 }

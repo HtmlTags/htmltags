@@ -28,10 +28,10 @@ namespace HtmlTags.Testing.Conventions
 
             subject1.ShouldNotEqual(subject2);
 
-            new TagSubject<FakeSubject>("a", subject1).ShouldEqual(new TagSubject<FakeSubject>("a", subject1));
-            new TagSubject<FakeSubject>("a", subject2).ShouldEqual(new TagSubject<FakeSubject>("a", subject2));
-            new TagSubject<FakeSubject>("a", subject1).ShouldNotEqual(new TagSubject<FakeSubject>("a", subject2));
-            new TagSubject<FakeSubject>("a", subject2).ShouldNotEqual(new TagSubject<FakeSubject>("b", subject2));
+            new TagSubject("a", subject1).ShouldEqual(new TagSubject("a", subject1));
+            new TagSubject("a", subject2).ShouldEqual(new TagSubject("a", subject2));
+            new TagSubject("a", subject1).ShouldNotEqual(new TagSubject("a", subject2));
+            new TagSubject("a", subject2).ShouldNotEqual(new TagSubject("b", subject2));
         }
 
         [Test]
@@ -51,10 +51,10 @@ namespace HtmlTags.Testing.Conventions
 
             subject1.ShouldNotEqual(subject2);
 
-            new TagSubject<FakeSubject>("a", subject1).GetHashCode().ShouldEqual(new TagSubject<FakeSubject>("a", subject1).GetHashCode());
-            new TagSubject<FakeSubject>("a", subject2).GetHashCode().ShouldEqual(new TagSubject<FakeSubject>("a", subject2).GetHashCode());
-            new TagSubject<FakeSubject>("a", subject1).GetHashCode().ShouldNotEqual(new TagSubject<FakeSubject>("a", subject2).GetHashCode());
-            new TagSubject<FakeSubject>("a", subject2).GetHashCode().ShouldNotEqual(new TagSubject<FakeSubject>("b", subject2).GetHashCode());
+            new TagSubject("a", subject1).GetHashCode().ShouldEqual(new TagSubject("a", subject1).GetHashCode());
+            new TagSubject("a", subject2).GetHashCode().ShouldEqual(new TagSubject("a", subject2).GetHashCode());
+            new TagSubject("a", subject1).GetHashCode().ShouldNotEqual(new TagSubject("a", subject2).GetHashCode());
+            new TagSubject("a", subject2).GetHashCode().ShouldNotEqual(new TagSubject("b", subject2).GetHashCode());
         }
     }
 }

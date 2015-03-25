@@ -2,55 +2,55 @@ using System;
 
 namespace HtmlTags.Conventions
 {
-    public interface ITagBuilderPolicy<T> where T : TagRequest
+    public interface ITagBuilderPolicy
     {
-        bool Matches(T subject);
-        ITagBuilder<T> BuilderFor(T subject);
+        bool Matches(ElementRequest subject);
+        ITagBuilder BuilderFor(ElementRequest subject);
     }
 
-    public class ConditionalTagBuilderPolicy<T> : ITagBuilderPolicy<T> where T : TagRequest
+    public class ConditionalTagBuilderPolicy : ITagBuilderPolicy
     {
-        private readonly Func<T, bool> _filter;
-        private readonly ITagBuilder<T> _builder;
+        private readonly Func<ElementRequest, bool> _filter;
+        private readonly ITagBuilder _builder;
 
-        public ConditionalTagBuilderPolicy(Func<T, bool> filter, Func<T, HtmlTag> builder)
+        public ConditionalTagBuilderPolicy(Func<ElementRequest, bool> filter, Func<ElementRequest, HtmlTag> builder)
         {
             _filter = filter;
-            _builder = new LambdaTagBuilder<T>(builder);
+            _builder = new LambdaTagBuilder(builder);
         }
 
-        public ConditionalTagBuilderPolicy(Func<T, bool> filter, ITagBuilder<T> builder)
+        public ConditionalTagBuilderPolicy(Func<ElementRequest, bool> filter, ITagBuilder builder)
         {
             _filter = filter;
             _builder = builder;
         }
 
 
-        public bool Matches(T subject)
+        public bool Matches(ElementRequest subject)
         {
             return _filter(subject);
         }
 
-        public ITagBuilder<T> BuilderFor(T subject)
+        public ITagBuilder BuilderFor(ElementRequest subject)
         {
             return _builder;
         }
     }
 
-    public interface ITagBuilder<T> where T : TagRequest
+    public interface ITagBuilder
     {
-        HtmlTag Build(T request);
+        HtmlTag Build(ElementRequest request);
     }
 
-    public abstract class TagBuilder<T> : ITagBuilderPolicy<T>, ITagBuilder<T> where T : TagRequest
+    public abstract class TagBuilder : ITagBuilderPolicy, ITagBuilder
     {
-        public abstract bool Matches(T subject);
+        public abstract bool Matches(ElementRequest subject);
 
-        public ITagBuilder<T> BuilderFor(T subject)
+        public ITagBuilder BuilderFor(ElementRequest subject)
         {
             return this;
         }
 
-        public abstract HtmlTag Build(T request);
+        public abstract HtmlTag Build(ElementRequest request);
     }
 }
