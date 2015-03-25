@@ -12,19 +12,6 @@ namespace HtmlTags.Testing.Conventions
     public class HtmlConventionLibraryTester
     {
         [Test]
-        public void for_returns_the_same_result()
-        {
-            var library = new HtmlConventionLibrary();
-            var lib1 = library.For();
-            var lib2 = library.For();
-
-            lib1.ShouldBeTheSameAs(lib2);
-
-
-            library.For().ShouldBeTheSameAs(library.For());
-        }
-
-        [Test]
         public void importing_test()
         {
             var b1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
@@ -36,19 +23,19 @@ namespace HtmlTags.Testing.Conventions
 
 
             var lib1 = new HtmlConventionLibrary();
-            lib1.For().Add(b1);
-            lib1.For().Add(b2);
+            lib1.TagLibrary.Add(b1);
+            lib1.TagLibrary.Add(b2);
 
             var lib2 = new HtmlConventionLibrary();
-            lib2.For().Add(b3);
-            lib2.For().Add(b4);
-            lib2.For().Add(b5);
-            lib2.For().Add(b6);
+            lib2.TagLibrary.Add(b3);
+            lib2.TagLibrary.Add(b4);
+            lib2.TagLibrary.Add(b5);
+            lib2.TagLibrary.Add(b6);
 
             lib1.Import(lib2);
 
-            lib1.For().Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b2, b3);
-            lib1.For().Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b4, b5, b6);
+            lib1.TagLibrary.Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b2, b3);
+            lib1.TagLibrary.Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b4, b5, b6);
         }
 
         [Test]

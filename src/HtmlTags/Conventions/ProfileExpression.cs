@@ -15,7 +15,7 @@ namespace HtmlTags.Conventions
 
         private BuilderSet buildersFor(string category)
         {
-            return Library.For().Category(category).Profile(_profileName);
+            return Library.TagLibrary.Category(category).Profile(_profileName);
         }
 
         public ElementCategoryExpression Labels

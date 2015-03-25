@@ -91,9 +91,7 @@
     <Compile Include="Conventions\Formatting\Stringifier.cs" />
     <Compile Include="Conventions\Formatting\StringifierStrategy.cs" />
     <Compile Include="Conventions\HtmlConventionLibrary.cs" />
-    <Compile Include="Conventions\HtmlConventionLibraryImporter.cs" />
     <Compile Include="Conventions\HtmlConventionRegistry.cs" />
-    <Compile Include="Conventions\IHtmlConventionLibraryImporter.cs" />
     <Compile Include="Conventions\IHtmlConventionVisitor.cs" />
     <Compile Include="Conventions\IServiceLocator.cs" />
     <Compile Include="Conventions\ITagBuilder.cs" />

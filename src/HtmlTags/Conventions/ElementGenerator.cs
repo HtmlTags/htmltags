@@ -35,7 +35,7 @@ namespace HtmlTags.Conventions
 
         public static ElementGenerator<T> For(HtmlConventionLibrary library)
         {
-            var tags = new TagGenerator(library.For(), new ActiveProfile());
+            var tags = new TagGenerator(library.TagLibrary, new ActiveProfile());
 
             return new ElementGenerator<T>(tags);
         }

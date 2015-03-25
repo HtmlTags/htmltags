@@ -34,7 +34,7 @@ namespace HtmlTags.Conventions
 
         private void buildNew()
         {
-            var generator = new TagGenerator(_library.For(), _profile);
+            var generator = new TagGenerator(_library.TagLibrary, _profile);
             _generators.Add(typeof(ElementRequest), generator);
         }
     }
