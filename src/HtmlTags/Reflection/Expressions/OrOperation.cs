@@ -87,7 +87,7 @@ namespace HtmlTags.Reflection.Expressions
         }
     }
 
-    public class RewriteToLambda : ExpressionVisitorBase
+    public class RewriteToLambda : ExpressionVisitor
     {
         private ParameterExpression _parameter;
 
@@ -98,11 +98,11 @@ namespace HtmlTags.Reflection.Expressions
 
         protected override Expression VisitBinary(BinaryExpression exp)
         {
-            var a = VisitMemberAccess((MemberExpression) exp.Left);
+            var a = VisitMember((MemberExpression) exp.Left);
             return Expression.Equal(a, exp.Right);    
         }
 
-        protected override Expression VisitMemberAccess(MemberExpression m)
+        protected override Expression VisitMember(MemberExpression m)
         {
             Expression exp = null;
             if(m.Expression.NodeType == ExpressionType.Parameter)
@@ -116,7 +116,7 @@ namespace HtmlTags.Reflection.Expressions
                 //c.Thing.IsThere
 
                 //rewrite c.Thing
-                var intermediate = VisitMemberAccess((MemberExpression)m.Expression);
+                var intermediate = VisitMember((MemberExpression)m.Expression);
 
                 //now combine 'c.Thing' with '.IsThere'
                 exp = Expression.MakeMemberAccess(intermediate, m.Member);
@@ -132,7 +132,7 @@ namespace HtmlTags.Reflection.Expressions
                 var aa = exp.Arguments.Skip(1).First();
                 if(aa.NodeType != ExpressionType.Constant)
                 {
-                    aa = VisitMemberAccess((MemberExpression) exp.Arguments.Skip(1).First());
+                    aa = VisitMember((MemberExpression)exp.Arguments.Skip(1).First());
                 }
 
                 //if second arg is a constant of our type swap other wise continue down the rabbit hole
