@@ -15,13 +15,16 @@ namespace HtmlTags.Conventions
             _tags = tags;
         }
 
-        public static ElementGenerator<T> For(HtmlConventionLibrary library, Func<Type, object> serviceLocator = null)
+        public static ElementGenerator<T> For(HtmlConventionLibrary library, Func<Type, object> serviceLocator = null, T model = null)
         {
             serviceLocator = serviceLocator ?? (Activator.CreateInstance);
 
             var tags = new TagGenerator(library.TagLibrary, new ActiveProfile(), serviceLocator);
 
-            return new ElementGenerator<T>(tags);
+            return new ElementGenerator<T>(tags)
+            {
+                Model = model
+            };
         }
 
         public HtmlTag LabelFor(Expression<Func<T, object>> expression, string profile = null, T model = null)
@@ -37,6 +40,11 @@ namespace HtmlTags.Conventions
         public HtmlTag DisplayFor(Expression<Func<T, object>> expression, string profile = null, T model = null)
         {
             return build(expression, ElementConstants.Display, profile, model);
+        }
+
+        public HtmlTag TagFor(Expression<Func<T, object>> expression, string category, string profile = null, T model = null)
+        {
+            return build(expression, category, profile, model);
         }
 
         public T Model
@@ -79,6 +87,11 @@ namespace HtmlTags.Conventions
         public HtmlTag DisplayFor(ElementRequest request, string profile = null, T model = null)
         {
             return build(request, ElementConstants.Display, profile, model);
+        }
+
+        public HtmlTag TagFor(ElementRequest request, string category, string profile = null, T model = null)
+        {
+            return build(request, category, profile, model);
         }
     }
 }
