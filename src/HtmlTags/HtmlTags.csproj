@@ -92,7 +92,6 @@
     <Compile Include="Conventions\Formatting\StringifierStrategy.cs" />
     <Compile Include="Conventions\HtmlConventionLibrary.cs" />
     <Compile Include="Conventions\HtmlConventionRegistry.cs" />
-    <Compile Include="Conventions\IServiceLocator.cs" />
     <Compile Include="Conventions\ITagBuilder.cs" />
     <Compile Include="Conventions\ITagBuildingExpression.cs" />
     <Compile Include="Conventions\ITagGenerator.cs" />
@@ -101,7 +100,6 @@
     <Compile Include="Conventions\LambdaTagModifier.cs" />
     <Compile Include="Conventions\ProfileExpression.cs" />
     <Compile Include="Conventions\ServiceBuilder.cs" />
-    <Compile Include="Conventions\ServiceLocatorTagRequestActivator.cs" />
     <Compile Include="Conventions\TagCategory.cs" />
     <Compile Include="Conventions\TagConstants.cs" />
     <Compile Include="Conventions\TagGenerator.cs" />

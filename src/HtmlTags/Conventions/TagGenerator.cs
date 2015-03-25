@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace HtmlTags.Conventions
 {
+    using System;
     using Elements;
 
     public class ActiveProfile
@@ -34,12 +35,14 @@ namespace HtmlTags.Conventions
     {
         private readonly ITagLibrary _library;
         private readonly ActiveProfile _profile;
-        
+        private readonly Func<Type, object> _serviceLocator;
 
-        public TagGenerator(ITagLibrary library, ActiveProfile profile)
+
+        public TagGenerator(ITagLibrary library, ActiveProfile profile, Func<Type, object> serviceLocator)
         {
             _library = library;
             _profile = profile;
+            _serviceLocator = serviceLocator;
         }
 
         public HtmlTag Build(ElementRequest request, string category = null, string profile = null)
@@ -51,19 +54,9 @@ namespace HtmlTags.Conventions
 
             var plan = _library.PlanFor(token, profile, category);
 
-            ActivateRequest(request);
+            request.Attach(_serviceLocator);
 
             return plan.Build(request);
-        }
-
-        private void ActivateRequest(ElementRequest request)
-        {
-            //var namingConvention = request.Get<IElementNamingConvention>() ?? new DefaultElementNamingConvention();
-            // TODO: add the element id and service location stuff here
-            //        request.ElementId = string.IsNullOrEmpty(request.ElementId)
-            //? _naming.GetName(request.HolderType(), request.Accessor)
-            //: request.ElementId;
-
         }
 
         public string ActiveProfile

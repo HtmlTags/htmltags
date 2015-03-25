@@ -10,14 +10,16 @@ namespace HtmlTags.Conventions
         private readonly ITagGenerator _tags;
         private Lazy<T> _model;
 
-        public ElementGenerator(ITagGenerator tags)
+        private ElementGenerator(ITagGenerator tags)
         {
             _tags = tags;
         }
 
-        public static ElementGenerator<T> For(HtmlConventionLibrary library)
+        public static ElementGenerator<T> For(HtmlConventionLibrary library, Func<Type, object> serviceLocator = null)
         {
-            var tags = new TagGenerator(library.TagLibrary, new ActiveProfile());
+            serviceLocator = serviceLocator ?? (Activator.CreateInstance);
+
+            var tags = new TagGenerator(library.TagLibrary, new ActiveProfile(), serviceLocator);
 
             return new ElementGenerator<T>(tags);
         }

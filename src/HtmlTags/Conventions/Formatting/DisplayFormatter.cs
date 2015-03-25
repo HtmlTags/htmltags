@@ -1,15 +1,14 @@
 namespace HtmlTags.Conventions.Formatting
 {
+    using System;
     using Reflection;
 
     public class DisplayFormatter : IDisplayFormatter
     {
-        private readonly IServiceLocator _locator;
+        private readonly Func<Type, object> _locator;
         private readonly Stringifier _stringifier;
 
-        // IServiceLocator should be injected into the constructor as
-        // a dependency
-        public DisplayFormatter(IServiceLocator locator)
+        public DisplayFormatter(Func<Type, object> locator)
         {
             _locator = locator;
             _stringifier = new Stringifier();

@@ -7,11 +7,11 @@ namespace HtmlTags.Conventions
     using Formatting;
     using Reflection;
 
-    public class ElementRequest : IServiceLocatorAware
+    public class ElementRequest
     {
         private bool _hasFetched;
         private object _rawValue;
-        private IServiceLocator _services;
+        private Func<Type, object> _services;
         private HtmlTag _currentTag;
         private HtmlTag _originalTag;
 
@@ -107,7 +107,7 @@ namespace HtmlTags.Conventions
 
         public T Get<T>()
         {
-            return _services.GetInstance<T>();
+            return (T)_services(typeof(T));
         }
 
         // virtual for mocking
@@ -138,7 +138,7 @@ namespace HtmlTags.Conventions
             action((T) RawValue);
         }
 
-        public void Attach(IServiceLocator locator)
+        public void Attach(Func<Type, object> locator)
         {
             _services = locator;
         }

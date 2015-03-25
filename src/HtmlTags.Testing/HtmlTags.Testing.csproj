@@ -79,7 +79,6 @@
     <Compile Include="Conventions\LambdaTagModifierTester.cs" />
     <Compile Include="Conventions\ServiceBuilderTester.cs" />
     <Compile Include="Conventions\TagCategoryTester.cs" />
-    <Compile Include="Conventions\TagGeneratorTester.cs" />
     <Compile Include="Conventions\TagLibraryTester.cs" />
     <Compile Include="Conventions\TagPlanTester.cs" />
     <Compile Include="Conventions\TagSubjectTester.cs" />

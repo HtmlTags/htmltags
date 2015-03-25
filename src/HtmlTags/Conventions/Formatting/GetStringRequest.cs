@@ -6,7 +6,7 @@ namespace HtmlTags.Conventions.Formatting
 
     public class GetStringRequest
     {
-        private IServiceLocator _locator;
+        private Func<Type, object> _locator;
         private Type _propertyType;
 
         private GetStringRequest()
@@ -19,7 +19,7 @@ namespace HtmlTags.Conventions.Formatting
         }
 
 
-        public GetStringRequest(Accessor accessor, object rawValue, IServiceLocator locator)
+        public GetStringRequest(Accessor accessor, object rawValue, Func<Type, object> locator)
         {
             _locator = locator;
             if (accessor != null) Property = accessor.InnerProperty;
@@ -56,7 +56,7 @@ namespace HtmlTags.Conventions.Formatting
 
         // Yes, I made this internal.  Don't necessarily want it in the public interface,
         // but needs to be "settable"
-        internal IServiceLocator Locator
+        internal Func<Type, object> Locator
         {
             get { return _locator; }
             set { _locator = value; }
@@ -113,7 +113,7 @@ namespace HtmlTags.Conventions.Formatting
 
         public T Get<T>()
         {
-            return _locator.GetInstance<T>();
+            return (T)_locator(typeof(T));
         }
 
         public bool Equals(GetStringRequest other)
