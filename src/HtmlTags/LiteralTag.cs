@@ -1,5 +1,10 @@
 using System;
+#if DNXCORE50
+using Microsoft.AspNet.Html;
+#else
 using System.Web.UI;
+#endif
+
 
 namespace HtmlTags
 {

@@ -1,8 +1,5 @@
 namespace HtmlTags.Conventions.Elements.Builders
 {
-    using System.ComponentModel;
-
-    [Description("Builds an html checkbox for a boolean value")]
     public class CheckboxBuilder : ElementTagBuilder
     {
         public override bool Matches(ElementRequest subject)

@@ -46,7 +46,7 @@ namespace HtmlTags.Reflection
         {
             var parameter = Expression.Parameter(typeof(T), "x");
             Expression body = Expression.Property(parameter, _property);
-            if (_property.PropertyType.IsValueType)
+            if (_property.PropertyType.GetTypeInfo().IsValueType)
             {
                 body = Expression.Convert(body, typeof (Object));
             }

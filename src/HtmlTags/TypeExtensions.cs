@@ -30,27 +30,27 @@
 
         public static bool IsNullable(this Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
         public static bool Closes(this Type type, Type openType)
         {
             if (type == null) return false;
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == openType) return true;
+            if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == openType) return true;
 
             if (type.GetInterfaces().Any(@interface => @interface.Closes(openType)))
             {
                 return true;
             }
 
-            Type baseType = type.BaseType;
+            Type baseType = type.GetTypeInfo().BaseType;
             if (baseType == null) return false;
 
-            bool closes = baseType.IsGenericType && baseType.GetGenericTypeDefinition() == openType;
+            bool closes = baseType.GetTypeInfo().IsGenericType && baseType.GetGenericTypeDefinition() == openType;
             if (closes) return true;
 
-            return type.BaseType != null && type.BaseType.Closes(openType);
+            return type.GetTypeInfo().BaseType != null && type.GetTypeInfo().BaseType.Closes(openType);
         }
 
         public static Type IsAnEnumerationOf(this Type type)
@@ -65,7 +65,7 @@
                 return type.GetElementType();
             }
 
-            if (type.IsGenericType)
+            if (type.GetTypeInfo().IsGenericType)
             {
                 return type.GetGenericArguments()[0];
             }
@@ -88,7 +88,7 @@
         {
             if (theType == null) return false;
 
-            return theType.IsGenericType && theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
+            return theType.GetTypeInfo().IsGenericType && theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
         
         public static bool IsTypeOrNullableOf<T>(this Type theType)

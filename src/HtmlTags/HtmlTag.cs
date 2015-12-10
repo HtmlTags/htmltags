@@ -5,16 +5,19 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Newtonsoft.Json;
+#if DNXCORE50
+using Microsoft.AspNet.Html;
+using Microsoft.AspNet.Http;
+#else
 using System.Web;
 using System.Web.UI;
+#endif
 
 namespace HtmlTags
 {
 
     public class HtmlTag : ITagSource
-#if !LEGACY
-        , IHtmlString
-#endif
     {
         public static HtmlTag Empty()
         {
@@ -420,7 +423,7 @@ namespace HtmlTags
         public override string ToString()
         {
             return WillBeRendered()
-                ? ToString(new HtmlTextWriter(new StringWriter(), String.Empty) {NewLine = String.Empty})
+                ? ToString(HtmlTextWriterExtensions.New(new StringWriter(), String.Empty, String.Empty))
                 : String.Empty;
         }
 
@@ -432,7 +435,7 @@ namespace HtmlTags
         public string ToPrettyString()
         {
             return WillBeRendered()
-                ? ToString(new HtmlTextWriter(new StringWriter(), "  ") {NewLine = Environment.NewLine})
+                ? ToString(HtmlTextWriterExtensions.New(new StringWriter(), "  ", Environment.NewLine))
                 : String.Empty;
         }
 
@@ -482,7 +485,7 @@ namespace HtmlTags
                     {
                         var value = attribute.Value;
                         var stringValue = !(value is string) && key.StartsWith(DataPrefix)
-                            ? JsonUtil.ToJson(value)
+                            ? JsonConvert.SerializeObject(value)
                             : value.ToString();
                         html.AddAttribute(key, stringValue, attribute.IsEncoded);
                     }
@@ -501,7 +504,7 @@ namespace HtmlTags
 
                 if (_metaData.Count > 0)
                 {
-                    var metadataValue = JsonUtil.ToUnsafeJson(_metaData.Inner);
+                    var metadataValue = JsonConvert.SerializeObject(_metaData.Inner);
                     html.AddAttribute(MetadataAttribute, metadataValue);
                 }
 
@@ -820,21 +823,9 @@ namespace HtmlTags
             return wrapper;
         }
 
-        public HtmlTag VisibleForRoles(params string[] roles)
+        public HtmlTag VisibleForRoles(IPrincipal principal, params string[] roles)
         {
-            var principal = findPrincipal();
             return Render(roles.Any(principal.IsInRole));
-        }
-
-        private static IPrincipal findPrincipal()
-        {
-            if (HttpContext.Current != null)
-            {
-                return HttpContext.Current.User;
-            }
-
-            // Rather throw up on nulls than put a fake in
-            return Thread.CurrentPrincipal;
         }
 
         public HtmlTag Encoded(bool encodeInnerText)

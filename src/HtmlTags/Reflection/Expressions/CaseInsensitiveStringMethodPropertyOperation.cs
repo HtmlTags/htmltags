@@ -29,7 +29,7 @@ namespace HtmlTags.Reflection.Expressions
             {
                 ConstantExpression valueToCheckConstant = Expression.Constant(valueToCheck);
                 BinaryExpression binaryExpression = Expression.Coalesce(propertyPath, Expression.Constant(string.Empty));
-                ConstantExpression invariantCulture = Expression.Constant(StringComparison.InvariantCultureIgnoreCase);
+                ConstantExpression invariantCulture = Expression.Constant(StringComparison.OrdinalIgnoreCase);
                 Expression expression = Expression.Call(binaryExpression, _method, valueToCheckConstant, invariantCulture);
                 if (_negate)
                 {

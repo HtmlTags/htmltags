@@ -43,7 +43,7 @@ namespace HtmlTags.Reflection
         public Expression ChainExpression(Expression body)
         {
             var memberExpression = Expression.ArrayIndex(body, Expression.Constant(Index, typeof(int)));
-            if (!_arrayType.GetElementType().IsValueType)
+            if (!_arrayType.GetElementType().GetTypeInfo().IsValueType)
             {
                 return memberExpression;
             }

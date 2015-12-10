@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 
 namespace HtmlTags
 {
     public class TagList : ITagSource
-#if !LEGACY
-                           , IHtmlString
-#endif
     {
         private readonly IEnumerable<HtmlTag> _tags;
 

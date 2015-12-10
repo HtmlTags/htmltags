@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\dev\htmltags\src\HtmlTags.Testing\bin\Debug\HtmlTags.Testing.dll" total="284" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2015-03-25" time="16:46:49">
+  <environment nunit-version="2.5.10.11092" clr-version="2.0.50727.8009" os-version="Microsoft Windows NT 6.2.9200.0" platform="Win32NT" cwd="C:\dev\htmltags" machine-name="JIMMYBOGARD-PC" user="Jimmy Bogard" user-domain="JIMMYBOGARD-PC" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="Assembly" name="C:\dev\htmltags\src\HtmlTags.Testing\bin\Debug\HtmlTags.Testing.dll" executed="True" result="Success" success="True" time="1.715" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="HtmlTags" executed="True" result="Success" success="True" time="1.708" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="Testing" executed="True" result="Success" success="True" time="1.706" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="BrTagTester" executed="True" result="Success" success="True" time="0.060" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.BrTagTester.default_renders_with_open_close_tags" executed="True" result="Success" success="True" time="0.043" asserts="1" />
+                  <test-case name="HtmlTags.Testing.BrTagTester.html5_mode_renders_with_single_tag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.BrTagTester.xhtml_mode_renders_with_self_closing_tag" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="CheckboxTagTester" executed="True" result="Success" success="True" time="0.008" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.CheckboxTagTester.basic_construction" executed="True" result="Success" success="True" time="0.003" asserts="2" />
+                  <test-case name="HtmlTags.Testing.CheckboxTagTester.create_checkbox_that_is_checked" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CheckboxTagTester.create_checkbox_that_is_not_checked" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="children_tests" executed="True" result="Success" success="True" time="0.094" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.children_tests.add_a_child_tag" executed="True" result="Success" success="True" time="0.046" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.add_and_return_a_child_tag_by_type" executed="True" result="Success" success="True" time="0.004" asserts="2" />
+                  <test-case name="HtmlTags.Testing.children_tests.add_multiple_levels_of_nesting" executed="True" result="Success" success="True" time="0.009" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.add_multiple_levels_of_nesting_with_initializer" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.add_returns_the_newly_created_child_tag" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.children_tests.append_adds_a_new_child_and_return_the_original" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.children_tests.append_all_tags_from_a_sequence" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.append_all_tags_from_a_tag_source" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.append_and_modify_the_innermost_child" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.append_nested_children" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.can_control_br_tag_behavior_even_if_using_regular_html_tag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.create_a_new_tag_as_child_of_existing_tag" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.does_not_return_children_or_siblings_when_treated_as_a_tag_source" executed="True" result="Success" success="True" time="0.007" asserts="2" />
+                  <test-case name="HtmlTags.Testing.children_tests.insert_a_new_child_tag_as_the_first_child" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.nesting_also_supports_jquery_direct_child_syntax" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.children_tests.remove_existing_children_and_add_new_children" executed="True" result="Success" success="True" time="0.002" asserts="3" />
+                </results>
+              </test-suite>
+              <test-suite type="Namespace" name="Conventions" executed="True" result="Success" success="True" time="0.561" asserts="0">
+                <results>
+                  <test-suite type="TestFixture" name="BuilderSetTester" executed="True" result="Success" success="True" time="0.216" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.BuilderSetTester.import_puts_the_second_set_stuff_in_the_back" executed="True" result="Success" success="True" time="0.214" asserts="14" />
+                      <test-case name="HtmlTags.Testing.Conventions.BuilderSetTester.insert_builder" executed="True" result="Success" success="True" time="0.000" asserts="6" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="ConditionalTagBuilderPolicyTester" executed="True" result="Success" success="True" time="0.030" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.ConditionalTagBuilderPolicyTester.build_delegates" executed="True" result="Success" success="True" time="0.024" asserts="1" />
+                      <test-case name="HtmlTags.Testing.Conventions.ConditionalTagBuilderPolicyTester.matches_delegates" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="Fake" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.Fake.good" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="HtmlConventionLibraryTester" executed="True" result="Success" success="True" time="0.043" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.fetching_by_profile_should_fall_back_to_default_if_not_specific_implementation_is_used" executed="True" result="Success" success="True" time="0.006" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.get_with_no_prior_definition_will_happily_blow_up" executed="True" result="Success" success="True" time="0.003" asserts="3" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.if_not_explicitly_specified_assume_the_profile_is_default" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.importing_services" executed="True" result="Success" success="True" time="0.003" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.importing_test" executed="True" result="Success" success="True" time="0.019" asserts="9" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.register_and_build_by_profile" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.registration_of_service_by_func" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.services_are_imported" executed="True" result="Success" success="True" time="0.000" asserts="4" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.services_are_not_overwritten_while_importing" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.HtmlConventionLibraryTester.simple_registration_of_service_by_type" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="LambdaTagModifierTester" executed="True" result="Success" success="True" time="0.140" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.LambdaTagModifierTester.matches_delegates" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.LambdaTagModifierTester.modify_delegates" executed="True" result="Success" success="True" time="0.135" asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="ServiceBuilderTester" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.ServiceBuilderTester.fill_into_will_not_overwrite_the_parent_if_it_exists" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TagCategoryTester" executed="True" result="Success" success="True" time="0.069" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.build_a_profile_simple" executed="True" result="Success" success="True" time="0.024" asserts="1" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.build_a_profile_where_it_has_to_select_builder" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.build_a_profile_with_matching_modifiers" executed="True" result="Success" success="True" time="0.007" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.build_a_profile_with_multiple_modifiers" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.build_default_profile_simple" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.build_default_profile_where_it_has_to_select_builder" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.build_default_profile_with_multiple_modifiers" executed="True" result="Success" success="True" time="0.003" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.build_default_with_matching_modifiers" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.building_with_no_matching_builder_throws_exception" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.building_with_no_matching_builder_throws_exception_2" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.modifiers_are_isolated_between_non_default_profiles" executed="True" result="Success" success="True" time="0.002" asserts="3" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.modifiers_in_the_default_profile_apply_to_other_profiles" executed="True" result="Success" success="True" time="0.002" asserts="3" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.profile_falls_through_to_default_builder_if_there_is_none_in_the_specific_profile" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagCategoryTester.tag_plan_is_memoized_by_profile_and_subject" executed="True" result="Success" success="True" time="0.004" asserts="6" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TagLibrary_Import_Tester" executed="True" result="Success" success="True" time="0.010" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.TagLibrary_Import_Tester.imports_category_from_the_second_library_not_originally_in_the_first" executed="True" result="Success" success="True" time="0.004" asserts="4" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagLibrary_Import_Tester.imports_category_that_both_libraries_have" executed="True" result="Success" success="True" time="0.000" asserts="5" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagLibrary_Import_Tester.imports_defaults" executed="True" result="Success" success="True" time="0.000" asserts="5" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TagLibraryTester" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.TagLibraryTester.builds_default_if_no_category_or_profile_is_specified" executed="True" result="Success" success="True" time="0.003" asserts="5" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TagPlanTester" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.TagPlanTester.build_tag_with_multiple_modifiers" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagPlanTester.build_tag_with_wrapper" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="TagSubjectTester" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.TagSubjectTester.equals" executed="True" result="Success" success="True" time="0.002" asserts="5" />
+                      <test-case name="HtmlTags.Testing.Conventions.TagSubjectTester.get_hashcode" executed="True" result="Success" success="True" time="0.002" asserts="5" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="when_importing_one_category_into_another" executed="True" result="Success" success="True" time="0.012" asserts="0">
+                    <results>
+                      <test-case name="HtmlTags.Testing.Conventions.when_importing_one_category_into_another.does_not_change_profile_held_by_first_category_but_not_the_second" executed="True" result="Success" success="True" time="0.003" asserts="5" />
+                      <test-case name="HtmlTags.Testing.Conventions.when_importing_one_category_into_another.import_profile_held_by_both_categories" executed="True" result="Success" success="True" time="0.002" asserts="17" />
+                      <test-case name="HtmlTags.Testing.Conventions.when_importing_one_category_into_another.import_profile_held_by_second_profile_but_not_the_first" executed="True" result="Success" success="True" time="0.001" asserts="4" />
+                      <test-case name="HtmlTags.Testing.Conventions.when_importing_one_category_into_another.should_import_the_default_profile" executed="True" result="Success" success="True" time="0.002" asserts="12" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="core_behavior_tests" executed="True" result="Success" success="True" time="0.125" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.add_a_class" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.add_multiple_classes_at_once" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.add_multiple_classes_at_once_with_duplicates" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.add_multiple_classes_at_once_with_multiple_spaces" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.attr_add_multiple_classes_with_multiple_space_separated_classes" executed="True" result="Success" success="True" time="0.000" asserts="5" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.attr_add_multiple_classes_with_space_separated_classes" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.attr_can_be_used_to_add_css_class" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.attributes_are_encoded_by_default" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.attributes_can_be_unencoded_if_needed" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.boolean_attr" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.can_get_classes_from_tag" executed="True" result="Success" success="True" time="0.005" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.can_opt_out_of_html_encoded_inner_text" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.class_name_must_have_at_least_two_chars_if_starts_with_dash" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.class_name_with_wrong_json" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.do_allow_a_class_that_is_a_json_blob_with_spaces" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.do_not_allow_first_double_dashes_in_class_names" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.do_not_allow_special_characters_in_class_names" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.do_not_allow_start_with_number_in_class_names" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.do_not_write_closing_tag" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.has_closing_tag_by_default" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.hasattr_should_be_true_for_style_if_any_styles_exist" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.implements_to_html_string_for_aspnet_4_compatibility" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.initialize_tag_via_constructor" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.pretty_string_is_more_suitable_for_human_viewing" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.recognize_input_elements" executed="True" result="Success" success="True" time="0.001" asserts="4" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.remove_a_class" executed="True" result="Success" success="True" time="0.004" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.remove_attribute" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.removing_the_class_attribute_should_remove_all_classes" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.removing_the_style_attribute_should_remove_all_styles" executed="True" result="Success" success="True" time="0.001" asserts="4" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_a_single_attribute" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_a_single_class_even_though_it_is_registered_more_than_once" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_a_tag" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_a_tag_with_inner_text" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_boolean_attr" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_empty_attr" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_id" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_multiple_attributes" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_multiple_classes" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_multiple_classes_from_a_sequence" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.render_multiple_classes_with_a_single_method_call" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.renders_closing_tag_by_default" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.replace_a_single_attribute" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.retrieve_a_non_existing_attr_should_return_an_empty_string" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.retrieve_a_set_id" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.retrieve_an_empty_attr_should_return_an_empty_string" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.retrieve_the_title" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.set_an_attribute_to_null_should_remove_the_attribute" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.set_the_class_attribute_to_empty_string_should_remove_all_classes" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.set_the_class_attribute_to_null_should_remove_all_classes" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.set_the_title_attribute" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.setting_the_style_attribute_to_empty_string_should_remove_all_styles" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.setting_the_style_attribute_to_null_should_remove_all_styles" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.should_report_has_class_attribute_if_any_classes_added" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.should_respect_subclass_encode_preference" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.tag_with_NoClosingTag_should_be_wrapped_correctly_with_tag_with_closingTag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.the_inner_text_is_html_encoded_by_default" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.valid_class_names" executed="True" result="Success" success="True" time="0.001" asserts="4" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.when_no_closing_tag_then_has_is_false" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.when_no_tag_do_not_write_opening_or_closing_tag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.when_no_tag_HasClosingTag_is_false" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.when_no_tag_HasTag_is_false" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.when_placeholder_do_not_write_opening_or_closing_tag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.when_placeholder_HasClosingTag_is_false" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.when_placeholder_HasTag_is_false" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.core_behavior_tests.write_styles" executed="True" result="Success" success="True" time="0.006" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="CssClassNameValidatorTester" executed="True" result="Success" success="True" time="0.058" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.class_name_must_have_at_least_two_chars_if_starts_with_dash" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.class_name_with_wrong_json" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.do_allow_a_class_that_is_a_json_blob_with_spaces" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.do_not_allow_first_double_dashes_in_class_names" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.do_not_allow_special_characters_in_class_names" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.do_not_allow_start_with_number_in_class_names" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.do_nothing_if_already_valid_class_name" executed="True" result="Success" success="True" time="0.001" asserts="5" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.json_arrays_must_start_and_end_with_square_brackets" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.json_objects_must_start_and_end_with_curly_brackets" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.remove_bogus_characters" executed="True" result="Success" success="True" time="0.030" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.remove_leading_hyphen_and_numbers_if_not_followed_by_an_underscore_or_alpha_char" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.remove_leading_numbers" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.return_default_if_completely_invalid_input" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.return_default_if_empty_input" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.return_default_if_null_input" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.setting_AllowInvalidClassNames_to_true_should_disable_validation_altogether" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.should_handle_different_combos_of_leading_invalid_characters" executed="True" result="Success" success="True" time="0.000" asserts="4" />
+                  <test-case name="HtmlTags.Testing.CssClassNameValidatorTester.valid_class_names" executed="True" result="Success" success="True" time="0.000" asserts="5" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="custom_data_attribute_tests" executed="True" result="Success" success="True" time="0.035" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.custom_data_attribute_tests.add_custom_data" executed="True" result="Success" success="True" time="0.023" asserts="1" />
+                  <test-case name="HtmlTags.Testing.custom_data_attribute_tests.attempt_to_manipulate_non_existing_custom_data_should_be_a_no_op" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.custom_data_attribute_tests.manipulate_previously_set_custom_data" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                  <test-case name="HtmlTags.Testing.custom_data_attribute_tests.retrieve_a_non_existing_custom_data_should_return_null" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.custom_data_attribute_tests.retrieve_a_previously_set_custom_data_value" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.custom_data_attribute_tests.set_a_custom_data_to_empty_string_should_store_an_empty_string" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                  <test-case name="HtmlTags.Testing.custom_data_attribute_tests.set_a_custom_data_to_null_should_remove_the_data_attribute" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="DLTagTester" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.DLTagTester.AddDefinition_adds_a_term_and_definition_to_the_list" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.DLTagTester.create_and_initialize_a_definition_list" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.DLTagTester.creates_a_definition_list" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="ElementTesters" executed="True" result="Success" success="True" time="0.007" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.ElementTesters.create_a_div_with_an_id" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.ElementTesters.create_a_div_without_an_id" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.ElementTesters.create_a_hidden_input" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.ElementTesters.create_a_text_input" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.ElementTesters.create_a_text_input_with_name_and_value" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="FormTagTester" executed="True" result="Success" success="True" time="0.010" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.FormTagTester.form_action_can_be_specified" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.FormTagTester.form_action_can_be_specified_via_constructor" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.FormTagTester.form_id_can_be_customized" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.FormTagTester.form_method_can_be_customized" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.FormTagTester.form_tag_creates_the_opening_element_of_a_form_with_id_mainForm" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.FormTagTester.form_tag_has_closing_tag_by_default" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="HtmlDocumentTester" executed="True" result="Success" success="True" time="0.057" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_a_tag_by_tag_name" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_an_htmlTag" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_attributes_to_script_tag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_attributes_to_style_tag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_does_not_push_onto_stack" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_javascript" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_script_of_a_different_type" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_styling" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.add_tags_from_a_tag_source" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.adding_scripts_does_not_alter_the_Last_property" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.adding_styles_does_not_alter_the_Last_property" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.can_set_a_legacy_doctype" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.check_the_basic_structure_with_title_body_and_head" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.head_contains_the_title" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.open_in_browser_writes_a_temp_file_then_opens_it" executed="True" result="Success" success="True" time="0.005" asserts="2" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.pop_rewinds_the_current" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.push_adds_to_the_stack" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.push_an_htmlTag" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.push_without_attaching_does_not_add_to_children" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.reference_external_stylesheet" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.reference_external_stylesheet_and_override_attributes" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.reference_javascript_by_file" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.reference_javascript_file_and_override_attributes" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.reference_script_file_of_a_different_type" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.rewind_takes_you_back_to_the_beginning" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.the_current_element_is_the_body_by_default" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.the_last_property" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                  <test-case name="HtmlTags.Testing.HtmlDocumentTester.write_to_file_sends_the_document_to_the_file_writer" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="HtmlTagExtendedAttributesTester" executed="True" result="Success" success="True" time="0.012" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.HtmlTagExtendedAttributesTester.autocomplete_ext_method" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlTagExtendedAttributesTester.file_upload_mode_ext_method" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlTagExtendedAttributesTester.hide_unless_negative_case" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlTagExtendedAttributesTester.hide_unless_positive_case" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlTagExtendedAttributesTester.name_ext_method" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlTagExtendedAttributesTester.password_mode_ext_method" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.HtmlTagExtendedAttributesTester.unencoded_turns_off_inner_text_html_encoding" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.HtmlTagExtendedAttributesTester.value_ext_method" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="JsonUtilTester" executed="True" result="Success" success="True" time="0.483" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.JsonUtilTester.can_handle_large_data_objects" executed="True" result="Success" success="True" time="0.056" asserts="1" />
+                  <test-case name="HtmlTags.Testing.JsonUtilTester.get_by_bytes" executed="True" result="Success" success="True" time="0.028" asserts="1" />
+                  <test-case name="HtmlTags.Testing.JsonUtilTester.get_by_bytes_large_data" executed="True" result="Success" success="True" time="0.372" asserts="1" />
+                  <test-case name="HtmlTags.Testing.JsonUtilTester.should_serialize_strings_with_quotes" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.JsonUtilTester.to_json_should_present_error_message_if_you_attempt_to_serialize_a_javascript_function" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.JsonUtilTester.unsafe_json_should_allow_you_to_serialize_javascript_function_names_without_quotes" executed="True" result="Success" success="True" time="0.018" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="LiteralTagTester" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.LiteralTagTester.just_writes_the_literal_html_it_is_given" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.LiteralTagTester.literal_tag_hosted_inside_of_another_tag" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.LiteralTagTester.literal_tag_hosted_inside_of_another_tag_from_the_extension_method" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="metadata_tests" executed="True" result="Success" success="True" time="0.015" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.metadata_tests.append_html" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.attempt_to_manipulate_a_non_existing_metadata_should_be_a_no_op" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.hasattr_should_be_true_for_metadata_attribute_if_any_metadata_exists" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.manipulate_a_previously_set_metadata" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.render_metadata" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.retrieve_a_non_existing_metadata_should_return_null" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.retrieve_a_previously_set_metadata" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.setting_the_metadata_attribute_to_empty_string_should_remove_all_metadata" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.setting_the_metadata_attribute_to_null_should_remove_all_metadata" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.metadata_tests.write_deep_object_in_metadata" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="metadataattribute_tests" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.metadataattribute_tests.metadataattribute_value_ends_with_a_colon_char_by_default" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.metadataattribute_tests.metadataattribute_value_ends_with_the_metadatasuffix_char" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="NestedNoClosingTagIssue" executed="True" result="Success" success="True" time="0.001" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.NestedNoClosingTagIssue.X" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="output_control_tests" executed="True" result="Success" success="True" time="0.010" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.output_control_tests.Empty_can_be_used_as_a_non_rendering_placeholder" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="HtmlTags.Testing.output_control_tests.hide_renders_the_tag_but_sets_style_to_display_none" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.output_control_tests.render_set_to_false_always_returns_an_empty_string" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.output_control_tests.render_set_to_true_by_default" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.output_control_tests.rendering_a_NoTag_should_not_render_anything" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.output_control_tests.tags_are_authorized_by_default" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.output_control_tests.unauthorized_tags_will_always_return_an_empty_string_regardless_of_render_setting" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="ParentTagTester" executed="True" result="Success" success="True" time="0.009" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.ParentTagTester.parent_property_is_set_correctly_using_add" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.ParentTagTester.parent_property_is_set_correctly_using_append" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.ParentTagTester.parent_property_is_set_correctly_using_append_with_multiple" executed="True" result="Success" success="True" time="0.001" asserts="4" />
+                  <test-case name="HtmlTags.Testing.ParentTagTester.parent_property_is_set_correctly_using_insertFirst" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.ParentTagTester.render_html_from_current_tag_by_default" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.ParentTagTester.render_html_from_top_if_set_renderfromtop" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="SelectTagTester" executed="True" result="Success" success="True" time="0.017" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.SelectTagTester.can_initialize_options_in_constructor" executed="True" result="Success" success="True" time="0.001" asserts="6" />
+                  <test-case name="HtmlTags.Testing.SelectTagTester.FirstOption_should_prepend_new_option_at_top" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.SelectTagTester.selected_by_string_value" executed="True" result="Success" success="True" time="0.002" asserts="3" />
+                  <test-case name="HtmlTags.Testing.SelectTagTester.selected_by_value" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                  <test-case name="HtmlTags.Testing.SelectTagTester.should_add_default_option_to_top_of_list" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.SelectTagTester.should_make_the_default_option_selected" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                  <test-case name="HtmlTags.Testing.SelectTagTester.should_not_remove_previous_selected_value_if_new_value_is_bogus" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.SelectTagTester.should_remove_previous_selected_value" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="sibling_tests" executed="True" result="Success" success="True" time="0.008" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.sibling_tests.get_the_next_sibling_via_property_is_equivelent_to_after" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.sibling_tests.retrieve_the_next_sibling" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.sibling_tests.set_the_next_sibling_via_next_property" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.sibling_tests.set_the_next_sibling_via_next_property_should_overwrite_any_existing_sibling" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.sibling_tests.set_the_next_sibling_via_the_after_method" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.sibling_tests.set_the_next_sibling_via_the_after_method_preserves_any_existing_sibling" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="TableTagTester" executed="True" result="Success" success="True" time="0.040" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.TableTagTester.add_caption_always_puts_the_caption_at_top" executed="True" result="Success" success="True" time="0.004" asserts="5" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.body_rows_can_be_configured_with_cells" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.caption_is_empty_string_if_hasnt_been_set" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.cells_can_have_colspan_and_rowspan" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.check_thead_tbody_tfoot_access" executed="True" result="Success" success="True" time="0.013" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.header_row_can_be_configured_with_headings" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.should_add_a_footer_to_the_tfoot" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.should_add_cells_to_rows_in_the_tbody" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.should_add_headings_in_a_header_row_to_the_thead" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.should_allow_multiple_rows_in_the_header" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.should_build_a_complete_table" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TableTagTester.should_create_an_empty_table" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="TagBuilderExtensionsTester" executed="True" result="Success" success="True" time="0.006" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.TagBuilderExtensionsTester.append_a_child_div_tag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TagBuilderExtensionsTester.append_a_child_span_tag" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.TagBuilderExtensionsTester.create_and_return_a_link_as_a_child_of_another_tag" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="TagListTester" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.TagListTester.can_be_used_as_a_tag_source" executed="True" result="Success" success="True" time="0.001" asserts="6" />
+                  <test-case name="HtmlTags.Testing.TagListTester.can_generate_output_for_a_collection_of_tags" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="VisibleForRoleTesting" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.VisibleForRoleTesting.should_be_visible_when_the_user_has_the_role" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                  <test-case name="HtmlTags.Testing.VisibleForRoleTesting.should_not_be_visible_when_the_user_does_not_have_the_role" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="when_converting_a_tag_to_multiline_that_does_not_start_with_a_value" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.when_converting_a_tag_to_multiline_that_does_not_start_with_a_value.the_tag_name_should_be_changed_to_textarea" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="when_converting_an_input_tag_with_a_value_into_a_multiline_editor" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.when_converting_an_input_tag_with_a_value_into_a_multiline_editor.the_previous_value_should_be_moved_to_the_text_attribute" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.when_converting_an_input_tag_with_a_value_into_a_multiline_editor.the_tag_name_should_be_changed_to_textarea" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="HtmlTags.Testing.when_converting_an_input_tag_with_a_value_into_a_multiline_editor.the_value_attribute_should_removed" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="wrapping_tags_tests" executed="True" result="Success" success="True" time="0.008" asserts="0">
+                <results>
+                  <test-case name="HtmlTags.Testing.wrapping_tags_tests.wrap_with_another_tag_returns_the_wrapping_tag_with_the_original_as_its_child" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.wrapping_tags_tests.wrap_with_returns_a_new_tag_with_the_original_as_the_first_child" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                  <test-case name="HtmlTags.Testing.wrapping_tags_tests.wrapped_tag_will_be_authorized_if_the_original_tag_was_authorized" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                  <test-case name="HtmlTags.Testing.wrapping_tags_tests.wrapped_tag_will_be_rendered_if_the_original_tag_was_to_be_rendered" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                  <test-case name="HtmlTags.Testing.wrapping_tags_tests.wrapped_tag_will_not_be_authorized_if_the_original_tag_was_not_authorized" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="HtmlTags.Testing.wrapping_tags_tests.wrapped_tag_will_not_be_rendered_if_the_original_tag_was_not_to_be_rendered" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

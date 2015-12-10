@@ -101,7 +101,7 @@ namespace HtmlTags.Reflection.Expressions
         static StringContainsPropertyOperationBase()
         {
             _indexOfMethod =
-                ReflectionHelper.GetMethod<string>(s => s.IndexOf("", StringComparison.InvariantCultureIgnoreCase));
+                ReflectionHelper.GetMethod<string>(s => s.IndexOf("", StringComparison.OrdinalIgnoreCase));
         }
 
         protected StringContainsPropertyOperationBase(string operation, string description, bool negate)
@@ -125,7 +125,7 @@ namespace HtmlTags.Reflection.Expressions
                 MethodCallExpression indexOfCall =
                     Expression.Call(Expression.Coalesce(propertyPath, Expression.Constant(String.Empty)), _indexOfMethod,
                                     valueToCheckConstant,
-                                    Expression.Constant(StringComparison.InvariantCultureIgnoreCase));
+                                    Expression.Constant(StringComparison.OrdinalIgnoreCase));
                 var operation = _negate ? ExpressionType.LessThan : ExpressionType.GreaterThanOrEqual;
                 BinaryExpression comparison = Expression.MakeBinary(operation, indexOfCall,
                                                                     Expression.Constant(0));

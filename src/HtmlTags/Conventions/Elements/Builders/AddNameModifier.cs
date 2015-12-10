@@ -1,8 +1,5 @@
 namespace HtmlTags.Conventions.Elements.Builders
 {
-    using System.ComponentModel;
-
-    [Description("Adds @name=[Accessor name] to any input elements to facilitate model binding")]
     public class AddNameModifier : IElementModifier
     {
         public bool Matches(ElementRequest token)

@@ -41,7 +41,7 @@ namespace HtmlTags.Reflection
         {
             var parameter = Expression.Parameter(typeof(T), "x");
             Expression body = Expression.ArrayIndex(parameter, Expression.Constant(_getter.Index, typeof(int)));
-            if (_getter.ValueType.IsValueType)
+            if (_getter.ValueType.GetTypeInfo().IsValueType)
             {
                 body = Expression.Convert(body, typeof(Object));
             }

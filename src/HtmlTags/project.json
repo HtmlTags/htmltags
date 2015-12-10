@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0-*",
+  "dependencies": {
+    "Newtonsoft.Json": "7.0.1"
+  },
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0",
+        "System.Web.Extensions": "4.0.0.0"
+      }
+    },
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0",
+        "System.Web.Extensions": "4.0.0.0"
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.0",
+        "System.Diagnostics.Process": "4.1.0-*",
+        "System.IO": "4.0.10",
+        "System.Reflection": "4.0.0",
+        "System.Runtime": "4.0.20",
+        "System.Runtime.Extensions": "4.0.10",
+        "System.Text.RegularExpressions": "4.0.10",
+        "System.Text.Encoding": "4.0.10",
+        "System.Runtime.Serialization.Primitives": "4.0.10",
+        "System.Security.Principal": "4.0.0",
+        "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-*",
+        "Microsoft.AspNet.Mvc.Razor": "6.0.0-*"
+      }
+    }
+  }
+}

@@ -1,5 +1,10 @@
 namespace HtmlTags
 {
+#if DNXCORE50
+    using Microsoft.AspNet.Html;
+#else
+    using System.Web.UI;
+#endif
     public class BrTag : HtmlTag
     {
         public BrTag() : base("br")
@@ -15,7 +20,7 @@ namespace HtmlTags
             Html5 = 2,
         }
 
-        protected override void writeHtml(System.Web.UI.HtmlTextWriter html)
+        protected override void writeHtml(HtmlTextWriter html)
         {
             switch(BrTag.ComplianceMode)
             {
@@ -27,8 +32,7 @@ namespace HtmlTags
                     break;
                 case ComplianceModes.AspNet:
                 default:
-                    html.RenderBeginTag("br");
-                    html.RenderEndTag();
+                    html.Write("<br />");
                     break;
             }
         }

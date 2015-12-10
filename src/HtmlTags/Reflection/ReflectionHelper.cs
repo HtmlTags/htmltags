@@ -10,7 +10,7 @@ namespace HtmlTags.Reflection
     {
         public static bool MeetsSpecialGenericConstraints(Type genericArgType, Type proposedSpecificType)
         {
-            GenericParameterAttributes gpa = genericArgType.GenericParameterAttributes;
+            GenericParameterAttributes gpa = genericArgType.GetTypeInfo().GenericParameterAttributes;
             GenericParameterAttributes constraints = gpa & GenericParameterAttributes.SpecialConstraintMask;
 
             // No constraints, away we go!
@@ -19,14 +19,14 @@ namespace HtmlTags.Reflection
 
             // "class" constraint and this is a value type
             if ((constraints & GenericParameterAttributes.ReferenceTypeConstraint) != 0
-                && proposedSpecificType.IsValueType)
+                && proposedSpecificType.GetTypeInfo().IsValueType)
             {
                 return false;
             }
 
             // "struct" constraint and this is not a value type
             if ((constraints & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0
-                && ! proposedSpecificType.IsValueType)
+                && ! proposedSpecificType.GetTypeInfo().IsValueType)
             {
                 return false;
             }
@@ -228,14 +228,15 @@ namespace HtmlTags.Reflection
                     object target;
                     if (TryEvaluateExpression(me.Expression, out target))
                     { // instance target
-                        switch (me.Member.MemberType)
+                        if (me.Member is FieldInfo)
                         {
-                            case MemberTypes.Field:
-                                value = ((FieldInfo)me.Member).GetValue(target);
-                                return true;
-                            case MemberTypes.Property:
-                                value = ((PropertyInfo)me.Member).GetValue(target, null);
-                                return true;
+                            value = ((FieldInfo)me.Member).GetValue(target);
+                            return true;
+                        }
+                        if (me.Member is PropertyInfo)
+                        {
+                            value = ((PropertyInfo)me.Member).GetValue(target, null);
+                            return true;
                         }
                     }
                     break;

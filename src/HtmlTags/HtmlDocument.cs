@@ -57,10 +57,7 @@ namespace HtmlTags
         {
             ensureFolderExists(fileName);
 
-            using (var writer = new StreamWriter(fileName))
-            {
-                writer.WriteLine(fileContents);
-            }
+            File.WriteAllText(fileName, fileContents);
         }
 
         private static void ensureFolderExists(string fileName)

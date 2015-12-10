@@ -22,23 +22,23 @@ namespace HtmlTags.Reflection
 
             return (U) (result ?? default(U));
         }
-
+        /*
         public static T GetAttribute<T>(this ICustomAttributeProvider provider) where T : Attribute
         {
             var atts = provider.GetCustomAttributes(typeof (T), true);
             return atts.Length > 0 ? atts[0] as T : null;
         }
-
+        
         public static IEnumerable<T> GetAllAttributes<T>(this ICustomAttributeProvider provider) where T : Attribute
         {
             return provider.GetCustomAttributes(typeof (T), true).Cast<T>();
         }
-
+        */
         public static IEnumerable<T> GetAllAttributes<T>(this Accessor accessor) where T : Attribute
         {
-            return accessor.InnerProperty.GetAllAttributes<T>();
+            return accessor.InnerProperty.GetCustomAttributes<T>();
         }
-
+        /*
         public static bool HasAttribute<T>(this ICustomAttributeProvider provider) where T : Attribute
         {
             var atts = provider.GetCustomAttributes(typeof (T), true);
@@ -65,7 +65,7 @@ namespace HtmlTags.Reflection
 
             if (!found) elseDo();
         }
-
+        */
         public static void ForAttribute<T>(this Accessor accessor, Action<T> action) where T : Attribute
         {
             foreach (T attribute in accessor.InnerProperty.GetCustomAttributes(typeof (T), true))
@@ -76,12 +76,12 @@ namespace HtmlTags.Reflection
 
         public static T GetAttribute<T>(this Accessor provider) where T : Attribute
         {
-            return provider.InnerProperty.GetAttribute<T>();
+            return provider.InnerProperty.GetCustomAttribute<T>();
         }
 
         public static bool HasAttribute<T>(this Accessor provider) where T : Attribute
         {
-            return provider.InnerProperty.HasAttribute<T>();
+            return provider.InnerProperty.GetCustomAttribute<T>() != null;
         }
 
         public static Accessor ToAccessor<T>(this Expression<Func<T, object>> expression)

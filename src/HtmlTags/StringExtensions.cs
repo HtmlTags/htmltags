@@ -6,7 +6,7 @@
     {
         public static bool EqualsIgnoreCase(this string thisString, string otherString)
         {
-            return thisString.Equals(otherString, StringComparison.InvariantCultureIgnoreCase);
+            return thisString.Equals(otherString, StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool IsEmpty(this string stringValue)

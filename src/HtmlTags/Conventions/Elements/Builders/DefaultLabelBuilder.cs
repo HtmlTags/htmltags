@@ -1,10 +1,8 @@
 namespace HtmlTags.Conventions.Elements.Builders
 {
-    using System.ComponentModel;
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    [Description("Builds a <label> element using the accessor name as the text and sets @for to the display id")]
     public class DefaultLabelBuilder : IElementBuilder
     {
         public bool Matches(ElementRequest subject)

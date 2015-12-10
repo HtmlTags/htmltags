@@ -38,7 +38,7 @@ namespace HtmlTags.Reflection
         public Expression ChainExpression(Expression body)
         {
             var memberExpression = Expression.Property(body, _propertyInfo);
-            if (!_propertyInfo.PropertyType.IsValueType)
+            if (!_propertyInfo.PropertyType.GetTypeInfo().IsValueType)
             {
                 return memberExpression;
             }
