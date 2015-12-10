@@ -26,10 +26,12 @@
         "System.Runtime.Extensions": "4.0.10",
         "System.Text.RegularExpressions": "4.0.10",
         "System.Text.Encoding": "4.0.10",
+        "System.Text.Encodings.Web": "4.0.0-*",
         "System.Runtime.Serialization.Primitives": "4.0.10",
         "System.Security.Principal": "4.0.0",
         "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-*",
         "Microsoft.AspNet.Mvc.Razor": "6.0.0-*"
+
       }
     }
   }

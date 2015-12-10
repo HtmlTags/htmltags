@@ -423,7 +423,7 @@ namespace HtmlTags
         public override string ToString()
         {
             return WillBeRendered()
-                ? ToString(HtmlTextWriterExtensions.New(new StringWriter(), String.Empty, String.Empty))
+                ? ToString(new HtmlTextWriter(new StringWriter(), String.Empty) {NewLine = String.Empty})
                 : String.Empty;
         }
 
@@ -435,7 +435,7 @@ namespace HtmlTags
         public string ToPrettyString()
         {
             return WillBeRendered()
-                ? ToString(HtmlTextWriterExtensions.New(new StringWriter(), "  ", Environment.NewLine))
+                ? ToString(new HtmlTextWriter(new StringWriter(), "  ") { NewLine = Environment.NewLine })
                 : String.Empty;
         }
 
