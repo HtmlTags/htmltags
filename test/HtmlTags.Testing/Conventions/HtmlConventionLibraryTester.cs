@@ -1,25 +1,25 @@
 using System;
 using HtmlTags.Conventions;
-using NUnit.Framework;
-using FubuTestingSupport;
-using Rhino.Mocks;
+using Xunit;
+using Should;
+using Moq;
 
 namespace HtmlTags.Testing.Conventions
 {
     using Reflection;
 
-    [TestFixture]
+    
     public class HtmlConventionLibraryTester
     {
-        [Test]
+        [Fact]
         public void importing_test()
         {
-            var b1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var b2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var b3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var b4 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var b5 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var b6 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var b1 = new Mock<ITagBuilderPolicy>().Object;
+            var b2 = new Mock<ITagBuilderPolicy>().Object;
+            var b3 = new Mock<ITagBuilderPolicy>().Object;
+            var b4 = new Mock<ITagBuilderPolicy>().Object;
+            var b5 = new Mock<ITagBuilderPolicy>().Object;
+            var b6 = new Mock<ITagBuilderPolicy>().Object;
 
 
             var lib1 = new HtmlConventionLibrary();
@@ -37,7 +37,7 @@ namespace HtmlTags.Testing.Conventions
             lib1.TagLibrary.Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b2, b3, b4, b5, b6);
         }
 
-        [Test]
+        [Fact]
         public void importing_services()
         {
             var builder1 = new ServiceBuilder();
@@ -54,7 +54,7 @@ namespace HtmlTags.Testing.Conventions
             builder1.Build<int>().ShouldEqual(1); // was filled in
         }
 
-        [Test]
+        [Fact]
         public void services_are_imported()
         {
             var library1 = new HtmlConventionLibrary();
@@ -65,11 +65,11 @@ namespace HtmlTags.Testing.Conventions
 
             library1.Import(library2);
 
-            library1.Get<IFoo>().ShouldBeOfType<LittleFoo>();
-            library1.Get<IFoo>("different").ShouldBeOfType<BigFoo>();
+            library1.Get<IFoo>().ShouldBeType<LittleFoo>();
+            library1.Get<IFoo>("different").ShouldBeType<BigFoo>();
         }
 
-        [Test]
+        [Fact]
         public void services_are_not_overwritten_while_importing()
         {
             var library1 = new HtmlConventionLibrary();
@@ -80,11 +80,11 @@ namespace HtmlTags.Testing.Conventions
 
             library1.Import(library2);
 
-            library1.Get<IFoo>().ShouldBeOfType<LittleFoo>();
+            library1.Get<IFoo>().ShouldBeType<LittleFoo>();
         }
 
 
-        [Test]
+        [Fact]
         public void get_with_no_prior_definition_will_happily_blow_up()
         {
             Exception<ArgumentOutOfRangeException>.ShouldBeThrownBy(() => {
@@ -92,35 +92,35 @@ namespace HtmlTags.Testing.Conventions
             }).Message.ShouldContain("No service implementation is registered for type " + typeof(IFoo).FullName);
         }
 
-        [Test]
+        [Fact]
         public void simple_registration_of_service_by_type()
         {
             var library = new HtmlConventionLibrary();
             library.RegisterService<IFoo, Foo>();
 
-            library.Get<IFoo>().ShouldBeOfType<Foo>();
+            library.Get<IFoo>().ShouldBeType<Foo>();
         }
 
-        [Test]
+        [Fact]
         public void registration_of_service_by_func()
         {
             var library = new HtmlConventionLibrary();
             library.RegisterService<IFoo>(() => new ColoredFoo{Color = "Red"});
 
-            library.Get<IFoo>().ShouldBeOfType<ColoredFoo>()
+            library.Get<IFoo>().ShouldBeType<ColoredFoo>()
                 .Color.ShouldEqual("Red");
         }
 
-        [Test]
+        [Fact]
         public void if_not_explicitly_specified_assume_the_profile_is_default()
         {
             var library = new HtmlConventionLibrary();
             library.RegisterService<IFoo, Foo>(TagConstants.Default);
 
-            library.Get<IFoo>().ShouldBeOfType<Foo>();
+            library.Get<IFoo>().ShouldBeType<Foo>();
         }
 
-        [Test]
+        [Fact]
         public void register_and_build_by_profile()
         {
             var library = new HtmlConventionLibrary();
@@ -128,16 +128,16 @@ namespace HtmlTags.Testing.Conventions
 
             library.RegisterService<IFoo, DifferentFoo>("Profile1");
 
-            library.Get<IFoo>("Profile1").ShouldBeOfType<DifferentFoo>();
+            library.Get<IFoo>("Profile1").ShouldBeType<DifferentFoo>();
         }
 
-        [Test]
+        [Fact]
         public void fetching_by_profile_should_fall_back_to_default_if_not_specific_implementation_is_used()
         {
             var library = new HtmlConventionLibrary();
             library.RegisterService<IFoo, Foo>(TagConstants.Default);
 
-            library.Get<IFoo>("Profile1").ShouldBeOfType<Foo>();
+            library.Get<IFoo>("Profile1").ShouldBeType<Foo>();
         }
     }
 

@@ -1,14 +1,13 @@
 using System;
-using FubuTestingSupport;
-using NUnit.Framework;
+using Should;
+using Xunit;
 
 namespace HtmlTags.Testing
 {
-    [TestFixture]
+    
     public class HtmlDocumentTester
     {
-        [SetUp]
-        public void SetUp()
+        public HtmlDocumentTester()
         {
             document = new HtmlDocument();
             document.Title = "the title";
@@ -16,28 +15,28 @@ namespace HtmlTags.Testing
 
         private HtmlDocument document;
 
-        [Test]
+        [Fact]
         public void head_contains_the_title()
         {
-            document.Head.FirstChild().Text().ShouldBeTheSameAs(document.Title);
+            document.Head.FirstChild().Text().ShouldBeSameAs(document.Title);
             document.ToString().ShouldContain("<head><title>the title</title></head>");
         }
 
-        [Test]
+        [Fact]
         public void add_does_not_push_onto_stack()
         {
             document.Add("div/a").Text("hello");
             document.Current.TagName().ShouldEqual("body");
         }
 
-        [Test]
+        [Fact]
         public void add_a_tag_by_tag_name()
         {
             HtmlTag element = document.Add("div/a").Text("hello");
             element.TagName().ShouldEqual("a");
         }
 
-        [Test]
+        [Fact]
         public void add_an_htmlTag()
         {
             document.Add(new HtmlTag("p"));
@@ -46,7 +45,7 @@ namespace HtmlTags.Testing
             document.Current.FirstChild().TagName().ShouldEqual("p");
         }
 
-        [Test]
+        [Fact]
         public void add_tags_from_a_tag_source()
         {
             var tagList = new TagList(
@@ -62,21 +61,21 @@ namespace HtmlTags.Testing
             document.Last.TagName().ShouldEqual("p");
         }
 
-        [Test]
+        [Fact]
         public void add_styling()
         {
             document.AddStyle("some styling");
             document.ToString().ShouldContain("</title><style>some styling</style></head>");
         }
 
-        [Test]
+        [Fact]
         public void add_attributes_to_style_tag()
         {
             document.AddStyle("p { display: block; }").Attr("media", "screen");
             document.ToString().ShouldContain("</title><style media=\"screen\">p { display: block; }</style></head>");
         }
 
-        [Test]
+        [Fact]
         public void reference_external_stylesheet()
         {
             var path = "css/site.css";
@@ -84,7 +83,7 @@ namespace HtmlTags.Testing
             document.ToString().ShouldContain("</title><link media=\"screen\" href=\"css/site.css\" type=\"text/css\" rel=\"stylesheet\" /></head>");
         }
 
-        [Test]
+        [Fact]
         public void reference_external_stylesheet_and_override_attributes()
         {
             document.ReferenceStyle("main.css");
@@ -97,14 +96,14 @@ namespace HtmlTags.Testing
                               "</head>"));
         }
 
-        [Test]
+        [Fact]
         public void check_the_basic_structure_with_title_body_and_head()
         {
             document.ToString().ShouldEqual("<!DOCTYPE html>" + Environment.NewLine +
                 "<html><head><title>the title</title></head><body></body></html>");
         }
 
-        [Test]
+        [Fact]
         public void can_set_a_legacy_doctype()
         {
             document.DocType =
@@ -115,7 +114,7 @@ namespace HtmlTags.Testing
                "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>the title</title></head><body></body></html>");
         }
 
-        [Test]
+        [Fact]
         public void add_javascript()
         {
             var script = String.Format("{0}alert('hello');{0}alert('world');{0}", Environment.NewLine);
@@ -128,7 +127,7 @@ namespace HtmlTags.Testing
             document.ToString().ShouldContain(expected);
         }
 
-        [Test]
+        [Fact]
         public void add_attributes_to_script_tag()
         {
             document.AddJavaScript("var today;").Attr("defer", "true");
@@ -136,14 +135,14 @@ namespace HtmlTags.Testing
             document.ToString().ShouldContain(expected);
         }
 
-        [Test]
+        [Fact]
         public void add_script_of_a_different_type()
         {
             document.AddScript("text/x-ecmascript", "var today;");
             document.ToString().ShouldContain("</title><script type=\"text/x-ecmascript\">" + Environment.NewLine + "var today;" + Environment.NewLine + "</script></head>");
         }
 
-        [Test]
+        [Fact]
         public void reference_javascript_by_file()
         {
             var path = "scripts/myfile.js";
@@ -151,7 +150,7 @@ namespace HtmlTags.Testing
             document.ToString().ShouldContain("</title><script type=\"text/javascript\" src=\"" + path + "\"></script></head>");
         }
 
-        [Test]
+        [Fact]
         public void reference_javascript_file_and_override_attributes()
         {
             document.ReferenceJavaScriptFile("nav.js");
@@ -164,14 +163,14 @@ namespace HtmlTags.Testing
                 "</head>"));
         }
 
-        [Test]
+        [Fact]
         public void reference_script_file_of_a_different_type()
         {
             document.ReferenceScriptFile("text/vbscript", "nojudgment.vbs");
             document.ToString().ShouldContain("</title><script type=\"text/vbscript\" src=\"nojudgment.vbs\"></script></head>");
         }
 
-        [Test]
+        [Fact]
         public void pop_rewinds_the_current()
         {
             document.Push("div/span");
@@ -180,41 +179,41 @@ namespace HtmlTags.Testing
             document.Current.TagName().ShouldEqual("body");
         }
 
-        [Test]
+        [Fact]
         public void push_adds_to_the_stack()
         {
             HtmlTag element = document.Push("div/span").Text("hello");
-            document.Current.ShouldBeTheSameAs(element);
+            document.Current.ShouldBeSameAs(element);
             document.ToString().ShouldContain("<body><div><span>hello</span></div></body>");
         }
 
-        [Test]
+        [Fact]
         public void push_an_htmlTag()
         {
             var element = new HtmlTag("p").Text("a paragraph");
             document.Push(element);
-            document.Current.ShouldBeTheSameAs(element);
+            document.Current.ShouldBeSameAs(element);
             document.ToString().ShouldContain("<body><p>a paragraph</p></body>");
         }
 
-        [Test]
+        [Fact]
         public void push_without_attaching_does_not_add_to_children()
         {
             HtmlTag attachedTag = document.Push("div");
             HtmlTag unattachedTag = new HtmlTag("span");
             document.PushWithoutAttaching(unattachedTag);
-            document.Body.FirstChild().ShouldBeTheSameAs(attachedTag);
-            document.Current.ShouldBeTheSameAs(unattachedTag);
+            document.Body.FirstChild().ShouldBeSameAs(attachedTag);
+            document.Current.ShouldBeSameAs(unattachedTag);
             document.ToString().ShouldEndWith("<body><div></div></body></html>");
         }
 
-        [Test]
+        [Fact]
         public void the_current_element_is_the_body_by_default()
         {
             document.Current.TagName().ShouldEqual("body");
         }
 
-        [Test]
+        [Fact]
         public void the_last_property()
         {
             document.Last.TagName().ShouldEqual("body");
@@ -226,7 +225,7 @@ namespace HtmlTags.Testing
             document.Last.TagName().ShouldEqual("p");
         }
 
-        [Test]
+        [Fact]
         public void adding_styles_does_not_alter_the_Last_property()
         {
             document.Add("p");
@@ -238,7 +237,7 @@ namespace HtmlTags.Testing
             document.Last.TagName().ShouldEqual("p");
         }
 
-        [Test]
+        [Fact]
         public void adding_scripts_does_not_alter_the_Last_property()
         {
             document.Add("p");
@@ -250,7 +249,7 @@ namespace HtmlTags.Testing
             document.Last.TagName().ShouldEqual("p");
         }
 
-        [Test]
+        [Fact]
         public void write_to_file_sends_the_document_to_the_file_writer()
         {
             string actualContent = null;
@@ -264,7 +263,7 @@ namespace HtmlTags.Testing
             actualContent.ShouldStartWith("<!DOCTYPE");
         }
 
-        [Test]
+        [Fact]
         public void open_in_browser_writes_a_temp_file_then_opens_it()
         {
             string actualPath = null;
@@ -286,7 +285,7 @@ namespace HtmlTags.Testing
             actualContent.ShouldStartWith("<!DOCTYPE");
         }
 
-        [Test]
+        [Fact]
         public void rewind_takes_you_back_to_the_beginning()
         {
             document.Push("div").Id("div1");
@@ -295,7 +294,7 @@ namespace HtmlTags.Testing
 
             document.Rewind();
 
-            document.Current.ShouldBeTheSameAs(document.Body);
+            document.Current.ShouldBeSameAs(document.Body);
         }
     }
 }

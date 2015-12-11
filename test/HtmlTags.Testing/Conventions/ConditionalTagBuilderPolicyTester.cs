@@ -1,13 +1,13 @@
-using FubuTestingSupport;
+using Should;
 using HtmlTags.Conventions;
-using NUnit.Framework;
+using Xunit;
 
 namespace HtmlTags.Testing.Conventions
 {
-    [TestFixture]
+    
     public class ConditionalTagBuilderPolicyTester
     {
-        [Test]
+        [Fact]
         public void matches_delegates()
         {
             var builder = new ConditionalTagBuilderPolicy(x => ((FakeSubject)x).Level > 10, x => new HtmlTag("div"));
@@ -16,7 +16,7 @@ namespace HtmlTags.Testing.Conventions
             builder.Matches(new FakeSubject{Level = 11}).ShouldBeTrue();
         }
 
-        [Test]
+        [Fact]
         public void build_delegates()
         {
             var builder = new ConditionalTagBuilderPolicy(x => ((FakeSubject)x).Level > 10, x => new HtmlTag("div").Text(((FakeSubject)x).Name));

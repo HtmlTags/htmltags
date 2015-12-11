@@ -1,13 +1,13 @@
-using FubuTestingSupport;
+using Should;
 using HtmlTags.Conventions;
-using NUnit.Framework;
+using Xunit;
 
 namespace HtmlTags.Testing.Conventions
 {
-    [TestFixture]
+    
     public class LambdaTagModifierTester
     {
-        [Test]
+        [Fact]
         public void matches_delegates()
         {
             var modifier = new LambdaTagModifier(x => ((FakeSubject)x).Level > 10, x => { });
@@ -16,7 +16,7 @@ namespace HtmlTags.Testing.Conventions
             modifier.Matches(new FakeSubject { Level = 11 }).ShouldBeTrue();
         }
 
-        [Test]
+        [Fact]
         public void modify_delegates()
         {
             var builder = new LambdaTagModifier(x => ((FakeSubject)x).Level > 10, x => x.CurrentTag.AddClass("foo"));

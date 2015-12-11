@@ -940,9 +940,9 @@ namespace HtmlTags
         {
             if (!String.IsNullOrEmpty(attrName))
             {
-                object key = _attrKeyLookupTable[attrName.ToLower()];
-                if (key != null)
-                    return (HtmlTextWriterAttribute)key;
+                HtmlTextWriterAttribute key;
+                if (_attrKeyLookupTable.TryGetValue(attrName.ToLower(), out key))
+                    return key;
             }
 
             return (HtmlTextWriterAttribute)(-1);
@@ -1108,40 +1108,31 @@ namespace HtmlTags
                 writer.Write(TagLeftChar);
                 writer.Write(_tagName);
 
-                string styleValue = null;
-
                 for (int i = 0; i < _attrCount; i++)
                 {
                     RenderAttribute attr = _attrList[i];
-                    if (attr.key == HtmlTextWriterAttribute.Style)
+                    writer.Write(SpaceChar);
+                    writer.Write(attr.name);
+                    if (attr.value != null)
                     {
-                        // append style attribute in with other styles
-                        styleValue = attr.value;
-                    }
-                    else {
-                        writer.Write(SpaceChar);
-                        writer.Write(attr.name);
-                        if (attr.value != null)
-                        {
-                            writer.Write(EqualsDoubleQuoteString);
+                        writer.Write(EqualsDoubleQuoteString);
 
-                            string attrValue = attr.value;
-                            if (attr.isUrl)
+                        string attrValue = attr.value;
+                        if (attr.isUrl)
+                        {
+                            if (attr.key != HtmlTextWriterAttribute.Href || !attrValue.StartsWith("javascript:", StringComparison.Ordinal))
                             {
-                                if (attr.key != HtmlTextWriterAttribute.Href || !attrValue.StartsWith("javascript:", StringComparison.Ordinal))
-                                {
-                                    attrValue = EncodeUrl(attrValue);
-                                }
+                                attrValue = EncodeUrl(attrValue);
                             }
-                            if (attr.encode)
-                            {
-                                WriteHtmlAttributeEncode(attrValue);
-                            }
-                            else {
-                                writer.Write(attrValue);
-                            }
-                            writer.Write(DoubleQuoteChar);
                         }
+                        if (attr.encode)
+                        {
+                            WriteHtmlAttributeEncode(attrValue);
+                        }
+                        else {
+                            writer.Write(attrValue);
+                        }
+                        writer.Write(DoubleQuoteChar);
                     }
                 }
 

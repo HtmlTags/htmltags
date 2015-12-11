@@ -1,12 +1,12 @@
-using FubuTestingSupport;
-using NUnit.Framework;
+using Should;
+using Xunit;
 
 namespace HtmlTags.Testing
 {
-    [TestFixture]
+    
     public class CheckboxTagTester
     {
-        [Test]
+        [Fact]
         public void basic_construction()
         {
             var tag = new CheckboxTag(true);
@@ -14,14 +14,14 @@ namespace HtmlTags.Testing
             tag.Attr("type").ShouldEqual("checkbox");
         }
 
-        [Test]
+        [Fact]
         public void create_checkbox_that_is_checked()
         {
             var tag = new CheckboxTag(true);
             tag.Attr("checked").ShouldEqual("true");
         }
 
-        [Test]
+        [Fact]
         public void create_checkbox_that_is_not_checked()
         {
             var tag = new CheckboxTag(false);

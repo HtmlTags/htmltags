@@ -1,15 +1,15 @@
-using FubuTestingSupport;
+using Should;
 using HtmlTags.Conventions;
-using NUnit.Framework;
+using Xunit;
 
 namespace HtmlTags.Testing.Conventions
 {
     using HtmlTags.Conventions.Elements;
 
-    [TestFixture]
+    
     public class TagPlanTester
     {
-        [Test]
+        [Fact]
         public void build_tag_with_multiple_modifiers()
         {
             var plan = new TagPlan(new ByNameBuilder(),
@@ -22,7 +22,7 @@ namespace HtmlTags.Testing.Conventions
                 .ToString().ShouldEqual("<div id=\"Malcolm Reynolds\" class=\"a b\"></div>");
         }
 
-        [Test]
+        [Fact]
         public void build_tag_with_wrapper()
         {
             var plan = new TagPlan(new ByNameBuilder(),

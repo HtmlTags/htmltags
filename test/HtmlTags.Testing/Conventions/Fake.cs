@@ -1,12 +1,12 @@
-using NUnit.Framework;
-using FubuTestingSupport;
+using Xunit;
+using Should;
 
 namespace HtmlTags.Testing.Conventions
 {
-    [TestFixture]
+    
     public class Fake
     {
-        [Test]
+        [Fact]
         public void good()
         {
             true.ShouldBeTrue();

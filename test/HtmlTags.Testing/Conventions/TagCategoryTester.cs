@@ -1,19 +1,18 @@
 using System;
-using FubuTestingSupport;
+using Should;
 using HtmlTags.Conventions;
-using NUnit.Framework;
-using Rhino.Mocks;
+using Xunit;
+using Moq;
 using System.Linq;
 
 namespace HtmlTags.Testing.Conventions
 {
-    [TestFixture]
+    
     public class TagCategoryTester
     {
         private TagCategory theCategory;
 
-        [SetUp]
-        public void SetUp()
+        public TagCategoryTester()
         {
             theCategory = new TagCategory();
 
@@ -26,7 +25,7 @@ namespace HtmlTags.Testing.Conventions
             return plan.Build(subject);
         }
 
-        [Test]
+        [Fact]
         public void build_default_profile_simple()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
@@ -37,7 +36,7 @@ namespace HtmlTags.Testing.Conventions
                 .ShouldEqual("<div>Jeremy</div>");
         }
 
-        [Test]
+        [Fact]
         public void build_default_profile_where_it_has_to_select_builder()
         {
             theCategory.If(x => ((FakeSubject)x).Level < 10).Build(x => new HtmlTag("h4").Text(((FakeSubject)x).Name));
@@ -55,7 +54,7 @@ namespace HtmlTags.Testing.Conventions
             }).ToString().ShouldEqual("<h1>Jeremy</h1>");
         }
 
-        [Test]
+        [Fact]
         public void build_default_with_matching_modifiers()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
@@ -75,7 +74,7 @@ namespace HtmlTags.Testing.Conventions
             }).ToString().ShouldEqual("<div class=\"big\">Jeremy</div>");
         }
 
-        [Test]
+        [Fact]
         public void build_default_profile_with_multiple_modifiers()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
@@ -98,7 +97,7 @@ namespace HtmlTags.Testing.Conventions
 
 
 
-        [Test]
+        [Fact]
         public void build_a_profile_simple()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
@@ -111,7 +110,7 @@ namespace HtmlTags.Testing.Conventions
                 .ShouldEqual("<div>Jeremy</div>");
         }
 
-        [Test]
+        [Fact]
         public void build_a_profile_where_it_has_to_select_builder()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
@@ -131,7 +130,7 @@ namespace HtmlTags.Testing.Conventions
             }, "A").ToString().ShouldEqual("<h1>Jeremy</h1>");
         }
 
-        [Test]
+        [Fact]
         public void build_a_profile_with_matching_modifiers()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
@@ -152,7 +151,7 @@ namespace HtmlTags.Testing.Conventions
             }, "A").ToString().ShouldEqual("<div class=\"big\">Jeremy</div>");
         }
 
-        [Test]
+        [Fact]
         public void build_a_profile_with_multiple_modifiers()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
@@ -174,7 +173,7 @@ namespace HtmlTags.Testing.Conventions
             }, "A").ToString().ShouldEqual("<div class=\"big more\">Jeremy</div>");
         }
 
-        [Test]
+        [Fact]
         public void profile_falls_through_to_default_builder_if_there_is_none_in_the_specific_profile()
         {
             theCategory.Always.Build(x => new HtmlTag("div").Text("Default"));
@@ -185,7 +184,7 @@ namespace HtmlTags.Testing.Conventions
             build(new FakeSubject(), "Different").ToString().ShouldEqual("<div>Default</div>");
         }
 
-        [Test]
+        [Fact]
         public void modifiers_are_isolated_between_non_default_profiles()
         {
             theCategory.Always.Build(x => new HtmlTag("div"));
@@ -198,7 +197,7 @@ namespace HtmlTags.Testing.Conventions
             build(new FakeSubject(), "B").ToString().ShouldEqual("<div class=\"B\"></div>");
         }
 
-        [Test]
+        [Fact]
         public void modifiers_in_the_default_profile_apply_to_other_profiles()
         {
             theCategory.Always.Build(x => new HtmlTag("div"));
@@ -212,7 +211,7 @@ namespace HtmlTags.Testing.Conventions
             build(new FakeSubject(), "b").ToString().ShouldEqual("<b class=\"required\"></b>");
         }
 
-        [Test]
+        [Fact]
         public void building_with_no_matching_builder_throws_exception()
         {
             Exception<ArgumentOutOfRangeException>.ShouldBeThrownBy(() =>
@@ -221,7 +220,7 @@ namespace HtmlTags.Testing.Conventions
             });
         }
 
-        [Test]
+        [Fact]
         public void building_with_no_matching_builder_throws_exception_2()
         {
             theCategory.If(x => false).Build(x => new HtmlTag("div"));
@@ -234,7 +233,7 @@ namespace HtmlTags.Testing.Conventions
             });
         }
 
-        [Test]
+        [Fact]
         public void tag_plan_is_memoized_by_profile_and_subject()
         {
             var subject1 = new FakeSubject { Name = "Jeremy", Level = 10 };
@@ -248,17 +247,17 @@ namespace HtmlTags.Testing.Conventions
 
 
 
-            theCategory.PlanFor(subject1).ShouldBeTheSameAs(theCategory.PlanFor(subject2));
-            theCategory.PlanFor(subject1, "a").ShouldBeTheSameAs(theCategory.PlanFor(subject2, "a"));
-            theCategory.PlanFor(subject1, "b").ShouldBeTheSameAs(theCategory.PlanFor(subject2, "b"));
+            theCategory.PlanFor(subject1).ShouldBeSameAs(theCategory.PlanFor(subject2));
+            theCategory.PlanFor(subject1, "a").ShouldBeSameAs(theCategory.PlanFor(subject2, "a"));
+            theCategory.PlanFor(subject1, "b").ShouldBeSameAs(theCategory.PlanFor(subject2, "b"));
 
-            theCategory.PlanFor(subject1, "a").ShouldNotBeTheSameAs(theCategory.PlanFor(subject2, "b"));
-            theCategory.PlanFor(subject1, "b").ShouldNotBeTheSameAs(theCategory.PlanFor(subject2, "a"));
+            theCategory.PlanFor(subject1, "a").ShouldNotBeSameAs(theCategory.PlanFor(subject2, "b"));
+            theCategory.PlanFor(subject1, "b").ShouldNotBeSameAs(theCategory.PlanFor(subject2, "a"));
         }
 
     }
 
-    [TestFixture]
+    
     public class when_importing_one_category_into_another
     {
         private ITagBuilderPolicy b1;
@@ -276,23 +275,22 @@ namespace HtmlTags.Testing.Conventions
         private ITagModifier m5;
         private TagCategory category1;
 
-        [SetUp]
-        public void SetUp()
+        public when_importing_one_category_into_another()
         {
-            b1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b4 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b5 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b6 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b7 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b8 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b1 = new Mock<ITagBuilderPolicy>().Object;
+            b2 = new Mock<ITagBuilderPolicy>().Object;
+            b3 = new Mock<ITagBuilderPolicy>().Object;
+            b4 = new Mock<ITagBuilderPolicy>().Object;
+            b5 = new Mock<ITagBuilderPolicy>().Object;
+            b6 = new Mock<ITagBuilderPolicy>().Object;
+            b7 = new Mock<ITagBuilderPolicy>().Object;
+            b8 = new Mock<ITagBuilderPolicy>().Object;
 
-            m1 = MockRepository.GenerateMock<ITagModifier>();
-            m2 = MockRepository.GenerateMock<ITagModifier>();
-            m3 = MockRepository.GenerateMock<ITagModifier>();
-            m4 = MockRepository.GenerateMock<ITagModifier>();
-            m5 = MockRepository.GenerateMock<ITagModifier>();
+            m1 = new Mock<ITagModifier>().Object;
+            m2 = new Mock<ITagModifier>().Object;
+            m3 = new Mock<ITagModifier>().Object;
+            m4 = new Mock<ITagModifier>().Object;
+            m5 = new Mock<ITagModifier>().Object;
 
             category1 = new TagCategory();
             category1.Add(b1);
@@ -319,21 +317,21 @@ namespace HtmlTags.Testing.Conventions
             category1.Import(category2);
         }
 
-        [Test]
+        [Fact]
         public void should_import_the_default_profile()
         {
             category1.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b2, b5);
             category1.Defaults.Modifiers.ShouldHaveTheSameElementsAs(m1, m2, m4);
         }
 
-        [Test]
+        [Fact]
         public void does_not_change_profile_held_by_first_category_but_not_the_second()
         {
             category1.Profile("D").Policies.ShouldHaveTheSameElementsAs(b8);
             category1.Profile("D").Modifiers.Any().ShouldBeFalse();
         }
 
-        [Test]
+        [Fact]
         public void import_profile_held_by_both_categories()
         {
             category1.Profile("A").Policies.ShouldHaveTheSameElementsAs(b3, b6);
@@ -343,7 +341,7 @@ namespace HtmlTags.Testing.Conventions
             category1.Profile("B").Modifiers.ShouldHaveTheSameElementsAs(m5);
         }
 
-        [Test]
+        [Fact]
         public void import_profile_held_by_second_profile_but_not_the_first()
         {
             category1.Profile("C").Policies.ShouldHaveTheSameElementsAs(b7);

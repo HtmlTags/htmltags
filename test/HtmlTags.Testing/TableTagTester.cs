@@ -1,20 +1,20 @@
-using FubuTestingSupport;
-using NUnit.Framework;
+using Should;
+using Xunit;
 using System.Linq;
 
 namespace HtmlTags.Testing
 {
-    [TestFixture]
+    
     public class TableTagTester
     {
-        [Test]
+        [Fact]
         public void should_create_an_empty_table()
         {
             var expected = getExpectedHtml(null, null, null);
             new TableTag().ToString().ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void should_add_headings_in_a_header_row_to_the_thead()
         {
             var expected = getExpectedHtml("<tr><th>Heading 1</th><th>Heading 2</th></tr>", null, null);
@@ -26,7 +26,7 @@ namespace HtmlTags.Testing
             tag.ToString().ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void header_row_can_be_configured_with_headings()
         {
             var expected = getExpectedHtml("<tr><th>Heading 1</th><th>Heading 2</th></tr>", null, null);
@@ -39,7 +39,7 @@ namespace HtmlTags.Testing
                 .ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void add_caption_always_puts_the_caption_at_top()
         {
             var tag = new TableTag();
@@ -57,13 +57,13 @@ namespace HtmlTags.Testing
             tag.Children.Count(x => x.TagName() == "caption").ShouldEqual(1);
         }
 
-        [Test]
+        [Fact]
         public void caption_is_empty_string_if_hasnt_been_set()
         {
             new TableTag().CaptionText().ShouldEqual(string.Empty);
         }
 
-        [Test]
+        [Fact]
         public void should_add_cells_to_rows_in_the_tbody()
         {
             var expected = getExpectedHtml(null,
@@ -80,7 +80,7 @@ namespace HtmlTags.Testing
             tag.ToString().ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void body_rows_can_be_configured_with_cells()
         {
             var expected = getExpectedHtml(null,
@@ -100,14 +100,14 @@ namespace HtmlTags.Testing
                 .ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void should_add_a_footer_to_the_tfoot()
         {
             var expected = getExpectedHtml(null, null, "<tfoot><tr><td>footer</td></tr></tfoot>");
             new TableTag().AddFooterRow(f => f.Cell("footer")).ToString().ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void should_build_a_complete_table()
         {
             var expected = getExpectedHtml("the caption",
@@ -139,7 +139,7 @@ namespace HtmlTags.Testing
                 .ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void should_allow_multiple_rows_in_the_header()
         {
             var expected = getExpectedHtml("<tr><th>heading</th></tr><tr><td>explanation</td></tr>", null, null);
@@ -149,7 +149,7 @@ namespace HtmlTags.Testing
                 .ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void cells_can_have_colspan_and_rowspan()
         {
             var expected = getExpectedHtml(null,
@@ -166,7 +166,7 @@ namespace HtmlTags.Testing
                 .ShouldEqual(expected);
         }
 
-        [Test]
+        [Fact]
         public void check_thead_tbody_tfoot_access()
         {
             var expected = "<table><thead class=\"header\"></thead><tfoot class=\"footer\"></tfoot><tbody class=\"body\"></tbody></table>";

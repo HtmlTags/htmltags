@@ -1,17 +1,16 @@
 using HtmlTags.Conventions;
-using NUnit.Framework;
-using FubuTestingSupport;
-using Rhino.Mocks;
+using Xunit;
+using Should;
+using Moq;
 
 namespace HtmlTags.Testing.Conventions
 {
-    [TestFixture]
+    
     public class TagLibraryTester
     {
         private TagLibrary theLibrary;
 
-        [SetUp]
-        public void SetUp()
+        public TagLibraryTester()
         {
             theLibrary = new TagLibrary();
         }
@@ -22,7 +21,7 @@ namespace HtmlTags.Testing.Conventions
             return plan.Build(subject);
         }
 
-        [Test]
+        [Fact]
         public void builds_default_if_no_category_or_profile_is_specified()
         {
             theLibrary.Always.Build(x => new HtmlTag("div").Text(((FakeSubject)x).Name));
@@ -42,7 +41,7 @@ namespace HtmlTags.Testing.Conventions
         }
     }
 
-    [TestFixture]
+    
     public class TagLibrary_Import_Tester
     {
         private ITagBuilderPolicy b1;
@@ -58,21 +57,20 @@ namespace HtmlTags.Testing.Conventions
         private ITagModifier m4;
         private TagLibrary library1;
 
-        [SetUp]
-        public void SetUp()
+        public TagLibrary_Import_Tester()
         {
-            b1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b4 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b5 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b6 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            b7 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            b1 = new Mock<ITagBuilderPolicy>().Object;
+            b2 = new Mock<ITagBuilderPolicy>().Object;
+            b3 = new Mock<ITagBuilderPolicy>().Object;
+            b4 = new Mock<ITagBuilderPolicy>().Object;
+            b5 = new Mock<ITagBuilderPolicy>().Object;
+            b6 = new Mock<ITagBuilderPolicy>().Object;
+            b7 = new Mock<ITagBuilderPolicy>().Object;
 
-            m1 = MockRepository.GenerateMock<ITagModifier>();
-            m2 = MockRepository.GenerateMock<ITagModifier>();
-            m3 = MockRepository.GenerateMock<ITagModifier>();
-            m4 = MockRepository.GenerateMock<ITagModifier>();
+            m1 = new Mock<ITagModifier>().Object;
+            m2 = new Mock<ITagModifier>().Object;
+            m3 = new Mock<ITagModifier>().Object;
+            m4 = new Mock<ITagModifier>().Object;
 
             library1 = new TagLibrary();
 
@@ -99,19 +97,19 @@ namespace HtmlTags.Testing.Conventions
             library1.Import(library2);
         }
 
-        [Test]
+        [Fact]
         public void imports_defaults()
         {
             library1.Default.Defaults.Policies.ShouldHaveTheSameElementsAs(b1, b5);
         }
 
-        [Test]
+        [Fact]
         public void imports_category_that_both_libraries_have()
         {
             library1.Category("Cat1").Defaults.Policies.ShouldHaveTheSameElementsAs(b3, b7);
         }
 
-        [Test]
+        [Fact]
         public void imports_category_from_the_second_library_not_originally_in_the_first()
         {
             library1.Category("Cat2").Defaults.Policies.ShouldHaveTheSameElementsAs(b6);

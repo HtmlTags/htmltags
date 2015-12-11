@@ -1,13 +1,13 @@
 ﻿using HtmlTags.Conventions;
-using NUnit.Framework;
-using FubuTestingSupport;
+using Xunit;
+using Should;
 
 namespace HtmlTags.Testing.Conventions
 {
-    [TestFixture]
+    
     public class ServiceBuilderTester
     {
-        [Test]
+        [Fact]
         public void fill_into_will_not_overwrite_the_parent_if_it_exists()
         {
             var services1 = new ServiceBuilder();
@@ -19,7 +19,7 @@ namespace HtmlTags.Testing.Conventions
 
             services2.FillInto(services1);
 
-            services1.Build<IChrome>().ShouldBeOfType<AChrome>();
+            services1.Build<IChrome>().ShouldBeType<AChrome>();
         }
     }
 

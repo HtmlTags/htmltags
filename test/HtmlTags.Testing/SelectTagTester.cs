@@ -1,13 +1,13 @@
-using FubuTestingSupport;
-using NUnit.Framework;
+using Should;
+using Xunit;
 using System.Linq;
 
 namespace HtmlTags.Testing
 {
-    [TestFixture]
+    
     public class SelectTagTester
     {
-        [Test]
+        [Fact]
         public void selected_by_value()
         {
             var tag = new SelectTag();
@@ -22,7 +22,7 @@ namespace HtmlTags.Testing
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
 
-        [Test]
+        [Fact]
         public void selected_by_string_value()
         {
             var tag = new SelectTag();
@@ -37,7 +37,7 @@ namespace HtmlTags.Testing
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
 
-        [Test]
+        [Fact]
         public void can_initialize_options_in_constructor()
         {
             var select = new SelectTag(tag =>
@@ -50,7 +50,7 @@ namespace HtmlTags.Testing
         }
 
 
-        [Test]
+        [Fact]
         public void should_remove_previous_selected_value()
         {
             var tag = new SelectTag();
@@ -66,7 +66,7 @@ namespace HtmlTags.Testing
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
 
-        [Test]
+        [Fact]
         public void should_not_remove_previous_selected_value_if_new_value_is_bogus()
         {
             var tag = new SelectTag();
@@ -80,7 +80,7 @@ namespace HtmlTags.Testing
             tag.Children[1].HasAttr("selected").ShouldBeFalse();
         }
 
-        [Test]
+        [Fact]
         public void should_add_default_option_to_top_of_list()
         {
             var tag = new SelectTag();
@@ -92,7 +92,7 @@ namespace HtmlTags.Testing
             tag.Children[0].Text().ShouldEqual("bar");
         }
 
-        [Test]
+        [Fact]
         public void should_make_the_default_option_selected()
         {
             var tag = new SelectTag();
@@ -106,7 +106,7 @@ namespace HtmlTags.Testing
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
 
-        [Test]
+        [Fact]
         public void FirstOption_should_prepend_new_option_at_top()
         {
             var tag = new SelectTag();

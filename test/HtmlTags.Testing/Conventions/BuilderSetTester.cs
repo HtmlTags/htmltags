@@ -1,27 +1,27 @@
 using HtmlTags.Conventions;
-using NUnit.Framework;
-using Rhino.Mocks;
-using FubuTestingSupport;
+using Moq;
+using Xunit;
+using Should;
 
 namespace HtmlTags.Testing.Conventions
 {
     using Reflection;
 
-    [TestFixture]
+    
     public class BuilderSetTester
     {
-        [Test]
+        [Fact]
         public void import_puts_the_second_set_stuff_in_the_back()
         {
-            var builder1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var builder2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var builder3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var builder1 = new Mock<ITagBuilderPolicy>().Object;
+            var builder2 = new Mock<ITagBuilderPolicy>().Object;
+            var builder3 = new Mock<ITagBuilderPolicy>().Object;
 
-            var m1 = MockRepository.GenerateMock<ITagModifier>();
-            var m2 = MockRepository.GenerateMock<ITagModifier>();
-            var m3 = MockRepository.GenerateMock<ITagModifier>();
-            var m4 = MockRepository.GenerateMock<ITagModifier>();
-            var m5 = MockRepository.GenerateMock<ITagModifier>();
+            var m1 = new Mock<ITagModifier>().Object;
+            var m2 = new Mock<ITagModifier>().Object;
+            var m3 = new Mock<ITagModifier>().Object;
+            var m4 = new Mock<ITagModifier>().Object;
+            var m5 = new Mock<ITagModifier>().Object;
 
             var set1 = new BuilderSet();
             set1.Add(builder1);
@@ -41,12 +41,12 @@ namespace HtmlTags.Testing.Conventions
             set1.Modifiers.ShouldHaveTheSameElementsAs(m1, m2, m3, m4, m5);
         }
 
-        [Test]
+        [Fact]
         public void insert_builder()
         {
-            var builder1 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var builder2 = MockRepository.GenerateMock<ITagBuilderPolicy>();
-            var builder3 = MockRepository.GenerateMock<ITagBuilderPolicy>();
+            var builder1 = new Mock<ITagBuilderPolicy>().Object;
+            var builder2 = new Mock<ITagBuilderPolicy>().Object;
+            var builder3 = new Mock<ITagBuilderPolicy>().Object;
 
             var set1 = new BuilderSet();
             set1.Add(builder2);

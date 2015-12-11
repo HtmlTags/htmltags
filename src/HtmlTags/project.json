@@ -4,12 +4,6 @@
     "Newtonsoft.Json": "7.0.1"
   },
   "frameworks": {
-    "dnx451": {
-      "frameworkAssemblies": {
-        "System.Web": "4.0.0.0",
-        "System.Web.Extensions": "4.0.0.0"
-      }
-    },
     "net451": {
       "frameworkAssemblies": {
         "System.Web": "4.0.0.0",

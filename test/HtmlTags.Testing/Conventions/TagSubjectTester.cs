@@ -1,6 +1,6 @@
 using HtmlTags.Conventions;
-using NUnit.Framework;
-using FubuTestingSupport;
+using Xunit;
+using Should;
 
 namespace HtmlTags.Testing.Conventions
 {
@@ -10,10 +10,10 @@ namespace HtmlTags.Testing.Conventions
      * is predictable
      */
 
-    [TestFixture]
+    
     public class TagSubjectTester
     {
-        [Test]
+        [Fact]
         public void equals()
         {
             var subject1 = new FakeSubject{
@@ -34,7 +34,7 @@ namespace HtmlTags.Testing.Conventions
             new TagSubject("a", subject2).ShouldNotEqual(new TagSubject("b", subject2));
         }
 
-        [Test]
+        [Fact]
         public void get_hashcode()
         {
             var subject1 = new FakeSubject

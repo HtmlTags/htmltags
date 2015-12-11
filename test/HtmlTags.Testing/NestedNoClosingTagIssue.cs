@@ -1,12 +1,12 @@
-using FubuTestingSupport;
-using NUnit.Framework;
+using Should;
+using Xunit;
 
 namespace HtmlTags.Testing
 {
-    [TestFixture]
+    
     public class NestedNoClosingTagIssue
     {
-        [Test]
+        [Fact]
         public void X()
         {
             var wrapper = new HtmlTag("div");

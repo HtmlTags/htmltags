@@ -1,27 +1,27 @@
-using FubuTestingSupport;
-using NUnit.Framework;
+using Should;
+using Xunit;
 using HtmlTags.Extended.TagBuilders;
 
 namespace HtmlTags.Testing
 {
-    [TestFixture]
+    
     public class TagBuilderExtensionsTester
     {
-        [Test]
+        [Fact]
         public void append_a_child_span_tag()
         {
             var tag = new HtmlTag("div").Span(x => x.Text("inner"));
             tag.ToString().ShouldEqual("<div><span>inner</span></div>");
         }
 
-        [Test]
+        [Fact]
         public void append_a_child_div_tag()
         {
             var tag = new HtmlTag("body").Div(x => x.Id("inner"));
             tag.ToString().ShouldEqual("<body><div id=\"inner\"></div></body>");
         }
 
-        [Test]
+        [Fact]
         public void create_and_return_a_link_as_a_child_of_another_tag()
         {
             var tag = new HtmlTag("div");

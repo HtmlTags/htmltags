@@ -1,12 +1,12 @@
-using NUnit.Framework;
-using FubuTestingSupport;
+using Xunit;
+using Should;
 
 namespace HtmlTags.Testing
 {
-    [TestFixture]
+    
     public class LiteralTagTester
     {
-        [Test]
+        [Fact]
         public void just_writes_the_literal_html_it_is_given()
         {
             var html = "<div>I did this</div>";
@@ -15,7 +15,7 @@ namespace HtmlTags.Testing
             tag.ToString().ShouldEqual(html);
         }
 
-        [Test]
+        [Fact]
         public void literal_tag_hosted_inside_of_another_tag()
         {
             var html = "<div>I did this</div>";
@@ -25,7 +25,7 @@ namespace HtmlTags.Testing
                 .ToString().ShouldEqual("<body>" + html + "</body>");
         }
 
-        [Test]
+        [Fact]
         public void literal_tag_hosted_inside_of_another_tag_from_the_extension_method()
         {
             var html = "<div>I did this</div>";
