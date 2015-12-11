@@ -1,4 +1,5 @@
-# ![HtmlTags](https://github.com/DarthFubuMVC/htmltags/raw/master/logo/HtmlTags_Icon_32x32.png) HtmlTags
+# ![HtmlTags](https://github.com/DarthFubuMVC/htmltags/raw/master/logo/HtmlTags_Icon_32x32.png) HtmlTags [![Build status](https://ci.appveyor.com/api/projects/status/7h0p16ld5dqikglj?svg=true)](https://ci.appveyor.com/project/jbogard/htmltags)
+
 
  .NET objects for generating HTML
 
