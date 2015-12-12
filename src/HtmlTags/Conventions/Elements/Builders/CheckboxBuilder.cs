@@ -4,12 +4,12 @@ namespace HtmlTags.Conventions.Elements.Builders
     {
         public override bool Matches(ElementRequest subject)
         {
-            return subject.Accessor.PropertyType == typeof (bool);
+            return subject?.Accessor?.PropertyType == typeof (bool);
         }
 
         public override HtmlTag Build(ElementRequest request)
         {
-            return new CheckboxTag(request.RawValue.As<bool>());
+            return new CheckboxTag(request?.RawValue?.As<bool>() ?? false);
         }
     }
 }
