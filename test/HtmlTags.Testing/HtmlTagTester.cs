@@ -190,10 +190,10 @@ namespace HtmlTags.Testing
         public void attributes_are_encoded_by_default()
         {
             const string options = "options: availableMeals, optionsText: 'mealName'";
-#if !DNXCORE50
-            var expectedAfterEncodingText = options.Replace("'", "&#39;");
-#else
+#if DNXCORE50 || DNX451
             var expectedAfterEncodingText = options.Replace("'", "&#x27;");
+#else
+            var expectedAfterEncodingText = options.Replace("'", "&#39;");
 #endif
 
             var tag = new HtmlTag("div").Attr("data-bind", options);

@@ -1,6 +1,6 @@
 namespace HtmlTags
 {
-#if DNXCORE50
+#if DNXCORE50 || DNX451
     using Microsoft.AspNet.Html;
 #else
     using System.Web.UI;

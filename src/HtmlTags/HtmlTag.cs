@@ -6,9 +6,10 @@ using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Newtonsoft.Json;
-#if DNXCORE50
+#if DNXCORE50 || DNX451
 using Microsoft.AspNet.Html;
 using Microsoft.AspNet.Http;
+using System.Text.Encodings.Web;
 #else
 using System.Web;
 using System.Web.UI;
@@ -18,6 +19,9 @@ namespace HtmlTags
 {
 
     public class HtmlTag : ITagSource
+#if DNXCORE50 || DNX451
+        , IHtmlContent
+#endif
     {
         public static HtmlTag Empty()
         {
@@ -467,6 +471,15 @@ namespace HtmlTags
             return _shouldRender && _isAuthorized;
         }
 
+#if DNXCORE50 || DNX451
+        public void WriteTo(TextWriter writer, HtmlEncoder encoder)
+        {
+            var html = new HtmlTextWriter(writer) { Encoder = encoder };
+            writeHtml(html);
+        }
+#endif
+
+
         protected virtual void writeHtml(HtmlTextWriter html)
         {
             if (!WillBeRendered()) return;
@@ -476,7 +489,7 @@ namespace HtmlTags
                 new BrTag().writeHtml(html);
                 return;
             }
-
+            
             if (HasTag())
             {
                 _htmlAttributes.Each((key, attribute) =>
@@ -886,5 +899,6 @@ namespace HtmlTags
         {
             return Attr("value", value);
         }
+
     }
 }

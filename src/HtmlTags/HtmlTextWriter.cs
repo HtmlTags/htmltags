@@ -3,7 +3,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-#if DNXCORE50
+#if DNXCORE50 || DNX451
 using System.Text.Encodings.Web;
 #else
 using System.Web;
@@ -383,6 +383,10 @@ namespace HtmlTags
                 return writer.Encoding;
             }
         }
+
+#if DNXCORE50 || DNX451
+        public HtmlEncoder Encoder { get; set; } = HtmlEncoder.Default;
+#endif
 
         // Gets or sets the new line character to use.
         public override string NewLine
@@ -907,10 +911,10 @@ namespace HtmlTags
             if (!fEncode)
                 return value;
 
-#if !DNXCORE50
-            return HttpUtility.HtmlAttributeEncode(value);
+#if DNXCORE50 || DNX451
+            return Encoder.Encode(value);
 #else
-            return HtmlEncoder.Default.Encode(value);
+            return HttpUtility.HtmlAttributeEncode(value);
 #endif
         }
 
@@ -929,10 +933,10 @@ namespace HtmlTags
         // This does minimal URL encoding by converting spaces in the url to "%20".
         protected string EncodeUrl(string url)
         {
-#if !DNXCORE50
-            return HttpUtility.UrlPathEncode(url);
-#else
+#if DNXCORE50 || DNX451
             return UrlEncoder.Default.Encode(url);
+#else
+            return HttpUtility.UrlPathEncode(url);
 #endif
         }
 
@@ -1353,10 +1357,10 @@ namespace HtmlTags
                 if (nbsp < 0)
                 {
                     var value = pos == 0 ? text : text.Substring(pos, length - pos);
-#if !DNXCORE50
-                    HttpUtility.HtmlEncode(value, this);
+#if DNXCORE50 || DNX451
+                    Encoder.Encode(this, value);
 #else
-                    HtmlEncoder.Default.Encode(this, value);
+                    HttpUtility.HtmlEncode(value, this);
 #endif
                     pos = length;
                 }
@@ -1364,10 +1368,10 @@ namespace HtmlTags
                     if (nbsp > pos)
                     {
                         var value = text.Substring(pos, nbsp - pos);
-#if !DNXCORE50
-                        HttpUtility.HtmlEncode(text.Substring(pos, nbsp - pos), this);
+#if DNXCORE50 || DNX451
+                        Encoder.Encode(this, value);
 #else
-                        HtmlEncoder.Default.Encode(this, value);
+                        HttpUtility.HtmlEncode(text.Substring(pos, nbsp - pos), this);
 #endif
                     }
                     Write("&nbsp;");
@@ -1378,10 +1382,10 @@ namespace HtmlTags
 
         internal void WriteHtmlAttributeEncode(string s)
         {
-#if !DNXCORE50
-            HttpUtility.HtmlAttributeEncode(s, writer);
+#if DNXCORE50 || DNX451
+            Encoder.Encode(writer, s);
 #else
-            HtmlEncoder.Default.Encode(writer, s);
+            HttpUtility.HtmlAttributeEncode(s, writer);
 #endif
         }
 

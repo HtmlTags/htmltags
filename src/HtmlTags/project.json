@@ -18,6 +18,13 @@
         "System.Web.Extensions": "4.0.0.0"
       }
     },
+    "dnx451": {
+      "dependencies": {
+        "System.Text.Encodings.Web": "4.0.0-*",
+        "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-*",
+        "Microsoft.AspNet.Mvc.Razor": "6.0.0-*"
+      }
+    },
     "dnxcore50": {
       "dependencies": {
         "Microsoft.CSharp": "4.0.0",
