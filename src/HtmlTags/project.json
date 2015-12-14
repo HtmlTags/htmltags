@@ -1,12 +1,12 @@
 {
-  "version": "4.0.0-beta1",
+  "version": "4.0.0-*",
   "authors": [ "Jeremy D. Miller", "Joshua Flanagan", "Josh Arnold" ],
   "owners": [ "Jeremy D. Miller", "Jimmy Bogard" ],
-  "licenseUrl": "https://github.com/DarthFubuMVC/htmltags/raw/master/license.txt",
-  "projectUrl": "http://htmltags.fubu-project.org/",
-  "iconUrl": "https://github.com/DarthFubuMVC/fubu-collateral/raw/master/Icons/FubuHtml_256.png",
+  "licenseUrl": "https://github.com/HtmlTags/htmltags/raw/master/license.txt",
+  "projectUrl": "https://github.com/HtmlTags/htmltags",
+  "iconUrl": "https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_256.png",
   "description": "Easy generation of html with a jquery inspired object model",
-  "tags": ["html", "ASP.NET MVC"],
+  "tags": [ "html", "ASP.NET MVC" ],
   "copyright": "Copyright 2008-2013 Jeremy D. Miller, Josh Arnold, Joshua Flanagan, et al. All rights reserved.",
   "dependencies": {
     "Newtonsoft.Json": "7.0.1"
