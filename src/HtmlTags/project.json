@@ -7,7 +7,7 @@
   "iconUrl": "https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_256.png",
   "description": "Easy generation of html with a jquery inspired object model",
   "tags": [ "html", "ASP.NET MVC" ],
-  "copyright": "Copyright 2008-2013 Jeremy D. Miller, Josh Arnold, Joshua Flanagan, et al. All rights reserved.",
+  "copyright": "Copyright 2008-2015 Jeremy D. Miller, Josh Arnold, Joshua Flanagan, et al. All rights reserved.",
   "dependencies": {
     "Newtonsoft.Json": "7.0.1"
   },
