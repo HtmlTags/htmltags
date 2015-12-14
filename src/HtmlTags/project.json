@@ -1,5 +1,5 @@
 {
-  "version": "4.0.0-ci-*",
+  "version": "4.0.0-beta1",
   "authors": [ "Jeremy D. Miller", "Joshua Flanagan", "Josh Arnold" ],
   "owners": [ "Jeremy D. Miller", "Jimmy Bogard" ],
   "licenseUrl": "https://github.com/DarthFubuMVC/htmltags/raw/master/license.txt",
