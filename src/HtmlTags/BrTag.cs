@@ -20,7 +20,7 @@ namespace HtmlTags
             Html5 = 2,
         }
 
-        protected override void writeHtml(HtmlTextWriter html)
+        protected override void WriteHtml(HtmlTextWriter html)
         {
             switch(BrTag.ComplianceMode)
             {

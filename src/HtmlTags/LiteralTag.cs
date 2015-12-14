@@ -20,7 +20,7 @@ namespace HtmlTags
             Encoded(false);
         }
 
-        protected override void writeHtml(HtmlTextWriter html)
+        protected override void WriteHtml(HtmlTextWriter html)
         {
             html.Write(Text());
         }

@@ -232,7 +232,7 @@ namespace HtmlTags
             RegisterTag("big", HtmlTextWriterTag.Big, TagType.Inline);
             RegisterTag("blockquote", HtmlTextWriterTag.Blockquote, TagType.Other);
             RegisterTag("body", HtmlTextWriterTag.Body, TagType.Other);
-            RegisterTag("br", HtmlTextWriterTag.Br, TagType.Other);
+            RegisterTag("br", HtmlTextWriterTag.Br, TagType.NonClosing);
             RegisterTag("button", HtmlTextWriterTag.Button, TagType.Inline);
             RegisterTag("caption", HtmlTextWriterTag.Caption, TagType.Other);
             RegisterTag("center", HtmlTextWriterTag.Center, TagType.Other);

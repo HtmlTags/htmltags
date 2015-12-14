@@ -43,10 +43,7 @@ namespace HtmlTags
             _metadataSuffix = suffix;
         }
 
-        public static string MetadataAttribute
-        {
-            get { return DataPrefix + _metadataSuffix; }
-        }
+        public static string MetadataAttribute => DataPrefix + _metadataSuffix;
 
         private readonly List<HtmlTag> _children = new List<HtmlTag>();
         private readonly HashSet<string> _cssClasses = new HashSet<string>();
@@ -447,7 +444,7 @@ namespace HtmlTags
         public string ToString(HtmlTextWriter html)
         {
             var tag = _renderFromTop ? walkToTop(this) : this;
-            tag.writeHtml(html);
+            tag.WriteHtml(html);
             return html.InnerWriter.ToString();
         }
 
@@ -475,68 +472,88 @@ namespace HtmlTags
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
             var html = new HtmlTextWriter(writer) { Encoder = encoder };
-            writeHtml(html);
+            WriteHtml(html);
         }
 #endif
 
 
-        protected virtual void writeHtml(HtmlTextWriter html)
+        protected virtual void WriteHtml(HtmlTextWriter html)
         {
             if (!WillBeRendered()) return;
 
-            if (_tag == "br")
+            WriteBeginTag(html);
+
+            WriteContent(html);
+
+            WriteEndTag(html);
+
+            _next?.WriteHtml(html);
+        }
+
+        protected void WriteBeginTag(HtmlTextWriter html)
+        {
+            if (!HasTag()) return;
+
+            _htmlAttributes.Each((key, attribute) =>
             {
-                new BrTag().writeHtml(html);
-                return;
-            }
-            
-            if (HasTag())
+                if (attribute != null)
+                {
+                    var value = attribute.Value;
+                    var stringValue = !(value is string) && key.StartsWith(DataPrefix)
+                        ? JsonConvert.SerializeObject(value)
+                        : value.ToString();
+                    html.AddAttribute(key, stringValue, attribute.IsEncoded);
+                }
+                else
+                {
+                    // HtmlTextWriter treats a null value as an attribute with no value (e.g., <input required />).
+                    html.AddAttribute(key, null, false);
+                }
+            });
+
+            if (_cssClasses.Count > 0)
             {
-                _htmlAttributes.Each((key, attribute) =>
-                {
-                    if (attribute != null)
-                    {
-                        var value = attribute.Value;
-                        var stringValue = !(value is string) && key.StartsWith(DataPrefix)
-                            ? JsonConvert.SerializeObject(value)
-                            : value.ToString();
-                        html.AddAttribute(key, stringValue, attribute.IsEncoded);
-                    }
-                    else
-                    {
-                        // HtmlTextWriter treats a null value as an attribute with no value (e.g., <input required />).
-                        html.AddAttribute(key, null, false);
-                    }
-                });
-
-                if (_cssClasses.Count > 0)
-                {
-                    var classValue = _cssClasses.Join(" ");
-                    html.AddAttribute(CssClassAttribute, classValue);
-                }
-
-                if (_metaData.Count > 0)
-                {
-                    var metadataValue = JsonConvert.SerializeObject(_metaData.Inner);
-                    html.AddAttribute(MetadataAttribute, metadataValue);
-                }
-
-                if (_customStyles.Count > 0)
-                {
-                    var attValue = _customStyles
-                        .Select(x => x.Key + ":" + x.Value)
-                        .ToArray().Join(";");
-
-                    html.AddAttribute(CssStyleAttribute, attValue);
-                }
-
-                html.RenderBeginTag(_tag);
+                var classValue = _cssClasses.Join(" ");
+                html.AddAttribute(CssClassAttribute, classValue);
             }
 
-            writeInnerText(html);
+            if (_metaData.Count > 0)
+            {
+                var metadataValue = JsonConvert.SerializeObject(_metaData.Inner);
+                html.AddAttribute(MetadataAttribute, metadataValue);
+            }
 
-            _children.Each(x => x.writeHtml(html));
+            if (_customStyles.Count > 0)
+            {
+                var attValue = _customStyles
+                    .Select(x => x.Key + ":" + x.Value)
+                    .ToArray().Join(";");
 
+                html.AddAttribute(CssStyleAttribute, attValue);
+            }
+
+            html.RenderBeginTag(_tag);
+        }
+
+        private void WriteContent(HtmlTextWriter html)
+        {
+            if (_innerText != null)
+            {
+                if (_encodeInnerText)
+                {
+                    html.WriteEncodedText(_innerText);
+                }
+                else
+                {
+                    html.Write(_innerText);
+                }
+            }
+
+            _children.Each(x => x.WriteHtml(html));
+        }
+
+        private void WriteEndTag(HtmlTextWriter html)
+        {
             if (HasClosingTag())
             {
                 html.RenderEndTag();
@@ -549,22 +566,6 @@ namespace HtmlTags
                     html.RenderBeginTag("");
                 html.RenderEndTag();
                 html.InnerWriter = currentInner;
-            }
-
-            if (_next != null) _next.writeHtml(html);
-        }
-
-        private void writeInnerText(HtmlTextWriter html)
-        {
-            if (_innerText == null) return;
-
-            if (_encodeInnerText)
-            {
-                html.WriteEncodedText(_innerText);
-            }
-            else
-            {
-                html.Write(_innerText);
             }
         }
 
@@ -899,6 +900,5 @@ namespace HtmlTags
         {
             return Attr("value", value);
         }
-
     }
 }
