@@ -149,4 +149,4 @@ You can then drive logic on the client using this data:
 
 ### More information
 
-More detailed documention is coming. In the meantime, try browsing the [unit tests](https://github.com/DarthFubuMVC/htmltags/blob/master/src/HtmlTags.Testing/HtmlTagTester.cs) for further examples.
+More detailed documention is coming. In the meantime, try browsing the [unit tests](https://github.com/HtmlTags/htmltags/blob/master/test/HtmlTags.Testing/HtmlTagTester.cs) for further examples.
