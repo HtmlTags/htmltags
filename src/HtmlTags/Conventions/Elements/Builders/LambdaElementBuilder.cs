@@ -22,14 +22,8 @@ namespace HtmlTags.Conventions.Elements.Builders
         public string ConditionDescription { get; set; }
         public string BuilderDescription { get; set; }
 
-        public override bool Matches(ElementRequest subject)
-        {
-            return _matcher(subject);
-        }
+        public override bool Matches(ElementRequest subject) => _matcher(subject);
 
-        public override HtmlTag Build(ElementRequest request)
-        {
-            return _build(request);
-        }
+        public override HtmlTag Build(ElementRequest request) => _build(request);
     }
 }

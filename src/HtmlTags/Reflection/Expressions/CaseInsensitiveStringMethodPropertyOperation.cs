@@ -17,10 +17,7 @@ namespace HtmlTags.Reflection.Expressions
             _negate = negate;
         }
 
-        public virtual string OperationName
-        {
-            get { return _method.Name; }
-        }
+        public virtual string OperationName => _method.Name;
         public abstract string Text { get; }
 
         public Func<object, Expression<Func<T, bool>>> GetPredicateBuilder<T>(MemberExpression propertyPath)

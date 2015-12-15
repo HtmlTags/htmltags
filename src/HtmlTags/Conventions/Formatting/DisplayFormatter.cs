@@ -22,13 +22,13 @@ namespace HtmlTags.Conventions.Formatting
 
         public string GetDisplay(Accessor accessor, object target)
         {
-            var request = new GetStringRequest(accessor, target, _locator);
+            var request = new GetStringRequest(accessor, target, _locator, null, null);
             return _stringifier.GetString(request);
         }
 
         public string GetDisplayForValue(Accessor accessor, object rawValue)
         {
-            var request = new GetStringRequest(accessor, rawValue, _locator);
+            var request = new GetStringRequest(accessor, rawValue, _locator, null, null);
             return _stringifier.GetString(request);
         }
     }

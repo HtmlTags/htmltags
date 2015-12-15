@@ -4,15 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
-using System.Threading;
 using Newtonsoft.Json;
 #if DNXCORE50 || DNX451
 using Microsoft.AspNet.Html;
-using Microsoft.AspNet.Http;
 using System.Text.Encodings.Web;
-#else
-using System.Web;
-using System.Web.UI;
 #endif
 
 namespace HtmlTags
@@ -23,15 +18,9 @@ namespace HtmlTags
         , IHtmlContent
 #endif
     {
-        public static HtmlTag Empty()
-        {
-            return new HtmlTag("span").Render(false);
-        }
+        public static HtmlTag Empty() => new HtmlTag("span").Render(false);
 
-        public static HtmlTag Placeholder()
-        {
-            return new HtmlTag().NoTag();
-        }
+        public static HtmlTag Placeholder() => new HtmlTag().NoTag();
 
         private const string CssClassAttribute = "class";
         private const string CssStyleAttribute = "style";
@@ -78,25 +67,18 @@ namespace HtmlTags
         {
             if (parent != null)
             {
-                _parent = parent;
+                Parent = parent;
                 parent.Append(this);
             }
         }
 
         private bool _encodeInnerText = true;
 
-        private HtmlTag _next;
-        private HtmlTag _parent;
-
         /// <summary>
         /// The sibling tag that immediately follows the current tag. 
         /// Setting this value will remove any existing value. Use <see cref="After(HtmlTag)"/> if you wish to insert a new sibling before any existing sibling.
         /// </summary>
-        public HtmlTag Next
-        {
-            get { return _next; }
-            set { _next = value; }
-        }
+        public HtmlTag Next { get; set; }
 
         /// <summary>
         /// Inserts a sibling tag immediately after the current tag. Any existing sibling will follow the inserted tag.
@@ -105,8 +87,8 @@ namespace HtmlTags
         /// <returns>The original tag</returns>
         public HtmlTag After(HtmlTag nextTag)
         {
-            nextTag.Next = _next;
-            _next = nextTag;
+            nextTag.Next = Next;
+            Next = nextTag;
             return this;
         }
 
@@ -114,30 +96,18 @@ namespace HtmlTags
         /// Returns the sibling tag that immediately follows the current tag. Same as <see cref="Next" />.
         /// </summary>
         /// <returns></returns>
-        public HtmlTag After()
-        {
-            return _next;
-        }
+        public HtmlTag After() => Next;
 
-        public IList<HtmlTag> Children
-        {
-            get { return _children; }
-        }
+        public IList<HtmlTag> Children => _children;
 
-        public HtmlTag Parent
-        {
-            get { return _parent; }
-        }
+        public HtmlTag Parent { get; private set; }
 
         IEnumerable<HtmlTag> ITagSource.AllTags()
         {
             yield return this;
         }
 
-        public string TagName()
-        {
-            return _tag;
-        }
+        public string TagName() => _tag;
 
         public HtmlTag TagName(string tag)
         {
@@ -145,14 +115,11 @@ namespace HtmlTags
             return this;
         }
 
-        public HtmlTag FirstChild()
-        {
-            return _children.FirstOrDefault();
-        }
+        public HtmlTag FirstChild() => _children.FirstOrDefault();
 
         public void InsertFirst(HtmlTag tag)
         {
-            tag._parent = this;
+            tag.Parent = this;
             _children.Insert(0, tag);
         }
 
@@ -162,30 +129,15 @@ namespace HtmlTags
             return this;
         }
 
-        public string Style(string key)
-        {
-            return _customStyles[key];
-        }
+        public string Style(string key) => _customStyles[key];
 
-        public bool HasStyle(string key)
-        {
-            return _customStyles.ContainsKey(key);
-        }
+        public bool HasStyle(string key) => _customStyles.ContainsKey(key);
 
-        public HtmlTag Id(string id)
-        {
-            return Attr("id", id);
-        }
+        public HtmlTag Id(string id) => Attr("id", id);
 
-        public string Id()
-        {
-            return Attr("id");
-        }
+        public string Id() => Attr("id");
 
-        public HtmlTag Hide()
-        {
-            return Style("display", "none");
-        }
+        public HtmlTag Hide() => Style("display", "none");
 
         /// <summary>
         /// Creates nested child tags and returns the innermost tag. Use <see cref="Append(string)"/> if you want to return the parent tag.
@@ -219,8 +171,7 @@ namespace HtmlTags
         /// <returns>The created child tag</returns>
         public T Add<T>() where T : HtmlTag, new()
         {
-            var child = new T();
-            child._parent = this;
+            var child = new T {Parent = this};
             _children.Add(child);
             return child;
         }
@@ -232,7 +183,7 @@ namespace HtmlTags
         /// <returns>The parent tag</returns>
         public HtmlTag Append(HtmlTag child)
         {
-            child._parent = this;
+            child.Parent = this;
             _children.Add(child);
             return this;
         }
@@ -253,10 +204,7 @@ namespace HtmlTags
         /// </summary>
         /// <param name="html"></param>
         /// <returns></returns>
-        public HtmlTag AppendHtml(string html)
-        {
-            return Append(new LiteralTag(html));
-        }
+        public HtmlTag AppendHtml(string html) => Append(new LiteralTag(html));
 
         /// <summary>
         /// Creates nested child tags, runs <paramref name="configuration"/> on the innermost tag, and returns the tag on which the method was called. Use <see cref="Add(string, Action{HtmlTag})"/> if you want to return the innermost tag.
@@ -279,7 +227,7 @@ namespace HtmlTags
         {
             tagSource.AllTags().Each(x =>
             {
-                x._parent = this;
+                x.Parent = this;
                 _children.Add(x);
             });
             return this;
@@ -294,7 +242,7 @@ namespace HtmlTags
         {
             tags.Each(x =>
             {
-                x._parent = this;
+                x.Parent = this;
                 _children.Add(x);
             });
             return this;
@@ -341,8 +289,7 @@ namespace HtmlTags
         public object Data(string key)
         {
             var dataKey = DataPrefix + key;
-            if (!_htmlAttributes.Has(dataKey)) return null;
-            return _htmlAttributes[dataKey].Value;
+            return _htmlAttributes.Has(dataKey) ? _htmlAttributes[dataKey].Value : null;
         }
 
         /// <summary>
@@ -386,10 +333,7 @@ namespace HtmlTags
         /// </summary>
         /// <param name="key">The name of the stored value</param>
         /// <returns>The calling tag.</returns>
-        public object MetaData(string key)
-        {
-            return !_metaData.Has(key) ? null : _metaData[key];
-        }
+        public object MetaData(string key) => !_metaData.Has(key) ? null : _metaData[key];
 
         public HtmlTag Text(string text)
         {
@@ -397,10 +341,7 @@ namespace HtmlTags
             return this;
         }
 
-        public string Text()
-        {
-            return _innerText;
-        }
+        public string Text() => _innerText;
 
 
         public HtmlTag Modify(Action<HtmlTag> action)
@@ -415,23 +356,17 @@ namespace HtmlTags
             return this;
         }
 
-        public bool Authorized()
-        {
-            return _isAuthorized;
-        }
+        public bool Authorized() => _isAuthorized;
 
 
         public override string ToString()
         {
             return WillBeRendered()
-                ? ToString(new HtmlTextWriter(new StringWriter(), String.Empty) {NewLine = String.Empty})
-                : String.Empty;
+                ? ToString(new HtmlTextWriter(new StringWriter(), string.Empty) {NewLine = string.Empty})
+                : string.Empty;
         }
 
-        public string ToHtmlString()
-        {
-            return ToString();
-        }
+        public string ToHtmlString() => ToString();
 
         public string ToPrettyString()
         {
@@ -443,7 +378,7 @@ namespace HtmlTags
 
         public string ToString(HtmlTextWriter html)
         {
-            var tag = _renderFromTop ? walkToTop(this) : this;
+            var tag = _renderFromTop ? WalkToTop(this) : this;
             tag.WriteHtml(html);
             return html.InnerWriter.ToString();
         }
@@ -456,17 +391,12 @@ namespace HtmlTags
             return this;
         }
 
-        private HtmlTag walkToTop(HtmlTag htmlTag)
+        private static HtmlTag WalkToTop(HtmlTag htmlTag)
         {
-            if (htmlTag.Parent == null)
-                return htmlTag;
-            return walkToTop(htmlTag.Parent);
+            return htmlTag.Parent == null ? htmlTag : WalkToTop(htmlTag.Parent);
         }
 
-        public bool WillBeRendered()
-        {
-            return _shouldRender && _isAuthorized;
-        }
+        public bool WillBeRendered() => _shouldRender && _isAuthorized;
 
 #if DNXCORE50 || DNX451
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
@@ -487,7 +417,7 @@ namespace HtmlTags
 
             WriteEndTag(html);
 
-            _next?.WriteHtml(html);
+            Next?.WriteHtml(html);
         }
 
         protected void WriteBeginTag(HtmlTextWriter html)
@@ -569,39 +499,33 @@ namespace HtmlTags
             }
         }
 
-        public HtmlTag Attr(string attribute, object value)
-        {
-            return buildAttr(attribute, value);
-        }
+        public HtmlTag Attr(string attribute, object value) => BuildAttr(attribute, value);
 
         public HtmlTag BooleanAttr(string attribute)
         {
-            if (isCssClassAttr(attribute))
+            if (IsCssClassAttr(attribute))
             {
-                return buildAttr(attribute, null);
+                return BuildAttr(attribute, null);
             }
 
             _htmlAttributes[attribute] = null;
             return this;
         }
 
-        public HtmlTag UnencodedAttr(string attribute, object value)
-        {
-            return buildAttr(attribute, value, false);
-        }
+        public HtmlTag UnencodedAttr(string attribute, object value) => BuildAttr(attribute, value, false);
 
-        private HtmlTag buildAttr(string attribute, object value, bool encode = true)
+        private HtmlTag BuildAttr(string attribute, object value, bool encode = true)
         {
             if (value == null)
             {
                 return RemoveAttr(attribute);
             }
-            if (value.Equals(String.Empty) &&
-                (isCssClassAttr(attribute) || isCssStyleAttr(attribute) || isMetadataAttr(attribute)))
+            if (value.Equals(string.Empty) &&
+                (IsCssClassAttr(attribute) || IsCssStyleAttr(attribute) || IsMetadataAttr(attribute)))
             {
                 return RemoveAttr(attribute);
             }
-            if (isCssClassAttr(attribute))
+            if (IsCssClassAttr(attribute))
             {
                 AddClass(value.ToString());
             }
@@ -612,38 +536,29 @@ namespace HtmlTags
             return this;
         }
 
-        private static bool isCssClassAttr(string attribute)
-        {
-            return attribute.Equals(CssClassAttribute, StringComparison.OrdinalIgnoreCase);
-        }
+        private static bool IsCssClassAttr(string attribute) => attribute.Equals(CssClassAttribute, StringComparison.OrdinalIgnoreCase);
 
-        private static bool isCssStyleAttr(string attribute)
-        {
-            return attribute.Equals(CssStyleAttribute, StringComparison.OrdinalIgnoreCase);
-        }
+        private static bool IsCssStyleAttr(string attribute) => attribute.Equals(CssStyleAttribute, StringComparison.OrdinalIgnoreCase);
 
-        private static bool isMetadataAttr(string attribute)
-        {
-            return attribute.Equals(MetadataAttribute, StringComparison.OrdinalIgnoreCase);
-        }
+        private static bool IsMetadataAttr(string attribute) => attribute.Equals(MetadataAttribute, StringComparison.OrdinalIgnoreCase);
 
         public string Attr(string attribute)
         {
             var attrVal = _htmlAttributes[attribute];
-            return attrVal == null ? String.Empty : attrVal.ToString();
+            return attrVal?.ToString() ?? string.Empty;
         }
 
         public HtmlTag RemoveAttr(string attribute)
         {
-            if (isCssClassAttr(attribute))
+            if (IsCssClassAttr(attribute))
             {
                 _cssClasses.Clear();
             }
-            else if (isCssStyleAttr(attribute))
+            else if (IsCssStyleAttr(attribute))
             {
                 _customStyles.Clear();
             }
-            else if (isMetadataAttr(attribute))
+            else if (IsMetadataAttr(attribute))
             {
                 _metaData.ClearAll();
             }
@@ -660,10 +575,7 @@ namespace HtmlTags
             return this;
         }
 
-        public bool Render()
-        {
-            return _shouldRender;
-        }
+        public bool Render() => _shouldRender;
 
         /// <summary>
         /// Adds one or more classes (separated by spaces) to the tag
@@ -673,12 +585,12 @@ namespace HtmlTags
         /// <exception cref="System.ArgumentException">One or more CSS class names were invalid (contained invalid characters)</exception>
         public HtmlTag AddClass(string className)
         {
-            IEnumerable<string> classes = parseClassName(className);
+            IEnumerable<string> classes = ParseClassName(className);
             foreach (string parsedClass in classes)
             {
                 if (!CssClassNameValidator.IsValidClassName(parsedClass))
                 {
-                    throw new ArgumentException("CSS class names is not valid. Problem class was '{0}'".ToFormat(className), "className");
+                    throw new ArgumentException(string.Format("CSS class names is not valid. Problem class was '{0}'", new[] {className}), nameof(className));
                 }
 
                 _cssClasses.Add(parsedClass);
@@ -692,7 +604,7 @@ namespace HtmlTags
         /// </summary>
         /// <param name="className">A string which contains class(-es)</param>
         /// <returns>The list of classes</returns>
-        private static IEnumerable<string> parseClassName(string className)
+        private static IEnumerable<string> ParseClassName(string className)
         {
             IEnumerable<string> classes;
             if (CssClassNameValidator.IsJsonClassName(className))
@@ -702,23 +614,15 @@ namespace HtmlTags
             else
             {
                 classes = Regex.Split(className, "[ ]+")
-                               .Where(c => !String.IsNullOrWhiteSpace(c));
+                               .Where(c => !string.IsNullOrWhiteSpace(c));
             }
 
             return classes;
         }
 
-        public HtmlTag AddClasses(params string[] classes)
-        {
-            return addClasses(classes);
-        }
+        public HtmlTag AddClasses(params string[] classes) => AddClasses((IEnumerable<string>)classes);
 
         public HtmlTag AddClasses(IEnumerable<string> classes)
-        {
-            return addClasses(classes);
-        }
-
-        private HtmlTag addClasses(IEnumerable<string> classes)
         {
             foreach (var cssClass in classes)
             {
@@ -727,15 +631,9 @@ namespace HtmlTags
             return this;
         }
 
-        public IEnumerable<string> GetClasses()
-        {
-            return _cssClasses;
-        }
+        public IEnumerable<string> GetClasses() => _cssClasses;
 
-        public bool HasClass(string className)
-        {
-            return _cssClasses.Contains(className);
-        }
+        public bool HasClass(string className) => _cssClasses.Contains(className);
 
         public HtmlTag RemoveClass(string className)
         {
@@ -743,40 +641,28 @@ namespace HtmlTags
             return this;
         }
 
-        public bool HasMetaData(string key)
-        {
-            return _metaData.Has(key);
-        }
+        public bool HasMetaData(string key) => _metaData.Has(key);
 
-        public string Title()
-        {
-            return Attr("title");
-        }
+        public string Title() => Attr("title");
 
-        public HtmlTag Title(string title)
-        {
-            return Attr("title", title);
-        }
+        public HtmlTag Title(string title) => Attr("title", title);
 
         public bool HasAttr(string key)
         {
-            if (isCssClassAttr(key)) return _cssClasses.Count > 0;
-            if (isCssStyleAttr(key)) return _customStyles.Count > 0;
-            if (isMetadataAttr(key)) return _metaData.Count > 0;
+            if (IsCssClassAttr(key)) return _cssClasses.Count > 0;
+            if (IsCssStyleAttr(key)) return _customStyles.Count > 0;
+            if (IsMetadataAttr(key)) return _metaData.Count > 0;
             return _htmlAttributes.Has(key);
         }
 
-        public bool IsInputElement()
-        {
-            return _tag == "input" || _tag == "select" || _tag == "textarea";
-        }
+        public bool IsInputElement() => _tag == "input" || _tag == "select" || _tag == "textarea";
 
         public void ReplaceChildren(params HtmlTag[] tags)
         {
             Children.Clear();
             tags.Each(t =>
             {
-                t._parent = this;
+                t.Parent = this;
                 Children.Add(t);
             });
         }
@@ -809,15 +695,9 @@ namespace HtmlTags
         /// Get whether or not to render the tag itself or just the children of the tag. 
         /// </summary>
         /// <returns></returns>
-        public bool HasTag()
-        {
-            return !_ignoreOpeningTag;
-        }
+        public bool HasTag() => !_ignoreOpeningTag;
 
-        public bool HasClosingTag()
-        {
-            return !_ignoreClosingTag;
-        }
+        public bool HasClosingTag() => !_ignoreClosingTag;
 
         public HtmlTag WrapWith(string tag)
         {
@@ -837,10 +717,7 @@ namespace HtmlTags
             return wrapper;
         }
 
-        public HtmlTag VisibleForRoles(IPrincipal principal, params string[] roles)
-        {
-            return Render(roles.Any(principal.IsInRole));
-        }
+        public HtmlTag VisibleForRoles(IPrincipal principal, params string[] roles) => Render(roles.Any(principal.IsInRole));
 
         public HtmlTag Encoded(bool encodeInnerText)
         {
@@ -848,10 +725,7 @@ namespace HtmlTags
             return this;
         }
 
-        public bool Encoded()
-        {
-            return _encodeInnerText;
-        }
+        public bool Encoded() => _encodeInnerText;
 
         private class HtmlAttribute
         {
@@ -866,13 +740,10 @@ namespace HtmlTags
                 IsEncoded = isEncoded;
             }
 
-            public object Value { get; set; }
-            public bool IsEncoded { get; set; }
+            public object Value { get; }
+            public bool IsEncoded { get; }
 
-            public override string ToString()
-            {
-                return Value != null ? Value.ToString() : String.Empty;
-            }
+            public override string ToString() => Value?.ToString() ?? string.Empty;
         }
 
         public HtmlTag ForChild(string tagName)
@@ -891,14 +762,8 @@ namespace HtmlTags
             return this;
         }
 
-        public HtmlTag Name(string name)
-        {
-            return Attr("name", name);
-        }
+        public HtmlTag Name(string name) => Attr("name", name);
 
-        public HtmlTag Value(string value)
-        {
-            return Attr("value", value);
-        }
+        public HtmlTag Value(string value) => Attr("value", value);
     }
 }

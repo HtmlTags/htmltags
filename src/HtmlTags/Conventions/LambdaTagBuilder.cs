@@ -11,9 +11,6 @@ namespace HtmlTags.Conventions
             _build = build;
         }
 
-        public HtmlTag Build(ElementRequest request)
-        {
-            return _build(request);
-        }
+        public HtmlTag Build(ElementRequest request) => _build(request);
     }
 }

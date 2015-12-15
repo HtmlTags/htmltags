@@ -12,14 +12,8 @@ namespace HtmlTags.Conventions.Elements.Builders
             _className = className;
         }
 
-        public bool Matches(ElementRequest token)
-        {
-            return token.Accessor.HasAttribute<T>();
-        }
+        public bool Matches(ElementRequest token) => token.Accessor.HasAttribute<T>();
 
-        public void Modify(ElementRequest request)
-        {
-            request.CurrentTag.AddClass(_className);
-        }
+        public void Modify(ElementRequest request) => request.CurrentTag.AddClass(_className);
     }
 }

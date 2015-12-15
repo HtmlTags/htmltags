@@ -2,10 +2,7 @@ namespace HtmlTags.Conventions.Elements.Builders
 {
     public class AddNameModifier : IElementModifier
     {
-        public bool Matches(ElementRequest token)
-        {
-            return true;
-        }
+        public bool Matches(ElementRequest token) => true;
 
         public void Modify(ElementRequest request)
         {

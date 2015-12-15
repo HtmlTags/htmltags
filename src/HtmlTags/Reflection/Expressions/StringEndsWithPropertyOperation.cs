@@ -13,9 +13,6 @@ namespace HtmlTags.Reflection.Expressions
         {
         }
 
-        public override string Text
-        {
-            get { return "ends with"; }
-        }
+        public override string Text => "ends with";
     }
 }

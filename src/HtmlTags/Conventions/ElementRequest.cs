@@ -12,8 +12,6 @@ namespace HtmlTags.Conventions
         private bool _hasFetched;
         private object _rawValue;
         private Func<Type, object> _services;
-        private HtmlTag _currentTag;
-        private HtmlTag _originalTag;
 
         public static ElementRequest For(object model, PropertyInfo property)
         {
@@ -23,10 +21,7 @@ namespace HtmlTags.Conventions
             };
         }
 
-        public static ElementRequest For<T>(Expression<Func<T, object>> expression)
-        {
-            return new ElementRequest(expression.ToAccessor());
-        }
+        public static ElementRequest For<T>(Expression<Func<T, object>> expression) => new ElementRequest(expression.ToAccessor());
 
         public static ElementRequest For<T>(T model, Expression<Func<T, object>> expression)
         {
@@ -57,79 +52,41 @@ namespace HtmlTags.Conventions
 
         public string ElementId { get; set; }
         public object Model { get; set; }
-        public Accessor Accessor { get; private set; }
-
-        public HtmlTag OriginalTag
-        {
-            get { return _originalTag; }
-        }
-
-        public HtmlTag CurrentTag
-        {
-            get { return _currentTag; }
-        }
+        public Accessor Accessor { get; }
+        public HtmlTag OriginalTag { get; private set; }
+        public HtmlTag CurrentTag { get; private set; }
 
         public void WrapWith(HtmlTag tag)
         {
-            _currentTag.WrapWith(tag);
+            CurrentTag.WrapWith(tag);
             ReplaceTag(tag);
         }
 
         public void ReplaceTag(HtmlTag tag)
         {
-            if (_originalTag == null)
+            if (OriginalTag == null)
             {
-                _originalTag = tag;
+                OriginalTag = tag;
             }
 
-            _currentTag = tag;
+            CurrentTag = tag;
         }
 
-        public AccessorDef ToAccessorDef()
-        {
-            return new AccessorDef
-            {
-                Accessor = Accessor,
-                ModelType = HolderType()
-            };
-        }
+        public AccessorDef ToAccessorDef() => new AccessorDef(Accessor, HolderType());
 
 
-        public Type HolderType()
-        {
-            if (Model == null)
-            {
-                return Accessor.DeclaringType;
-            }
+        public Type HolderType() => Model == null ? Accessor.DeclaringType : Model?.GetType();
 
-            return Model == null ? null : Model.GetType();
-        }
-
-        public T Get<T>()
-        {
-            return (T)_services(typeof(T));
-        }
+        public T Get<T>() => (T)_services(typeof(T));
 
         // virtual for mocking
-        public virtual HtmlTag BuildForCategory(string category, string profile = null)
-        {
-            return Get<ITagGenerator>().Build(this, category, profile);
-        }
+        public virtual HtmlTag BuildForCategory(string category, string profile = null) => Get<ITagGenerator>().Build(this, category, profile);
 
-        public T Value<T>()
-        {
-            return (T) RawValue;
-        }
+        public T Value<T>() => (T) RawValue;
 
-        public string StringValue()
-        {
-            return new DisplayFormatter(_services).GetDisplay(new GetStringRequest(Accessor, RawValue, _services));
-        }
+        public string StringValue() => new DisplayFormatter(_services).GetDisplay(new GetStringRequest(Accessor, RawValue, _services, null, null));
 
-        public bool ValueIsEmpty()
-        {
-            return RawValue == null || string.Empty.Equals(RawValue);
-        }
+        public bool ValueIsEmpty() => RawValue == null || string.Empty.Equals(RawValue);
 
         public void ForValue<T>(Action<T> action)
         {
@@ -138,14 +95,8 @@ namespace HtmlTags.Conventions
             action((T) RawValue);
         }
 
-        public void Attach(Func<Type, object> locator)
-        {
-            _services = locator;
-        }
+        public void Attach(Func<Type, object> locator) => _services = locator;
 
-        public ElementRequest ToToken()
-        {
-            return new ElementRequest(Accessor);
-        }
+        public ElementRequest ToToken() => new ElementRequest(Accessor);
     }
 }

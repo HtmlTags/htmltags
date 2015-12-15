@@ -7,10 +7,7 @@
 
     internal static class TypeExtensions
     {
-        public static T As<T>(this object target)
-        {
-            return (T)target;
-        }
+        public static T As<T>(this object target) => (T)target;
 
         public static bool CanBeCastTo<T>(this Type type)
         {
@@ -71,31 +68,26 @@
             }
 
 
-            throw new Exception("I don't know how to figure out what this is a collection of. Can you tell me? {0}".ToFormat(type));
+            throw new Exception(string.Format("I don't know how to figure out what this is a collection of. Can you tell me? {0}", new[] {type}));
         }
 
-        public static bool PropertyMatches(this PropertyInfo prop1, PropertyInfo prop2)
-        {
-            return prop1.DeclaringType == prop2.DeclaringType && prop1.Name == prop2.Name;
-        }
+        public static bool PropertyMatches(this PropertyInfo prop1, PropertyInfo prop2) 
+            => prop1.DeclaringType == prop2.DeclaringType && prop1.Name == prop2.Name;
 
-        public static Type GetInnerTypeFromNullable(this Type nullableType)
-        {
-            return nullableType.GetGenericArguments()[0];
-        }
+        public static Type GetInnerTypeFromNullable(this Type nullableType) => nullableType.GetGenericArguments()[0];
 
         public static bool IsNullableOfT(this Type theType)
         {
             if (theType == null) return false;
 
-            return theType.GetTypeInfo().IsGenericType && theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
+            return theType.GetTypeInfo().IsGenericType && theType.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
         
         public static bool IsTypeOrNullableOf<T>(this Type theType)
         {
             Type otherType = typeof(T);
             return theType == otherType ||
-                   (theType.IsNullableOfT() && theType.GetGenericArguments()[0].Equals(otherType));
+                   (theType.IsNullableOfT() && theType.GetGenericArguments()[0] == otherType);
         }
     }
 }

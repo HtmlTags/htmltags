@@ -22,24 +22,21 @@ namespace HtmlTags.Reflection
         }
 
 
-        public string FieldName { get { return _getter.Name; } }
+        public string FieldName => _getter.Name;
 
-        public Type PropertyType { get { return _getter.ReturnType; } }
+        public Type PropertyType => _getter.ReturnType;
 
-        public Type DeclaringType { get { return _getter.DeclaringType; } }
+        public Type DeclaringType => _getter.DeclaringType;
 
 
-        public PropertyInfo InnerProperty { get { return null; } }
+        public PropertyInfo InnerProperty => null;
 
         public Accessor GetChildAccessor<T>(Expression<Func<T, object>> expression)
         {
             throw new NotSupportedException("Not supported with Methods");
         }
 
-        public string[] PropertyNames
-        {
-            get { return new[] { Name }; }
-        }
+        public string[] PropertyNames => new[] { Name };
 
         public Expression<Func<T, object>> ToExpression<T>()
         {
@@ -58,25 +55,16 @@ namespace HtmlTags.Reflection
             yield return _getter;
         }
 
-        public string Name { get { return _getter.Name; } }
+        public string Name => _getter.Name;
 
         public virtual void SetValue(object target, object propertyValue)
         {
             // no-op
         }
 
-        public object GetValue(object target)
-        {
-            return _getter.GetValue(target);
-        }
+        public object GetValue(object target) => _getter.GetValue(target);
 
-        public Type OwnerType
-        {
-            get
-            {
-                return _ownerType ?? DeclaringType;
-            }
-        }
+        public Type OwnerType => _ownerType ?? DeclaringType;
 
 
         public bool Equals(SingleMethod other)
@@ -94,9 +82,6 @@ namespace HtmlTags.Reflection
             return Equals((SingleMethod) obj);
         }
 
-        public override int GetHashCode()
-        {
-            return (_getter != null ? _getter.GetHashCode() : 0);
-        }
+        public override int GetHashCode() => _getter?.GetHashCode() ?? 0;
     }
 }

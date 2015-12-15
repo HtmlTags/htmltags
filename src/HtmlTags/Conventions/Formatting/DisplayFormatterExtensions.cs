@@ -16,10 +16,7 @@ namespace HtmlTags.Conventions.Formatting
         public static string FormatValue(this IDisplayFormatter formatter, Type modelType, Accessor accessor,
             object value, string format)
         {
-            var request = new GetStringRequest(accessor, value, null)
-            {
-                Format = format
-            };
+            var request = new GetStringRequest(accessor, value, null, format, null);
 
             return formatter.GetDisplay(request);
         }
@@ -37,13 +34,7 @@ namespace HtmlTags.Conventions.Formatting
         /// <param name="property">The property that holds the given value</param>
         /// <param name="value">The data to format</param>
         public static string FormatValue(this IDisplayFormatter formatter, Type modelType, Accessor property,
-            object value)
-        {
-            return formatter.GetDisplay(new GetStringRequest(property, value, null)
-            {
-                OwnerType = modelType
-            });
-        }
+            object value) => formatter.GetDisplay(new GetStringRequest(property, value, null, null, modelType));
 
         /// <summary>
         /// Retrieves the formatted value of a property from an instance

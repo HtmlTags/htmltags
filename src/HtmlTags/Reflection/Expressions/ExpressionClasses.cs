@@ -19,7 +19,7 @@ namespace HtmlTags.Reflection.Expressions
             var constructor = concreteType.GetConstructor(new Type[]{typeof (string)});
             if (constructor == null)
             {
-                throw new ArgumentOutOfRangeException("concreteType", concreteType, "Only types with a ctor(string) can be used here");
+                throw new ArgumentOutOfRangeException(nameof(concreteType), concreteType, "Only types with a ctor(string) can be used here");
             }
 
             var argument = Expression.Parameter(typeof (string), "x");

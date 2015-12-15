@@ -19,7 +19,7 @@ namespace HtmlTags
 
         public static bool IsValidClassName(string className)
         {
-            var pattern = string.Format(@"{0}[{1}]*$", ValidStartRegex, ValidClassChars);
+            var pattern = $@"{ValidStartRegex}[{ValidClassChars}]*$";
             return AllowInvalidCssClassNames || IsJsonClassName(className) || Regex.IsMatch(className, pattern);
         }
 
@@ -30,12 +30,12 @@ namespace HtmlTags
             if (IsValidClassName(className)) return className;
 
             // it can't have anything other than _,-,a-z,A-Z, or 0-9
-            var pattern = string.Format("[^{0}]", ValidClassChars);
+            var pattern = $"[^{ValidClassChars}]";
             className = Regex.Replace(className, pattern, "");
 
             // Strip invalid leading combinations (i.e. '-9test' -> 'test')
             // if it starts with '-', it must be followed by _, a-z, A-Z
-            var invalidleadingpattern = string.Format("{0}(?<rest>.*)$", InvalidStartRegex);
+            var invalidleadingpattern = $"{InvalidStartRegex}(?<rest>.*)$";
             className = Regex.Replace(className, invalidleadingpattern, @"${rest}");
 
             // if the whole thing was invalid, we'll end up with an empty string. That's not valid either, so return the default

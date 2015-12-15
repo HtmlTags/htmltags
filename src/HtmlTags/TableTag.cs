@@ -5,36 +5,23 @@ namespace HtmlTags
 {
     public class TableTag : HtmlTag
     {
-        private readonly HtmlTag _body;
-        private readonly HtmlTag _header;
-        private readonly HtmlTag _footer;
+        public HtmlTag THead { get; }
 
-        public HtmlTag THead
-        {
-            get { return _header; }
-        }
+        public HtmlTag TBody { get; }
 
-        public HtmlTag TBody
-        {
-            get { return _body; }
-        }
-
-        public HtmlTag TFoot
-        {
-            get { return _footer; }
-        }
+        public HtmlTag TFoot { get; }
 
         public TableTag()
             : base("table")
         {
-            _header = new HtmlTag("thead", this);
-            _footer = new HtmlTag("tfoot", this).Render(false);
-            _body = new HtmlTag("tbody", this);
+            THead = new HtmlTag("thead", this);
+            TFoot = new HtmlTag("tfoot", this).Render(false);
+            TBody = new HtmlTag("tbody", this);
         }
 
         public TableTag CaptionText(string text)
         {
-            HtmlTag caption = existingCaption();
+            HtmlTag caption = ExistingCaption();
             if (caption == null)
             {
                 caption = new HtmlTag("caption");
@@ -48,19 +35,13 @@ namespace HtmlTags
 
         public string CaptionText()
         {
-            var caption = existingCaption();
+            var caption = ExistingCaption();
             return caption == null ? string.Empty : caption.Text();
         }
 
-        private HtmlTag existingCaption()
-        {
-            return Children.FirstOrDefault(x => x.TagName() == "caption");
-        }
+        private HtmlTag ExistingCaption() => Children.FirstOrDefault(x => x.TagName() == "caption");
 
-        public TableRowTag AddHeaderRow()
-        {
-            return _header.Add<TableRowTag>();
-        }
+        public TableRowTag AddHeaderRow() => THead.Add<TableRowTag>();
 
         public TableTag AddHeaderRow(Action<TableRowTag> configure)
         {
@@ -69,10 +50,7 @@ namespace HtmlTags
             return this;
         }
 
-        public TableRowTag AddBodyRow()
-        {
-            return _body.Add<TableRowTag>();
-        }
+        public TableRowTag AddBodyRow() => TBody.Add<TableRowTag>();
 
         public TableTag AddBodyRow(Action<TableRowTag> configure)
         {
@@ -82,15 +60,15 @@ namespace HtmlTags
 
         public TableTag AddFooterRow(Action<TableRowTag> configure)
         {
-            _footer.Render(true);
-            configure(_footer.Add<TableRowTag>());
+            TFoot.Render(true);
+            configure(TFoot.Add<TableRowTag>());
             return this;
         }
 
 
         public TableTag Caption(string caption)
         {
-            var captionTag = existingCaption();
+            var captionTag = ExistingCaption();
             if (captionTag == null)
             {
                 captionTag = new HtmlTag("caption");
@@ -110,24 +88,12 @@ namespace HtmlTags
         {
         }
 
-        public HtmlTag Header(string text)
-        {
-            return new HtmlTag("th", this).Text(text);
-        }
+        public HtmlTag Header(string text) => new HtmlTag("th", this).Text(text);
 
-        public HtmlTag Header()
-        {
-            return new HtmlTag("th", this);
-        }
+        public HtmlTag Header() => new HtmlTag("th", this);
 
-        public HtmlTag Cell(string text)
-        {
-            return new HtmlTag("td", this).Text(text);
-        }
+        public HtmlTag Cell(string text) => new HtmlTag("td", this).Text(text);
 
-        public HtmlTag Cell()
-        {
-            return new HtmlTag("td", this);
-        }
+        public HtmlTag Cell() => new HtmlTag("td", this);
     }
 }

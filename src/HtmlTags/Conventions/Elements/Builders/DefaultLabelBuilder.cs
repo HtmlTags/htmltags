@@ -5,10 +5,7 @@ namespace HtmlTags.Conventions.Elements.Builders
 
     public class DefaultLabelBuilder : IElementBuilder
     {
-        public bool Matches(ElementRequest subject)
-        {
-            return true;
-        }
+        public bool Matches(ElementRequest subject) => true;
 
         public HtmlTag Build(ElementRequest request)
         {

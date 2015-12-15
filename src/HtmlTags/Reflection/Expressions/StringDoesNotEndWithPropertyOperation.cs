@@ -13,14 +13,8 @@ namespace HtmlTags.Reflection.Expressions
         {
         }
 
-        public override string OperationName
-        {
-            get { return "DoesNotEndWith"; }
-        }
+        public override string OperationName => "DoesNotEndWith";
 
-        public override string Text
-        {
-            get { return "does not end with"; }
-        }
+        public override string Text => "does not end with";
     }
 }

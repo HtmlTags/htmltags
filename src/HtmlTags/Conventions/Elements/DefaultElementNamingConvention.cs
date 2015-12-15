@@ -5,9 +5,6 @@ namespace HtmlTags.Conventions.Elements
 
     public class DefaultElementNamingConvention : IElementNamingConvention
     {
-        public string GetName(Type modelType, Accessor accessor)
-        {
-            return accessor.Name;
-        }
+        public string GetName(Type modelType, Accessor accessor) => accessor.Name;
     }
 }
