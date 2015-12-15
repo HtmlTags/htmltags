@@ -15,19 +15,10 @@ namespace HtmlTags.Conventions.Elements.Builders
         }
 
         public string ConditionDescription { get; set; }
-        public bool Matches(ElementRequest subject)
-        {
-            return _filter(subject);
-        }
+        public bool Matches(ElementRequest subject) => _filter(subject);
 
-        public ITagBuilder BuilderFor(ElementRequest subject)
-        {
-            return this;
-        }
+        public ITagBuilder BuilderFor(ElementRequest subject) => this;
 
-        public HtmlTag Build(ElementRequest request)
-        {
-            return _inner.Build(request);
-        }
+        public HtmlTag Build(ElementRequest request) => _inner.Build(request);
     }
 }

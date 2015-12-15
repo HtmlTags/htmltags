@@ -20,7 +20,7 @@ namespace HtmlTags
         public SelectTag TopOption(string display, object value, Action<HtmlTag> optionAction)
         {
             var option = TopOption(display, value);
-            if(optionAction != null ) optionAction(option);
+            optionAction?.Invoke(option);
             return this;
         }
 
@@ -46,10 +46,7 @@ namespace HtmlTags
             return this;
         }
 
-        private static HtmlTag MakeOption(string display, object value)
-        {
-            return new HtmlTag("option").Text(display).Attr("value", value);
-        }
+        private static HtmlTag MakeOption(string display, object value) => new HtmlTag("option").Text(display).Attr("value", value);
 
         public void SelectByValue(object value)
         {
@@ -66,10 +63,7 @@ namespace HtmlTags
         {
             var prevSelected = Children.FirstOrDefault(x => x.HasAttr(SelectedAttributeKey));
 
-            if (prevSelected != null)
-            {
-                prevSelected.RemoveAttr(SelectedAttributeKey);
-            }
+            prevSelected?.RemoveAttr(SelectedAttributeKey);
 
             optionTag.Attr(SelectedAttributeKey, SelectedAttributeKey);
         }

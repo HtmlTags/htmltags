@@ -13,14 +13,8 @@ namespace HtmlTags.Reflection.Expressions
         {
         }
 
-        public override string OperationName
-        {
-            get { return "DoesNotEqual"; }
-        }
+        public override string OperationName => "DoesNotEqual";
 
-        public override string Text
-        {
-            get { return "is not"; }
-        }
+        public override string Text => "is not";
     }
 }

@@ -7,7 +7,7 @@ namespace HtmlTags.Reflection.Expressions
 {
     public class ComposableOrOperation
     {
-        private List<Tuple<IPropertyOperation, MemberExpression, object>> _listOfOperations = new List<Tuple<IPropertyOperation, MemberExpression, object>>();
+        private readonly List<Tuple<IPropertyOperation, MemberExpression, object>> _listOfOperations = new List<Tuple<IPropertyOperation, MemberExpression, object>>();
 
         public void Set<T>(Expression<Func<T, object>> path, object value)
         {
@@ -27,9 +27,10 @@ namespace HtmlTags.Reflection.Expressions
 
         public Expression<Func<T, bool>> GetPredicateBuilder<T>()
         {
-            if(_listOfOperations.Count() == 0)
+            if(!_listOfOperations.Any())
             {
-                throw new Exception("You must have at least one operation registered for an 'or' operation (you have {0})".ToFormat(_listOfOperations.Count));
+                throw new Exception(
+                    $"You must have at least one operation registered for an 'or' operation (you have {new[] {_listOfOperations.Count}})");
             }
 
             //the parameter to use
@@ -89,7 +90,7 @@ namespace HtmlTags.Reflection.Expressions
 
     public class RewriteToLambda : ExpressionVisitor
     {
-        private ParameterExpression _parameter;
+        private readonly ParameterExpression _parameter;
 
         public RewriteToLambda(ParameterExpression parameter)
         {

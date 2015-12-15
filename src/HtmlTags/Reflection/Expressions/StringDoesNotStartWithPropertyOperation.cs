@@ -13,14 +13,8 @@ namespace HtmlTags.Reflection.Expressions
         {
         }
 
-        public override string OperationName
-        {
-            get { return "DoesNotStartWith"; }
-        }
+        public override string OperationName => "DoesNotStartWith";
 
-        public override string Text
-        {
-            get { return "does not start with"; }
-        }
+        public override string Text => "does not start with";
     }
 }

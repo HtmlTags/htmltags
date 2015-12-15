@@ -7,43 +7,26 @@ namespace HtmlTags.Reflection
 {
     public class IndexerValueGetter : IValueGetter
     {
-        private readonly Type _arrayType;
-
         public IndexerValueGetter(Type arrayType, int index)
         {
-            _arrayType = arrayType;
+            DeclaringType = arrayType;
             Index = index;
         }
 
-        public object GetValue(object target)
-        {
-            return ((Array)target).GetValue(Index);
-        }
+        public object GetValue(object target) => ((Array)target).GetValue(Index);
 
-        public string Name
-        {
-            get
-            {
-                return "[{0}]".ToFormat(Index);
-            }
-        }
+        public string Name => $"[{Index}]";
 
-        public int Index { get; private set; }
+        public int Index { get; }
 
-        public Type DeclaringType
-        {
-            get { return _arrayType; }
-        }
+        public Type DeclaringType { get; }
 
-        public Type ValueType
-        {
-            get { return _arrayType.GetElementType(); }
-        }
+        public Type ValueType => DeclaringType.GetElementType();
 
         public Expression ChainExpression(Expression body)
         {
             var memberExpression = Expression.ArrayIndex(body, Expression.Constant(Index, typeof(int)));
-            if (!_arrayType.GetElementType().GetTypeInfo().IsValueType)
+            if (!DeclaringType.GetElementType().GetTypeInfo().IsValueType)
             {
                 return memberExpression;
             }
@@ -51,15 +34,9 @@ namespace HtmlTags.Reflection
             return Expression.Convert(memberExpression, typeof(object));
         }
 
-        public void SetValue(object target, object propertyValue)
-        {
-            ((Array)target).SetValue(propertyValue, Index);
-        }
+        public void SetValue(object target, object propertyValue) => ((Array)target).SetValue(propertyValue, Index);
 
-        protected bool Equals(IndexerValueGetter other)
-        {
-            return _arrayType == other._arrayType && Index == other.Index;
-        }
+        protected bool Equals(IndexerValueGetter other) => DeclaringType == other.DeclaringType && Index == other.Index;
 
         public override bool Equals(object obj)
         {
@@ -73,7 +50,7 @@ namespace HtmlTags.Reflection
         {
             unchecked
             {
-                return ((_arrayType != null ? _arrayType.GetHashCode() : 0) * 397) ^ Index;
+                return ((DeclaringType?.GetHashCode() ?? 0) * 397) ^ Index;
             }
         }
     }

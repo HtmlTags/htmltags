@@ -27,32 +27,29 @@ namespace HtmlTags.Reflection.Expressions
     {
         private const string _operationName = "Contains";
         private const string _description = "contains";
-                private MethodInfo method =
-                    typeof (Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(
-                        m => m.Name.EqualsIgnoreCase("Contains")).First();
+        private readonly MethodInfo _method =
+            typeof(Enumerable).GetMethods(
+                BindingFlags.Static | BindingFlags.Public).First(m => m.Name.EqualsIgnoreCase("Contains"));
 
-        public string OperationName { get { return _operationName; } }
-        
-        public string Text
-        {
-            get { return _description; }
-        }
+        public string OperationName => _operationName;
+
+        public string Text => _description;
 
         public Func<object, Expression<Func<T, bool>>> GetPredicateBuilder<T>(MemberExpression propertyPath)
         {
             return valuesToCheck =>
             {
-                var enumerationOfObjects = (IEnumerable<object>) valuesToCheck;
+                var enumerationOfObjects = (IEnumerable<object>)valuesToCheck;
                 if (enumerationOfObjects == null) return c => false;
 
                 //what's the type of the collection?
                 var valuesToCheckType = valuesToCheck.GetType();
                 var collectionOf = valuesToCheckType.IsAnEnumerationOf();
-                
-                
 
-                //capture and close the Enumerbable.Contains method
-                var closedMethod = method.MakeGenericMethod(collectionOf);
+
+
+                //capture and close the Enumerbable.Contains _method
+                var closedMethod = _method.MakeGenericMethod(collectionOf);
 
                 //the list that we need to call contains on
                 var list = Expression.Constant(enumerationOfObjects);
@@ -63,8 +60,8 @@ namespace HtmlTags.Reflection.Expressions
 
                 //this should be a property call
                 var memberAccess = Expression.MakeMemberAccess(param, propertyPath.Member);
-                
-                
+
+
                 //call 'Contains' with the desired 'value' to check on the 'list'
                 var call = Expression.Call(closedMethod, list, memberAccess);
 
@@ -94,8 +91,6 @@ namespace HtmlTags.Reflection.Expressions
     public abstract class StringContainsPropertyOperationBase : IPropertyOperation
     {
         private static readonly MethodInfo _indexOfMethod;
-        private readonly string _operation;
-        private readonly string _description;
         private readonly bool _negate;
 
         static StringContainsPropertyOperationBase()
@@ -106,16 +101,14 @@ namespace HtmlTags.Reflection.Expressions
 
         protected StringContainsPropertyOperationBase(string operation, string description, bool negate)
         {
-            _operation = operation;
-            _description = description;
+            OperationName = operation;
+            Text = description;
             _negate = negate;
         }
 
-        public string OperationName { get { return _operation; } }
-        public string Text
-        {
-            get { return _description; }
-        }
+        public string OperationName { get; }
+
+        public string Text { get; }
 
         public Func<object, Expression<Func<T, bool>>> GetPredicateBuilder<T>(MemberExpression propertyPath)
         {

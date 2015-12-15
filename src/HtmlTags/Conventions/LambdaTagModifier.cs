@@ -18,14 +18,8 @@ namespace HtmlTags.Conventions
         {
         }
 
-        public bool Matches(ElementRequest token)
-        {
-            return _matcher(token);
-        }
+        public bool Matches(ElementRequest token) => _matcher(token);
 
-        public void Modify(ElementRequest request)
-        {
-            _modify(request);
-        }
+        public void Modify(ElementRequest request) => _modify(request);
     }
 }

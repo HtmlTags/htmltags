@@ -21,16 +21,13 @@ namespace HtmlTags.Reflection
             _arguments = arguments;
         }
 
-        public object GetValue(object target)
-        {
-            return _methodInfo.Invoke(target, _arguments);
-        }
+        public object GetValue(object target) => _methodInfo.Invoke(target, _arguments);
 
         public string Name
         {
             get
             {
-                if (_arguments.Length == 1) return "[{0}]".ToFormat(_arguments[0]);
+                if (_arguments.Length == 1) return $"[{_arguments[0]}]";
                 if (_arguments.Length == 0) return _methodInfo.Name;
 
                 throw new NotSupportedException("Dunno how to deal with this method");

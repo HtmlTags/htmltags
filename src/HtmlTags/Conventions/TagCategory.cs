@@ -6,7 +6,6 @@ namespace HtmlTags.Conventions
 {
     public class TagCategory : ITagBuildingExpression
     {
-        private readonly BuilderSet _defaults = new BuilderSet();
         private readonly Cache<TagSubject, TagPlan> _plans = new Cache<TagSubject, TagPlan>();
 
         private readonly Cache<string, BuilderSet> _profiles =
@@ -14,19 +13,13 @@ namespace HtmlTags.Conventions
 
         public TagCategory()
         {
-            _profiles[TagConstants.Default] = _defaults;
-            _plans.OnMissing = buildPlan;
+            _profiles[TagConstants.Default] = Defaults;
+            _plans.OnMissing = BuildPlan;
         }
 
-        public BuilderSet Defaults
-        {
-            get { return _defaults; }
-        }
+        public BuilderSet Defaults { get; } = new BuilderSet();
 
-        public BuilderSet Profile(string name)
-        {
-            return _profiles[name];
-        }
+        public BuilderSet Profile(string name) => _profiles[name];
 
         public TagPlan PlanFor(ElementRequest request, string profile = null)
         {
@@ -34,9 +27,9 @@ namespace HtmlTags.Conventions
             return _plans[subject];
         }
 
-        private TagPlan buildPlan(TagSubject subject)
+        private TagPlan BuildPlan(TagSubject subject)
         {
-            var sets = setsFor(subject.Profile).ToList();
+            var sets = SetsFor(subject.Profile).ToList();
             var policy = sets.SelectMany(x => x.Policies).FirstOrDefault(x => x.Matches(subject.Subject));
             if (policy == null)
             {
@@ -52,55 +45,34 @@ namespace HtmlTags.Conventions
             return new TagPlan(builder, modifiers, elementNamingConvention);
         }
 
-        private IEnumerable<BuilderSet> setsFor(string profile)
+        private IEnumerable<BuilderSet> SetsFor(string profile)
         {
             if (!string.IsNullOrEmpty(profile) && profile != TagConstants.Default)
             {
                 yield return _profiles[profile];
             }
 
-            yield return _defaults;
+            yield return Defaults;
         }
 
-        public void ClearPlans()
-        {
-            _plans.ClearAll();
-        }
+        public void ClearPlans() => _plans.ClearAll();
 
-        public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder)
-        {
-            Add(new ConditionalTagBuilderPolicy(filter, builder));
-        }
+        public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder) => Add(new ConditionalTagBuilderPolicy(filter, builder));
 
-        public void Add(ITagBuilderPolicy policy)
-        {
-            _profiles[TagConstants.Default].Add(policy);
-        }
+        public void Add(ITagBuilderPolicy policy) => _profiles[TagConstants.Default].Add(policy);
 
-        public void Add(ITagModifier modifier)
-        {
-            _profiles[TagConstants.Default].Add(modifier);
-        }
+        public void Add(ITagModifier modifier) => _profiles[TagConstants.Default].Add(modifier);
 
 
-        public CategoryExpression Always
-        {
-            get { return _defaults.Always; }
-        }
+        public CategoryExpression Always => Defaults.Always;
 
-        public CategoryExpression If(Func<ElementRequest, bool> matches)
-        {
-            return _defaults.If(matches);
-        }
+        public CategoryExpression If(Func<ElementRequest, bool> matches) => Defaults.If(matches);
 
-        public ITagBuildingExpression ForProfile(string profile)
-        {
-            return _profiles[profile];
-        }
+        public ITagBuildingExpression ForProfile(string profile) => _profiles[profile];
 
         public void Import(TagCategory other)
         {
-            _defaults.Import(other._defaults);
+            Defaults.Import(other.Defaults);
 
             var keys = _profiles.GetKeys().Union(other._profiles.GetKeys())
                 .Where(x => x != TagConstants.Default)

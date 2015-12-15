@@ -89,12 +89,12 @@ namespace HtmlTags.Conventions
 
         public void Attr(string attName, object value)
         {
-            ModifyWith(req => req.CurrentTag.Attr(attName, value), "Set @{0} = '{1}'".ToFormat(attName, value));
+            ModifyWith(req => req.CurrentTag.Attr(attName, value), string.Format("Set @{0} = '{1}'", new[] {attName, value}));
         }
 
         public void AddClass(string className)
         {
-            ModifyWith(req => req.CurrentTag.AddClass(className), "Add class '{0}'".ToFormat(className));
+            ModifyWith(req => req.CurrentTag.AddClass(className), string.Format("Add class '{0}'", new[] {className}));
         }
     }
 }

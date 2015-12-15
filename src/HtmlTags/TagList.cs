@@ -26,14 +26,8 @@ namespace HtmlTags
             return _tags.Select(x => x.ToString()).Join("\n");
         }
 
-        public IEnumerable<HtmlTag> AllTags()
-        {
-            return _tags;
-        }
+        public IEnumerable<HtmlTag> AllTags() => _tags;
 
-        public override string ToString()
-        {
-            return ToHtmlString();
-        }
+        public override string ToString() => ToHtmlString();
     }
 }

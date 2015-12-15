@@ -11,32 +11,21 @@ namespace HtmlTags.Conventions
 
     public class TagPlan : ITagPlan
     {
-        private readonly ITagBuilder _builder;
-        private readonly IElementNamingConvention _elementNamingConvention;
         private readonly List<ITagModifier> _modifiers = new List<ITagModifier>();
 
         public TagPlan(ITagBuilder builder, IEnumerable<ITagModifier> modifiers, IElementNamingConvention elementNamingConvention)
         {
-            _builder = builder;
-            _elementNamingConvention = elementNamingConvention;
+            Builder = builder;
+            ElementNamingConvention = elementNamingConvention;
 
             _modifiers.AddRange(modifiers); // Important to force the enumerable to be executed no later than this point
         }
 
-        public ITagBuilder Builder
-        {
-            get { return _builder; }
-        }
+        public ITagBuilder Builder { get; }
 
-        public IEnumerable<ITagModifier> Modifiers
-        {
-            get { return _modifiers; }
-        }
+        public IEnumerable<ITagModifier> Modifiers => _modifiers;
 
-        public IElementNamingConvention ElementNamingConvention
-        {
-            get { return _elementNamingConvention; }
-        }
+        public IElementNamingConvention ElementNamingConvention { get; }
 
         public HtmlTag Build(ElementRequest request)
         {
@@ -44,7 +33,7 @@ namespace HtmlTags.Conventions
                 ? ElementNamingConvention.GetName(request.HolderType(), request.Accessor)
                 : request.ElementId;
 
-            var tag = _builder.Build(request);
+            var tag = Builder.Build(request);
             request.ReplaceTag(tag);
 
             _modifiers.Each(m => m.Modify(request));

@@ -9,11 +9,8 @@ namespace HtmlTags.Reflection.Expressions
         {
         }
 
-        public override string OperationName { get { return "LessThan"; } }
+        public override string OperationName => "LessThan";
 
-        public override string Text
-        {
-            get { return "less than"; }
-        }
+        public override string Text => "less than";
     }
 }

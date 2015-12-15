@@ -15,11 +15,8 @@
             Profile = profile ?? TagConstants.Default;
         }
 
-        public string Category { get; private set; }
-        public string Profile { get; private set; }
-        public IElementBuilder Builder()
-        {
-            return new T();
-        }
+        public string Category { get; }
+        public string Profile { get; }
+        public IElementBuilder Builder() => new T();
     }
 }

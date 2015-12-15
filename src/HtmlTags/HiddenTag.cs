@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace HtmlTags
+﻿namespace HtmlTags
 {
     public class HiddenTag : HtmlTag
     {

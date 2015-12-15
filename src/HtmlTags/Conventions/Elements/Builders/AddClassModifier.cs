@@ -9,14 +9,8 @@ namespace HtmlTags.Conventions.Elements.Builders
             _className = className;
         }
 
-        public bool Matches(ElementRequest token)
-        {
-            return true;
-        }
+        public bool Matches(ElementRequest token) => true;
 
-        public void Modify(ElementRequest request)
-        {
-            request.CurrentTag.AddClass(_className);
-        }
+        public void Modify(ElementRequest request) => request.CurrentTag.AddClass(_className);
     }
 }

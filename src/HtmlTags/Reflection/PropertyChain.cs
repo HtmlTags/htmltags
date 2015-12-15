@@ -23,33 +23,25 @@ namespace HtmlTags.Reflection
             _valueGetters = valueGetters;
         }
 
-        public IValueGetter[] ValueGetters
-        {
-            get { return _valueGetters; }
-        }
+        public IValueGetter[] ValueGetters => _valueGetters;
 
 
         public void SetValue(object target, object propertyValue)
         {
-            target = findInnerMostTarget(target);
+            target = FindInnerMostTarget(target);
             if (target == null)
             {
                 return;
             }
 
-            setValueOnInnerObject(target, propertyValue);
+            SetValueOnInnerObject(target, propertyValue);
         }
 
         public object GetValue(object target)
         {
-            target = findInnerMostTarget(target);
+            target = FindInnerMostTarget(target);
 
-            if (target == null)
-            {
-                return null;
-            }
-
-            return _valueGetters.Last().GetValue(target);
+            return target == null ? null : _valueGetters.Last().GetValue(target);
         }
 
         public Type OwnerType
@@ -68,8 +60,8 @@ namespace HtmlTags.Reflection
                 }
 
                 var propertyGetter = _chain.Last() as PropertyValueGetter;
-                if (propertyGetter != null) return propertyGetter.PropertyInfo.PropertyType;
-                return InnerProperty != null ? InnerProperty.DeclaringType : null;
+
+                return propertyGetter?.PropertyInfo.PropertyType ?? InnerProperty?.DeclaringType;
             }
         }
 
@@ -79,29 +71,16 @@ namespace HtmlTags.Reflection
                 var last = _valueGetters.Last();
                 if (last is PropertyValueGetter) return last.Name;
 
-                var previous = _valueGetters[_valueGetters.Count() - 2];
+                var previous = _valueGetters[_valueGetters.Length - 2];
                 return previous.Name + last.Name;
             }
         }
 
-        public Type PropertyType
-        {
-            get { return _valueGetters.Last().ValueType; }
-        }
+        public Type PropertyType => _valueGetters.Last().ValueType;
 
-        public PropertyInfo InnerProperty
-        {
-            get
-            {
-                var last = _valueGetters.Last() as PropertyValueGetter;
-                return last == null ? null : last.PropertyInfo;
-            }
-        }
+        public PropertyInfo InnerProperty => (_valueGetters.Last() as PropertyValueGetter)?.PropertyInfo;
 
-        public Type DeclaringType
-        {
-            get { return _chain[0].DeclaringType; }
-        }
+        public Type DeclaringType => _chain[0].DeclaringType;
 
         public Accessor GetChildAccessor<T>(Expression<Func<T, object>> expression)
         {
@@ -110,10 +89,7 @@ namespace HtmlTags.Reflection
             return new PropertyChain(allGetters);
         }
 
-        public string[] PropertyNames
-        {
-            get { return _valueGetters.Select(x => x.Name).ToArray(); }
-        }
+        public string[] PropertyNames => _valueGetters.Select(x => x.Name).ToArray();
 
 
         public Expression<Func<T, object>> ToExpression<T>()
@@ -138,28 +114,20 @@ namespace HtmlTags.Reflection
             return new PropertyChain(list.ToArray());
         }
 
-        public IEnumerable<IValueGetter> Getters()
-        {
-            return _valueGetters;
-        }
+        public IEnumerable<IValueGetter> Getters() => _valueGetters;
 
 
         /// <summary>
         ///     Concatenated names of all the properties in the chain.
         ///     Case.Site.Name == "CaseSiteName"
         /// </summary>
-        public string Name
-        {
-            get { return _valueGetters.Select(x => x.Name).Join(""); }
-        }
+        public string Name => _valueGetters.Select(x => x.Name).Join("");
 
-        protected virtual void setValueOnInnerObject(object target, object propertyValue)
-        {
-            _valueGetters.Last().SetValue(target, propertyValue);
-        }
+        protected virtual void SetValueOnInnerObject(object target, object propertyValue) 
+            => _valueGetters.Last().SetValue(target, propertyValue);
 
 
-        protected object findInnerMostTarget(object target)
+        protected object FindInnerMostTarget(object target)
         {
             foreach (IValueGetter info in _chain)
             {
@@ -174,10 +142,7 @@ namespace HtmlTags.Reflection
         }
 
 
-        public override string ToString()
-        {
-            return _chain.First().DeclaringType.FullName + _chain.Select(x => x.Name).Join(".");
-        }
+        public override string ToString() => _chain.First().DeclaringType.FullName + _chain.Select(x => x.Name).Join(".");
 
         public bool Equals(PropertyChain other)
         {
@@ -195,9 +160,6 @@ namespace HtmlTags.Reflection
             return Equals((PropertyChain) obj);
         }
 
-        public override int GetHashCode()
-        {
-            return (_chain != null ? _chain.GetHashCode() : 0);
-        }
+        public override int GetHashCode() => _chain?.GetHashCode() ?? 0;
     }
 }

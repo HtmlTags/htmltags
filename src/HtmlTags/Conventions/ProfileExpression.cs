@@ -13,29 +13,14 @@ namespace HtmlTags.Conventions
             _profileName = profileName;
         }
 
-        private BuilderSet buildersFor(string category)
-        {
-            return Library.TagLibrary.Category(category).Profile(_profileName);
-        }
+        private BuilderSet BuildersFor(string category) => Library.TagLibrary.Category(category).Profile(_profileName);
 
-        public ElementCategoryExpression Labels
-        {
-            get { return new ElementCategoryExpression(buildersFor(ElementConstants.Label)); }
-        }
+        public ElementCategoryExpression Labels => new ElementCategoryExpression(BuildersFor(ElementConstants.Label));
 
-        public ElementCategoryExpression Displays
-        {
-            get { return new ElementCategoryExpression(buildersFor(ElementConstants.Display)); }
-        }
+        public ElementCategoryExpression Displays => new ElementCategoryExpression(BuildersFor(ElementConstants.Display));
 
-        public ElementCategoryExpression Editors
-        {
-            get { return new ElementCategoryExpression(buildersFor(ElementConstants.Editor)); }
-        }
+        public ElementCategoryExpression Editors => new ElementCategoryExpression(BuildersFor(ElementConstants.Editor));
 
-        public void Apply(HtmlConventionLibrary library)
-        {
-            library.Import(Library);
-        }
+        public void Apply(HtmlConventionLibrary library) => library.Import(Library);
     }
 }

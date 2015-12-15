@@ -16,7 +16,7 @@ namespace HtmlTags.Conventions
             _defaultBuilder = _services[TagConstants.Default];
         }
 
-        public TagLibrary TagLibrary { get; private set; }
+        public TagLibrary TagLibrary { get; }
 
         public T Get<T>(string profile = null)
         {
@@ -32,10 +32,8 @@ namespace HtmlTags.Conventions
             throw new ArgumentOutOfRangeException("T", "No service implementation is registered for type " + typeof(T).FullName);
         }
 
-        public void RegisterService<T, TImplementation>(string profile = null) where TImplementation : T, new()
-        {
-            RegisterService<T>(() => new TImplementation(), profile);
-        }
+        public void RegisterService<T, TImplementation>(string profile = null) where TImplementation : T, new() 
+            => RegisterService<T>(() => new TImplementation(), profile);
 
         public void RegisterService<T>(Func<T> builder, string profile = null)
         {
@@ -49,9 +47,6 @@ namespace HtmlTags.Conventions
             library._services.Each((key, builder) => builder.FillInto(_services[key]));
         }
 
-        public IElementGenerator<T> GeneratorFor<T>() where T : class
-        {
-            return ElementGenerator<T>.For(this);
-        }
+        public IElementGenerator<T> GeneratorFor<T>() where T : class => ElementGenerator<T>.For(this);
     }
 }
