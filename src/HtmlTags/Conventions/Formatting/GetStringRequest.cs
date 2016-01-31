@@ -6,44 +6,20 @@ namespace HtmlTags.Conventions.Formatting
 
     public class GetStringRequest
     {
-        private Func<Type, object> _locator;
         private Type _propertyType;
 
-        private GetStringRequest()
-        {
-        }
-
         public GetStringRequest(PropertyInfo property, object rawValue)
-            : this(new SingleProperty(property), rawValue, null)
+            : this(new SingleProperty(property), rawValue, null, null, null)
         {
         }
 
 
-        public GetStringRequest(Accessor accessor, object rawValue, Func<Type, object> locator)
+        public GetStringRequest(Accessor accessor, object rawValue, Func<Type, object> locator, string format, Type ownerType)
         {
-            _locator = locator;
+            Locator = locator;
             if (accessor != null) Property = accessor.InnerProperty;
             RawValue = rawValue;
 
-            setPropertyType();
-
-            setOwnerType(accessor);
-        }
-
-        private void setOwnerType(Accessor accessor)
-        {
-            if (accessor != null)
-            {
-                OwnerType = accessor.OwnerType;
-            }
-            else if (Property != null)
-            {
-                OwnerType = Property.DeclaringType;
-            }
-        }
-
-        private void setPropertyType()
-        {
             if (Property != null)
             {
                 PropertyType = Property.PropertyType;
@@ -52,17 +28,39 @@ namespace HtmlTags.Conventions.Formatting
             {
                 PropertyType = RawValue.GetType();
             }
+
+            if (ownerType == null)
+            {
+                if (accessor != null)
+                {
+                    OwnerType = accessor.OwnerType;
+                }
+                else if (Property != null)
+                {
+                    OwnerType = Property.DeclaringType;
+                }
+            }
+            else
+            {
+                OwnerType = ownerType;
+            }
+            Format = format;
+        }
+
+        public GetStringRequest(Type ownerType, PropertyInfo property, object rawValue, string format, Type propertyType)
+        {
+            OwnerType = ownerType;
+            Property = property;
+            RawValue = rawValue;
+            Format = format;
+            PropertyType = propertyType;
         }
 
         // Yes, I made this internal.  Don't necessarily want it in the public interface,
         // but needs to be "settable"
-        internal Func<Type, object> Locator
-        {
-            get { return _locator; }
-            set { _locator = value; }
-        }
+        internal Func<Type, object> Locator { get; set; }
 
-        public Type OwnerType { get; set; }
+        public Type OwnerType { get; }
 
         public Type PropertyType
         {
@@ -78,43 +76,29 @@ namespace HtmlTags.Conventions.Formatting
             set { _propertyType = value; }
         }
 
-        public PropertyInfo Property { get; private set; }
-        public object RawValue { get; private set; }
-        public string Format { get; set; }
+        public PropertyInfo Property { get; }
+        public object RawValue { get; }
+        public string Format { get; }
 
-        public string WithFormat(string format)
-        {
-            return string.Format(format, RawValue);
-        }
+        public string WithFormat(string format) => string.Format(format, RawValue);
 
         public GetStringRequest GetRequestForNullableType()
         {
-            return new GetStringRequest
+            return new GetStringRequest(OwnerType, Property, RawValue, Format, PropertyType.GetInnerTypeFromNullable())
             {
-                _locator = _locator,
-                Property = Property,
-                PropertyType = PropertyType.GetInnerTypeFromNullable(),
-                RawValue = RawValue,
-                OwnerType = OwnerType
+                Locator = Locator
             };
         }
 
         public GetStringRequest GetRequestForElementType()
         {
-            return new GetStringRequest
+            return new GetStringRequest(OwnerType, Property, RawValue, Format, PropertyType.GetElementType())
             {
-                _locator = _locator,
-                Property = Property,
-                PropertyType = PropertyType.GetElementType(),
-                RawValue = RawValue,
-                OwnerType = OwnerType
+                Locator = Locator,
             };
         }
 
-        public T Get<T>()
-        {
-            return (T)_locator(typeof(T));
-        }
+        public T Get<T>() => (T)Locator(typeof(T));
 
         public bool Equals(GetStringRequest other)
         {
@@ -136,10 +120,10 @@ namespace HtmlTags.Conventions.Formatting
         {
             unchecked
             {
-                int result = (OwnerType != null ? OwnerType.GetHashCode() : 0);
-                result = (result*397) ^ (Property != null ? Property.GetHashCode() : 0);
-                result = (result*397) ^ (RawValue != null ? RawValue.GetHashCode() : 0);
-                result = (result*397) ^ (Format != null ? Format.GetHashCode() : 0);
+                int result = OwnerType?.GetHashCode() ?? 0;
+                result = (result*397) ^ (Property?.GetHashCode() ?? 0);
+                result = (result*397) ^ (RawValue?.GetHashCode() ?? 0);
+                result = (result*397) ^ (Format?.GetHashCode() ?? 0);
                 return result;
             }
         }

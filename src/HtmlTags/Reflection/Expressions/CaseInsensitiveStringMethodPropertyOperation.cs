@@ -17,10 +17,7 @@ namespace HtmlTags.Reflection.Expressions
             _negate = negate;
         }
 
-        public virtual string OperationName
-        {
-            get { return _method.Name; }
-        }
+        public virtual string OperationName => _method.Name;
         public abstract string Text { get; }
 
         public Func<object, Expression<Func<T, bool>>> GetPredicateBuilder<T>(MemberExpression propertyPath)
@@ -29,7 +26,7 @@ namespace HtmlTags.Reflection.Expressions
             {
                 ConstantExpression valueToCheckConstant = Expression.Constant(valueToCheck);
                 BinaryExpression binaryExpression = Expression.Coalesce(propertyPath, Expression.Constant(string.Empty));
-                ConstantExpression invariantCulture = Expression.Constant(StringComparison.InvariantCultureIgnoreCase);
+                ConstantExpression invariantCulture = Expression.Constant(StringComparison.OrdinalIgnoreCase);
                 Expression expression = Expression.Call(binaryExpression, _method, valueToCheckConstant, invariantCulture);
                 if (_negate)
                 {

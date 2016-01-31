@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 
 namespace HtmlTags
 {
     public class TagList : ITagSource
-#if !LEGACY
-                           , IHtmlString
-#endif
     {
         private readonly IEnumerable<HtmlTag> _tags;
 
@@ -30,14 +26,8 @@ namespace HtmlTags
             return _tags.Select(x => x.ToString()).Join("\n");
         }
 
-        public IEnumerable<HtmlTag> AllTags()
-        {
-            return _tags;
-        }
+        public IEnumerable<HtmlTag> AllTags() => _tags;
 
-        public override string ToString()
-        {
-            return ToHtmlString();
-        }
+        public override string ToString() => ToHtmlString();
     }
 }

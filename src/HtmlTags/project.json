@@ -1,0 +1,47 @@
+{
+  "version": "4.0.0-ci-*",
+  "authors": [ "Jeremy D. Miller", "Joshua Flanagan", "Josh Arnold" ],
+  "owners": [ "Jeremy D. Miller", "Jimmy Bogard" ],
+  "licenseUrl": "https://github.com/HtmlTags/htmltags/raw/master/license.txt",
+  "projectUrl": "https://github.com/HtmlTags/htmltags",
+  "iconUrl": "https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_256.png",
+  "description": "Easy generation of html with a jquery inspired object model",
+  "tags": [ "html", "ASP.NET MVC" ],
+  "copyright": "Copyright 2008-2015 Jeremy D. Miller, Josh Arnold, Joshua Flanagan, et al. All rights reserved.",
+  "dependencies": {
+    "Newtonsoft.Json": "7.0.1"
+  },
+  "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0",
+        "System.Web.Extensions": "4.0.0.0"
+      }
+    },
+    "dnx451": {
+      "dependencies": {
+        "System.Text.Encodings.Web": "4.0.0-*",
+        "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-*",
+        "Microsoft.AspNet.Mvc.Razor": "6.0.0-*"
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.0",
+        "System.Diagnostics.Process": "4.1.0-*",
+        "System.IO": "4.0.10",
+        "System.Reflection": "4.0.0",
+        "System.Runtime": "4.0.20",
+        "System.Runtime.Extensions": "4.0.10",
+        "System.Text.RegularExpressions": "4.0.10",
+        "System.Text.Encoding": "4.0.10",
+        "System.Text.Encodings.Web": "4.0.0-*",
+        "System.Runtime.Serialization.Primitives": "4.0.10",
+        "System.Security.Principal": "4.0.0",
+        "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-*",
+        "Microsoft.AspNet.Mvc.Razor": "6.0.0-*"
+
+      }
+    }
+  }
+}

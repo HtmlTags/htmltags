@@ -13,9 +13,6 @@ namespace HtmlTags.Reflection.Expressions
         {
         }
 
-        public override string Text
-        {
-            get { return "is"; }
-        }
+        public override string Text => "is";
     }
 }

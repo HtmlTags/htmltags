@@ -7,10 +7,7 @@
 
     internal static class TypeExtensions
     {
-        public static T As<T>(this object target)
-        {
-            return (T)target;
-        }
+        public static T As<T>(this object target) => (T)target;
 
         public static bool CanBeCastTo<T>(this Type type)
         {
@@ -30,27 +27,27 @@
 
         public static bool IsNullable(this Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
         public static bool Closes(this Type type, Type openType)
         {
             if (type == null) return false;
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == openType) return true;
+            if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == openType) return true;
 
             if (type.GetInterfaces().Any(@interface => @interface.Closes(openType)))
             {
                 return true;
             }
 
-            Type baseType = type.BaseType;
+            Type baseType = type.GetTypeInfo().BaseType;
             if (baseType == null) return false;
 
-            bool closes = baseType.IsGenericType && baseType.GetGenericTypeDefinition() == openType;
+            bool closes = baseType.GetTypeInfo().IsGenericType && baseType.GetGenericTypeDefinition() == openType;
             if (closes) return true;
 
-            return type.BaseType != null && type.BaseType.Closes(openType);
+            return type.GetTypeInfo().BaseType != null && type.GetTypeInfo().BaseType.Closes(openType);
         }
 
         public static Type IsAnEnumerationOf(this Type type)
@@ -65,37 +62,32 @@
                 return type.GetElementType();
             }
 
-            if (type.IsGenericType)
+            if (type.GetTypeInfo().IsGenericType)
             {
                 return type.GetGenericArguments()[0];
             }
 
 
-            throw new Exception("I don't know how to figure out what this is a collection of. Can you tell me? {0}".ToFormat(type));
+            throw new Exception(string.Format("I don't know how to figure out what this is a collection of. Can you tell me? {0}", new[] {type}));
         }
 
-        public static bool PropertyMatches(this PropertyInfo prop1, PropertyInfo prop2)
-        {
-            return prop1.DeclaringType == prop2.DeclaringType && prop1.Name == prop2.Name;
-        }
+        public static bool PropertyMatches(this PropertyInfo prop1, PropertyInfo prop2) 
+            => prop1.DeclaringType == prop2.DeclaringType && prop1.Name == prop2.Name;
 
-        public static Type GetInnerTypeFromNullable(this Type nullableType)
-        {
-            return nullableType.GetGenericArguments()[0];
-        }
+        public static Type GetInnerTypeFromNullable(this Type nullableType) => nullableType.GetGenericArguments()[0];
 
         public static bool IsNullableOfT(this Type theType)
         {
             if (theType == null) return false;
 
-            return theType.IsGenericType && theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
+            return theType.GetTypeInfo().IsGenericType && theType.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
         
         public static bool IsTypeOrNullableOf<T>(this Type theType)
         {
             Type otherType = typeof(T);
             return theType == otherType ||
-                   (theType.IsNullableOfT() && theType.GetGenericArguments()[0].Equals(otherType));
+                   (theType.IsNullableOfT() && theType.GetGenericArguments()[0] == otherType);
         }
     }
 }

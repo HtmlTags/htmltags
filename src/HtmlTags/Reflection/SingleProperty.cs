@@ -7,48 +7,44 @@ namespace HtmlTags.Reflection
 {
     public class SingleProperty : Accessor
     {
-        private readonly PropertyInfo _property;
         private readonly Type _ownerType;
 
         public SingleProperty(PropertyInfo property)
         {
-            _property = property;
+            InnerProperty = property;
         }
 
         public SingleProperty(PropertyInfo property, Type ownerType)
         {
-            _property = property;
+            InnerProperty = property;
             _ownerType = ownerType;
         }
 
 
-        public string FieldName { get { return _property.Name; } }
+        public string FieldName => InnerProperty.Name;
 
-        public Type PropertyType { get { return _property.PropertyType; } }
+        public Type PropertyType => InnerProperty.PropertyType;
 
-        public Type DeclaringType { get { return _property.DeclaringType; } }
+        public Type DeclaringType => InnerProperty.DeclaringType;
 
 
-        public PropertyInfo InnerProperty { get { return _property; } }
+        public PropertyInfo InnerProperty { get; }
 
         public Accessor GetChildAccessor<T>(Expression<Func<T, object>> expression)
         {
             PropertyInfo property = ReflectionHelper.GetProperty(expression);
-            return new PropertyChain(new[] {new PropertyValueGetter(_property), new PropertyValueGetter(property)});
+            return new PropertyChain(new[] {new PropertyValueGetter(InnerProperty), new PropertyValueGetter(property)});
         }
 
-        public string[] PropertyNames
-        {
-            get { return new[] { _property.Name }; }
-        }
+        public string[] PropertyNames => new[] { InnerProperty.Name };
 
         public Expression<Func<T, object>> ToExpression<T>()
         {
             var parameter = Expression.Parameter(typeof(T), "x");
-            Expression body = Expression.Property(parameter, _property);
-            if (_property.PropertyType.IsValueType)
+            Expression body = Expression.Property(parameter, InnerProperty);
+            if (InnerProperty.PropertyType.GetTypeInfo().IsValueType)
             {
-                body = Expression.Convert(body, typeof (Object));
+                body = Expression.Convert(body, typeof (object));
             }
 
 
@@ -60,30 +56,27 @@ namespace HtmlTags.Reflection
         {
             return
                 new PropertyChain(new IValueGetter[]
-                                  {new PropertyValueGetter(property), new PropertyValueGetter(_property)});
+                                  {new PropertyValueGetter(property), new PropertyValueGetter(InnerProperty)});
         }
 
         public IEnumerable<IValueGetter> Getters()
         {
-            yield return new PropertyValueGetter(_property);
+            yield return new PropertyValueGetter(InnerProperty);
         }
 
-        public string Name { get { return _property.Name; } }
+        public string Name => InnerProperty.Name;
 
         public virtual void SetValue(object target, object propertyValue)
         {
-            if (_property.CanWrite)
+            if (InnerProperty.CanWrite)
             {
-                _property.SetValue(target, propertyValue, null);
+                InnerProperty.SetValue(target, propertyValue, null);
             }
         }
 
-        public object GetValue(object target)
-        {
-            return _property.GetValue(target, null);
-        }
+        public object GetValue(object target) => InnerProperty.GetValue(target, null);
 
-        public Type OwnerType { get { return _ownerType ?? DeclaringType; } }
+        public Type OwnerType => _ownerType ?? DeclaringType;
 
 
         public static SingleProperty Build<T>(Expression<Func<T, object>> expression)
@@ -102,7 +95,7 @@ namespace HtmlTags.Reflection
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return _property.PropertyMatches(other._property);
+            return InnerProperty.PropertyMatches(other.InnerProperty);
         }
 
         public override bool Equals(object obj)
@@ -113,9 +106,6 @@ namespace HtmlTags.Reflection
             return Equals((SingleProperty) obj);
         }
 
-        public override int GetHashCode()
-        {
-            return (_property != null ? (_property.DeclaringType.FullName + "." + _property.Name).GetHashCode() : 0);
-        }
+        public override int GetHashCode() => (InnerProperty != null ? (InnerProperty.DeclaringType?.FullName + "." + InnerProperty.Name).GetHashCode() : 0);
     }
 }

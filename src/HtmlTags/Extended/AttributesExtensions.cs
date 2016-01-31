@@ -10,10 +10,7 @@ namespace HtmlTags.Extended
                 return tag;
             }
 
-            public static HtmlTag Value(this HtmlTag tag, object value)
-            {
-                return tag.Attr("value", value);
-            }
+            public static HtmlTag Value(this HtmlTag tag, object value) => tag.Attr("value", value);
 
             public static T Name<T>(this T tag, string name) where T : HtmlTag
             {

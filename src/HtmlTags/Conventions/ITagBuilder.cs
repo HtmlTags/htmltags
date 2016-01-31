@@ -26,15 +26,9 @@ namespace HtmlTags.Conventions
         }
 
 
-        public bool Matches(ElementRequest subject)
-        {
-            return _filter(subject);
-        }
+        public bool Matches(ElementRequest subject) => _filter(subject);
 
-        public ITagBuilder BuilderFor(ElementRequest subject)
-        {
-            return _builder;
-        }
+        public ITagBuilder BuilderFor(ElementRequest subject) => _builder;
     }
 
     public interface ITagBuilder
@@ -46,10 +40,7 @@ namespace HtmlTags.Conventions
     {
         public abstract bool Matches(ElementRequest subject);
 
-        public ITagBuilder BuilderFor(ElementRequest subject)
-        {
-            return this;
-        }
+        public ITagBuilder BuilderFor(ElementRequest subject) => this;
 
         public abstract HtmlTag Build(ElementRequest request);
     }

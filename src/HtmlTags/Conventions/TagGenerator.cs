@@ -1,11 +1,8 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace HtmlTags.Conventions
 {
-    using System;
-    using Elements;
-
     public class ActiveProfile
     {
         private readonly Stack<string> _profiles = new Stack<string>();
@@ -14,21 +11,12 @@ namespace HtmlTags.Conventions
         {
             _profiles.Push(TagConstants.Default);
         }
-        
-        public string Name
-        {
-            get { return _profiles.Peek(); }
-        }
 
-        public void Push(string profile)
-        {
-            _profiles.Push(profile);
-        }
+        public string Name => _profiles.Peek();
 
-        public void Pop()
-        {
-            _profiles.Pop();
-        }
+        public void Push(string profile) => _profiles.Push(profile);
+
+        public void Pop() => _profiles.Pop();
     }
 
     public class TagGenerator : ITagGenerator
@@ -59,9 +47,6 @@ namespace HtmlTags.Conventions
             return plan.Build(request);
         }
 
-        public string ActiveProfile
-        {
-            get { return _profile.Name; }
-        }
+        public string ActiveProfile => _profile.Name;
     }
 }

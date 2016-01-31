@@ -6,16 +6,18 @@ namespace HtmlTags.Conventions.Elements
 
     public class AccessorDef
     {
-        public Accessor Accessor { get; set; }
-        public Type ModelType { get; set; }
+        public AccessorDef(Accessor accessor, Type modelType)
+        {
+            Accessor = accessor;
+            ModelType = modelType;
+        }
+
+        public Accessor Accessor { get; }
+        public Type ModelType { get; }
 
         public static AccessorDef For<T>(Expression<Func<T, object>> expression)
         {
-            return new AccessorDef
-                   {
-                       Accessor = expression.ToAccessor(),
-                       ModelType = typeof(T)
-                   };
+            return new AccessorDef(expression.ToAccessor(), typeof(T));
         }
 
         public bool Equals(AccessorDef other)
@@ -37,14 +39,11 @@ namespace HtmlTags.Conventions.Elements
         {
             unchecked
             {
-                return ((Accessor != null ? Accessor.GetHashCode() : 0) * 397) ^
-                       (ModelType != null ? ModelType.GetHashCode() : 0);
+                return ((Accessor?.GetHashCode() ?? 0) * 397) ^
+                       (ModelType?.GetHashCode() ?? 0);
             }
         }
 
-        public bool Is<T>()
-        {
-            return Accessor.PropertyType.Equals(typeof(T));
-        }
+        public bool Is<T>() => Accessor.PropertyType == typeof(T);
     }
 }

@@ -14,14 +14,8 @@ namespace HtmlTags.Conventions
             _matcher = matcher;
         }
 
-        public void Modify(Action<ElementRequest> modify)
-        {
-            _parent.Add(new LambdaTagModifier(_matcher, modify));
-        }
+        public void Modify(Action<ElementRequest> modify) => _parent.Add(new LambdaTagModifier(_matcher, modify));
 
-        public void Build(Func<ElementRequest, HtmlTag> build)
-        {
-            _parent.Add(new ConditionalTagBuilderPolicy(_matcher, build));
-        }
+        public void Build(Func<ElementRequest, HtmlTag> build) => _parent.Add(new ConditionalTagBuilderPolicy(_matcher, build));
     }
 }

@@ -9,61 +9,50 @@ namespace HtmlTags
     public class HtmlDocument
     {
         private readonly List<Func<string, string>> _alterations = new List<Func<string, string>>();
-        private readonly HtmlTag _body;
 
         private readonly Stack<HtmlTag> _currentStack = new Stack<HtmlTag>();
-        private readonly HtmlTag _head;
         private readonly HtmlTag _title;
 
         public HtmlDocument()
         {
             RootTag = new HtmlTag("html");
             DocType = "<!DOCTYPE html>";
-            _head = RootTag.Add("head");
-            _title = _head.Add("title");
-            _body = RootTag.Add("body");
-            Last = _body;
+            Head = RootTag.Add("head");
+            _title = Head.Add("title");
+            Body = RootTag.Add("body");
+            Last = Body;
         }
 
         public string DocType { get; set; }
-        public HtmlTag RootTag { get; private set; }
-        public HtmlTag Head { get { return _head; } }
-        public HtmlTag Body { get { return _body; } }
+        public HtmlTag RootTag { get; }
+        public HtmlTag Head { get; }
+        public HtmlTag Body { get; }
         public string Title { get { return _title.Text(); } set { _title.Text(value); } }
 
-        public HtmlTag Current { get { return _currentStack.Any() ? _currentStack.Peek() : _body; } }
+        public HtmlTag Current => _currentStack.Any() ? _currentStack.Peek() : Body;
         public HtmlTag Last { get; private set; }
-        public Action<string, string> FileWriter = writeToFile;
-        public Action<string> FileOpener = openFile;
+        public Action<string, string> FileWriter = WriteToFile;
+        public Action<string> FileOpener = OpenFile;
 
-        public void WriteToFile(string fileName)
-        {
-            FileWriter(fileName, ToString());
-        }
+        public void WriteToFile(string fileName) => FileWriter(fileName, ToString());
 
         public void OpenInBrowser()
         {
-            var filename = getPath();
+            var filename = GetPath();
             WriteToFile(filename);
             FileOpener(filename);
         }
 
-        protected virtual string getPath()
+        protected virtual string GetPath() => Path.GetTempFileName() + ".htm";
+
+        private static void WriteToFile(string fileName, string fileContents)
         {
-            return Path.GetTempFileName() + ".htm";
+            EnsureFolderExists(fileName);
+
+            File.WriteAllText(fileName, fileContents);
         }
 
-        private static void writeToFile(string fileName, string fileContents)
-        {
-            ensureFolderExists(fileName);
-
-            using (var writer = new StreamWriter(fileName))
-            {
-                writer.WriteLine(fileContents);
-            }
-        }
-
-        private static void ensureFolderExists(string fileName)
+        private static void EnsureFolderExists(string fileName)
         {
             var folder = Path.GetDirectoryName(fileName);
 
@@ -78,7 +67,7 @@ namespace HtmlTags
             }
         }
 
-        private static void openFile(string fileName)
+        private static void OpenFile(string fileName)
         {
             Process.Start(fileName);
         }
@@ -95,10 +84,7 @@ namespace HtmlTags
             Current.Append(tag);
         }
 
-        public void Add(ITagSource source)
-        {
-            source.AllTags().Each(Add);
-        }
+        public void Add(ITagSource source) => source.AllTags().Each(Add);
 
         public HtmlTag Push(string tagName)
         {
@@ -114,10 +100,7 @@ namespace HtmlTags
             _currentStack.Push(tag);
         }
 
-        public void PushWithoutAttaching(HtmlTag tag)
-        {
-            _currentStack.Push(tag);
-        }
+        public void PushWithoutAttaching(HtmlTag tag) => _currentStack.Push(tag);
 
         public void Pop()
         {
@@ -127,63 +110,43 @@ namespace HtmlTags
             }
         }
 
-        private string substitute(string value)
-        {
-            foreach (var alteration in _alterations)
-            {
-                value = alteration(value);
-            }
-
-            return value;
-        }
+        private string Substitute(string value) => _alterations.Aggregate(value, (current, alteration) => alteration(current));
 
         public override string ToString()
         {
             var value = DocType + Environment.NewLine + RootTag;
-            return substitute(value);
+            return Substitute(value);
         }
 
         public HtmlTag AddStyle(string styling)
         {
             var key = Guid.NewGuid().ToString();
             _alterations.Add(html => html.Replace(key, styling));
-            return _head.Add("style").Text(key);
+            return Head.Add("style").Text(key);
         }
 
-        public HtmlTag AddJavaScript(string javascript)
-        {
-            return AddScript("text/javascript", javascript);
-        }
+        public HtmlTag AddJavaScript(string javascript) => AddScript("text/javascript", javascript);
 
         public HtmlTag AddScript(string scriptType, string scriptContents)
         {
             var key = Guid.NewGuid().ToString();
             _alterations.Add(html => html.Replace(key, Environment.NewLine + scriptContents + Environment.NewLine));
-            return _head.Add("script").Attr("type", scriptType).Text(key);
+            return Head.Add("script").Attr("type", scriptType).Text(key);
         }
 
-        public HtmlTag ReferenceJavaScriptFile(string path)
-        {
-            return ReferenceScriptFile("text/javascript", path);
-        }
+        public HtmlTag ReferenceJavaScriptFile(string path) => ReferenceScriptFile("text/javascript", path);
 
-        public HtmlTag ReferenceScriptFile(string scriptType, string path)
-        {
-            return _head.Add("script").Attr("type", scriptType).Attr("src", path);
-        }
+        public HtmlTag ReferenceScriptFile(string scriptType, string path) => Head.Add("script").Attr("type", scriptType).Attr("src", path);
 
         public HtmlTag ReferenceStyle(string path)
         {
-            return _head.Add("link")
+            return Head.Add("link")
                 .Attr("media", "screen")
                 .Attr("href", path)
                 .Attr("type", "text/css")
                 .Attr("rel", "stylesheet");
         }
 
-        public void Rewind()
-        {
-            _currentStack.Clear();
-        }
+        public void Rewind() => _currentStack.Clear();
     }
 }

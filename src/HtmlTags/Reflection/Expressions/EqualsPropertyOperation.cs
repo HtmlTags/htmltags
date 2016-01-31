@@ -9,10 +9,8 @@ namespace HtmlTags.Reflection.Expressions
         {
         }
 
-        public override string OperationName { get { return "Is"; } }
-        public override string Text
-        {
-            get { return "is"; }
-        }
+        public override string OperationName => "Is";
+
+        public override string Text => "is";
     }
 }

@@ -10,7 +10,7 @@ namespace HtmlTags.Reflection
     {
         public static bool MeetsSpecialGenericConstraints(Type genericArgType, Type proposedSpecificType)
         {
-            GenericParameterAttributes gpa = genericArgType.GenericParameterAttributes;
+            GenericParameterAttributes gpa = genericArgType.GetTypeInfo().GenericParameterAttributes;
             GenericParameterAttributes constraints = gpa & GenericParameterAttributes.SpecialConstraintMask;
 
             // No constraints, away we go!
@@ -19,14 +19,14 @@ namespace HtmlTags.Reflection
 
             // "class" constraint and this is a value type
             if ((constraints & GenericParameterAttributes.ReferenceTypeConstraint) != 0
-                && proposedSpecificType.IsValueType)
+                && proposedSpecificType.GetTypeInfo().IsValueType)
             {
                 return false;
             }
 
             // "struct" constraint and this is not a value type
             if ((constraints & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0
-                && ! proposedSpecificType.IsValueType)
+                && ! proposedSpecificType.GetTypeInfo().IsValueType)
             {
                 return false;
             }
@@ -43,13 +43,13 @@ namespace HtmlTags.Reflection
 
         public static PropertyInfo GetProperty<TModel>(Expression<Func<TModel, object>> expression)
         {
-            MemberExpression memberExpression = getMemberExpression(expression);
+            MemberExpression memberExpression = GetMemberExpression(expression);
             return (PropertyInfo) memberExpression.Member;
         }
 
         public static PropertyInfo GetProperty<TModel, T>(Expression<Func<TModel, T>> expression)
         {
-            MemberExpression memberExpression = getMemberExpression(expression);
+            MemberExpression memberExpression = GetMemberExpression(expression);
             return (PropertyInfo) memberExpression.Member;
         }
 
@@ -59,7 +59,7 @@ namespace HtmlTags.Reflection
             return (PropertyInfo)memberExpression.Member;
         }
 
-        private static MemberExpression getMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression)
+        private static MemberExpression GetMemberExpression<TModel, T>(Expression<Func<TModel, T>> expression)
         {
             MemberExpression memberExpression = null;
             if (expression.Body.NodeType == ExpressionType.Convert)
@@ -102,24 +102,18 @@ namespace HtmlTags.Reflection
             return memberExpression;
         }
 
-        public static bool IsMemberExpression<T>(Expression<Func<T, object>> expression)
-        {
-            return IsMemberExpression<T, object>(expression);
-        }
+        public static bool IsMemberExpression<T>(Expression<Func<T, object>> expression) => IsMemberExpression<T, object>(expression);
 
-        public static bool IsMemberExpression<T, U>(Expression<Func<T, U>> expression)
-        {
-            return GetMemberExpression(expression, false) != null;
-        }
+        public static bool IsMemberExpression<T, U>(Expression<Func<T, U>> expression) => GetMemberExpression(expression, false) != null;
 
         public static Accessor GetAccessor<TModel>(Expression<Func<TModel, object>> expression)
         {
             if (expression.Body is MethodCallExpression || expression.Body.NodeType == ExpressionType.ArrayIndex)
             {
-                return GetAccessor((Expression)expression.Body);
+                return GetAccessor(expression.Body);
             }
 
-            MemberExpression memberExpression = getMemberExpression(expression);
+            MemberExpression memberExpression = GetMemberExpression(expression);
 
             return GetAccessor(memberExpression);
         }
@@ -128,12 +122,11 @@ namespace HtmlTags.Reflection
         {
             var list = new List<IValueGetter>();
 
-            buildValueGetters(memberExpression, list);
+            BuildValueGetters(memberExpression, list);
 
             if (list.Count == 1 && list[0] is PropertyValueGetter)
             {
-                var propertyValueGetter = list[0] as PropertyValueGetter;
-                return propertyValueGetter != null ? new SingleProperty(propertyValueGetter.PropertyInfo) : null;
+                return new SingleProperty(((PropertyValueGetter) list[0]).PropertyInfo);
             }
 
             if (list.Count == 1 && list[0] is MethodValueGetter)
@@ -150,7 +143,7 @@ namespace HtmlTags.Reflection
             return new PropertyChain(list.ToArray());
         }
 
-        private static void buildValueGetters(Expression expression, IList<IValueGetter> list)
+        private static void BuildValueGetters(Expression expression, IList<IValueGetter> list)
         {
             var memberExpression = expression as MemberExpression;
             if (memberExpression != null)
@@ -159,7 +152,7 @@ namespace HtmlTags.Reflection
                 list.Add(new PropertyValueGetter(propertyInfo));
                 if (memberExpression.Expression != null)
                 {
-                    buildValueGetters(memberExpression.Expression, list);
+                    BuildValueGetters(memberExpression.Expression, list);
                 }
             }
 
@@ -189,7 +182,7 @@ namespace HtmlTags.Reflection
                 
                 if (methodCallExpression.Object != null)
                 {
-                    buildValueGetters(methodCallExpression.Object, list);
+                    BuildValueGetters(methodCallExpression.Object, list);
                 }
             }
 
@@ -207,7 +200,7 @@ namespace HtmlTags.Reflection
                     list.Add(indexValueGetter);
                 }
 
-                buildValueGetters(binaryExpression.Left, list);
+                BuildValueGetters(binaryExpression.Left, list);
             }
         }
 
@@ -228,14 +221,15 @@ namespace HtmlTags.Reflection
                     object target;
                     if (TryEvaluateExpression(me.Expression, out target))
                     { // instance target
-                        switch (me.Member.MemberType)
+                        if (me.Member is FieldInfo)
                         {
-                            case MemberTypes.Field:
-                                value = ((FieldInfo)me.Member).GetValue(target);
-                                return true;
-                            case MemberTypes.Property:
-                                value = ((PropertyInfo)me.Member).GetValue(target, null);
-                                return true;
+                            value = ((FieldInfo)me.Member).GetValue(target);
+                            return true;
+                        }
+                        if (me.Member is PropertyInfo)
+                        {
+                            value = ((PropertyInfo)me.Member).GetValue(target, null);
+                            return true;
                         }
                     }
                     break;
@@ -246,62 +240,38 @@ namespace HtmlTags.Reflection
 
         public static Accessor GetAccessor<TModel, T>(Expression<Func<TModel, T>> expression)
         {
-            MemberExpression memberExpression = getMemberExpression(expression);
+            MemberExpression memberExpression = GetMemberExpression(expression);
 
             return GetAccessor(memberExpression);
         }
 
-        public static MethodInfo GetMethod<T>(Expression<Func<T, object>> expression)
-        {
-            return new FindMethodVisitor(expression).Method;
-        }
+        public static MethodInfo GetMethod<T>(Expression<Func<T, object>> expression) => new FindMethodVisitor(expression).Method;
 
-        public static MethodInfo GetMethod(Expression<Func<object>> expression)
-        {
-            return GetMethod<Func<object>>(expression);
-        }
+        public static MethodInfo GetMethod(Expression<Func<object>> expression) => GetMethod<Func<object>>(expression);
 
-        public static MethodInfo GetMethod(Expression expression)
-        {
-            return new FindMethodVisitor(expression).Method;
-        }
+        public static MethodInfo GetMethod(Expression expression) => new FindMethodVisitor(expression).Method;
 
-        public static MethodInfo GetMethod<TDelegate>(Expression<TDelegate> expression)
-        {
-            return new FindMethodVisitor(expression).Method;
-        }
+        public static MethodInfo GetMethod<TDelegate>(Expression<TDelegate> expression) => new FindMethodVisitor(expression).Method;
 
-        public static MethodInfo GetMethod<T, U>(Expression<Func<T, U>> expression)
-        {
-            return new FindMethodVisitor(expression).Method;
-        }
+        public static MethodInfo GetMethod<T, U>(Expression<Func<T, U>> expression) => new FindMethodVisitor(expression).Method;
 
-        public static MethodInfo GetMethod<T, U, V>(Expression<Func<T, U, V>> expression)
-        {
-            return new FindMethodVisitor(expression).Method;
-        }
+        public static MethodInfo GetMethod<T, U, V>(Expression<Func<T, U, V>> expression) => new FindMethodVisitor(expression).Method;
 
-        public static MethodInfo GetMethod<T>(Expression<Action<T>> expression)
-        {
-            return new FindMethodVisitor(expression).Method;
-        }
-
+        public static MethodInfo GetMethod<T>(Expression<Action<T>> expression) => new FindMethodVisitor(expression).Method;
     }
 
     public class FindMethodVisitor : ExpressionVisitor
     {
-        private MethodInfo _method;
-
         public FindMethodVisitor(Expression expression)
         {
             Visit(expression);
         }
 
-        public MethodInfo Method { get { return _method; } }
+        public MethodInfo Method { get; private set; }
 
         protected override Expression VisitMethodCall(MethodCallExpression m)
         {
-            _method = m.Method;
+            Method = m.Method;
             return m;
         }
     }

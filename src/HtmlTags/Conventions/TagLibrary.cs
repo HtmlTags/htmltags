@@ -21,30 +21,18 @@ namespace HtmlTags.Conventions
             return _categories[category].PlanFor(subject, profile);
         }
 
-        public CategoryExpression Always
-        {
-            get { return _categories[TagConstants.Default].Always; }
-        }
+        public CategoryExpression Always => _categories[TagConstants.Default].Always;
 
-        public CategoryExpression If(Func<ElementRequest, bool> matches)
-        {
-            return _categories[TagConstants.Default].If(matches);
-        }
+        public CategoryExpression If(Func<ElementRequest, bool> matches) => _categories[TagConstants.Default].If(matches);
 
-        public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder)
-        {
-            Add(new ConditionalTagBuilderPolicy(filter, builder));
-        }
+        public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder) => Add(new ConditionalTagBuilderPolicy(filter, builder));
 
         /// <summary>
         /// The modifiers and builders for a category of conventions 
         /// </summary>
         /// <param name="category">Example:  "Label", "Editor", "Display"</param>
         /// <returns></returns>
-        public TagCategory Category(string category)
-        {
-            return _categories[category];
-        }
+        public TagCategory Category(string category) => _categories[category];
 
         public BuilderSet BuilderSetFor(string category = null, string profile = null)
         {
@@ -58,40 +46,25 @@ namespace HtmlTags.Conventions
         /// Adds a builder policy to the default category and profile
         /// </summary>
         /// <param name="policy"> </param>
-        public void Add(ITagBuilderPolicy policy)
-        {
-            Default.Add(policy);
-        }
+        public void Add(ITagBuilderPolicy policy) => Default.Add(policy);
 
         /// <summary>
         /// Adds a modifier to the default category and profile
         /// </summary>
         /// <param name="modifier"></param>
-        public void Add(ITagModifier modifier)
-        {
-            Default.Add(modifier);
-        }
+        public void Add(ITagModifier modifier) => Default.Add(modifier);
 
         /// <summary>
         /// Access to the default category
         /// </summary>
-        public TagCategory Default
-        {
-            get
-            {
-                return _categories[TagConstants.Default];
-            }
-        }
+        public TagCategory Default => _categories[TagConstants.Default];
 
         /// <summary>
         /// Add builders and modifiers by profile
         /// </summary>
         /// <param name="profile"></param>
         /// <returns></returns>
-        public ITagBuildingExpression ForProfile(string profile)
-        {
-            return _categories[TagConstants.Default].ForProfile(profile);
-        }
+        public ITagBuildingExpression ForProfile(string profile) => _categories[TagConstants.Default].ForProfile(profile);
 
         public void Import(TagLibrary other)
         {

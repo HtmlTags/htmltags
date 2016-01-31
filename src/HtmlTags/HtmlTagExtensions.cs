@@ -4,15 +4,9 @@ namespace HtmlTags
 {
     public static class HtmlTagExtensions
     {
-        public static TagList ToTagList(this IEnumerable<HtmlTag> tags)
-        {
-            return new TagList(tags);
-        }
+        public static TagList ToTagList(this IEnumerable<HtmlTag> tags) => new TagList(tags);
 
-        public static HtmlTag EmailMode(this HtmlTag tag)
-        {
-            return tag.Attr("type", "email");
-        }
+        public static HtmlTag EmailMode(this HtmlTag tag) => tag.Attr("type", "email");
 
         /// <summary>
         /// Sets the input as checked (checkbox, radio buttons)
@@ -26,20 +20,11 @@ namespace HtmlTags
             return tag;
         }
 
-        public static FormTag DoPOST(this FormTag tag)
-        {
-            return tag.Method("POST");
-        }
+        public static FormTag DoPOST(this FormTag tag) => tag.Method("POST");
 
-        public static FormTag DoGET(this FormTag tag)
-        {
-            return tag.Method("GET");
-        }
+        public static FormTag DoGET(this FormTag tag) => tag.Method("GET");
 
-        public static string IdFromName(string name)
-        {
-           return name?.Replace('.', '_');
-        }
+        public static string IdFromName(string name) => name?.Replace('.', '_');
 
         /// <summary>
         /// Sets the id of the tag using the asp.net mvc default convention
@@ -52,9 +37,6 @@ namespace HtmlTags
             return tag;
         }
 
-        public static LabelTag CreateLabel(this HtmlTag tag, string display)
-        {
-            return new LabelTag(tag.Id(), display);
-        }
+        public static LabelTag CreateLabel(this HtmlTag tag, string display) => new LabelTag(tag.Id(), display);
     }
 }
