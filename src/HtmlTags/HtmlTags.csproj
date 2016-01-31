@@ -119,9 +119,11 @@
     <Compile Include="HtmlTagExtensions.cs" />
     <Compile Include="ITagSource.cs" />
     <Compile Include="JsonUtil.cs" />
+    <Compile Include="LabelTag.cs" />
     <Compile Include="LinkTag.cs" />
     <Compile Include="LiteralTag.cs" />
     <Compile Include="NoTag.cs" />
+    <Compile Include="RadionButtonTag.cs" />
     <Compile Include="Reflection\Accessor.cs" />
     <Compile Include="Reflection\AccessorRules.cs" />
     <Compile Include="Reflection\ArrayIndexer.cs" />
@@ -158,6 +160,7 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="TableTag.cs" />
     <Compile Include="TagList.cs" />
+    <Compile Include="TextareaTag.cs" />
     <Compile Include="TextboxTag.cs" />
     <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
