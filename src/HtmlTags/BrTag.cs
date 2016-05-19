@@ -1,7 +1,7 @@
 namespace HtmlTags
 {
-#if DNXCORE50 || DNX451
-    using Microsoft.AspNet.Html;
+#if NETSTANDARD1_5
+    using Microsoft.AspNetCore.Html;
 #else
     using System.Web.UI;
 #endif
