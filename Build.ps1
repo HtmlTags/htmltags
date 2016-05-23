@@ -1,57 +1,45 @@
-function Restore-Packages
-{
-    param([string] $DirectoryName)
-    & dotnet restore ("""" + $DirectoryName + """")
+<#
+.SYNOPSIS
+    You can add this to you build script to ensure that psbuild is available before calling
+    Invoke-MSBuild. If psbuild is not available locally it will be downloaded automatically.
+#>
+function EnsurePsbuildInstalled{
+    [cmdletbinding()]
+    param(
+        [string]$psbuildInstallUri = 'https://raw.githubusercontent.com/ligershark/psbuild/master/src/GetPSBuild.ps1'
+    )
+    process{
+        if(-not (Get-Command "Invoke-MsBuild" -errorAction SilentlyContinue)){
+            'Installing psbuild from [{0}]' -f $psbuildInstallUri | Write-Verbose
+            (new-object Net.WebClient).DownloadString($psbuildInstallUri) | iex
+        }
+        else{
+            'psbuild already loaded, skipping download' | Write-Verbose
+        }
+
+        # make sure it's loaded and throw if not
+        if(-not (Get-Command "Invoke-MsBuild" -errorAction SilentlyContinue)){
+            throw ('Unable to install/load psbuild from [{0}]' -f $psbuildInstallUri)
+        }
+    }
 }
 
-function Build-Projects
-{
-    param([string] $DirectoryName)
-    & dotnet build ("""" + $DirectoryName + """") --configuration Release --output .\artifacts\testbin --framework netstandard1.5; if($LASTEXITCODE -ne 0) { exit 1 }
-    & dotnet pack ("""" + $DirectoryName + """") --configuration Release --output .\artifacts\packages; if($LASTEXITCODE -ne 0) { exit 1 }
-}
-
-function Build-TestProjects
-{
-    param([string] $DirectoryName) 
-    & dotnet build ("""" + $DirectoryName + """") --configuration Release --output .\artifacts\testbin --framework netstandard1.5; if($LASTEXITCODE -ne 0) { exit 1 }
-}
-
-function Test-Projects
-{
-    param([string] $DirectoryName)
-    & dotnet test ("""" + $DirectoryName + """"); if($LASTEXITCODE -ne 0) { exit 2 }
-}
-
-function Remove-PathVariable
-{
-    param([string] $VariableToRemove)
-    $path = [Environment]::GetEnvironmentVariable("PATH", "User")
-    $newItems = $path.Split(';') | Where-Object { $_.ToString() -inotlike $VariableToRemove }
-    [Environment]::SetEnvironmentVariable("PATH", [System.String]::Join(';', $newItems), "User")
-    $path = [Environment]::GetEnvironmentVariable("PATH", "Process")
-    $newItems = $path.Split(';') | Where-Object { $_.ToString() -inotlike $VariableToRemove }
-    [Environment]::SetEnvironmentVariable("PATH", [System.String]::Join(';', $newItems), "Process")
-}
-
-Push-Location $PSScriptRoot
-
-
-# Clean
 if(Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
 
+EnsurePsbuildInstalled
 
-# Package restore
-Get-ChildItem -Path . -Filter *.xproj -Recurse | ForEach-Object { Restore-Packages $_.DirectoryName }
+& dotnet restore
+if($LASTEXITCODE -ne 0) { exit 1 }
 
-# Build/package
-Get-ChildItem -Path .\src -Filter *.xproj -Recurse | ForEach-Object { Build-Projects $_.DirectoryName }
-Get-ChildItem -Path .\test -Filter *.xproj -Recurse | ForEach-Object { Build-TestProjects $_.DirectoryName }
+& Invoke-MSBuild
+if($LASTEXITCODE -ne 0) { exit 1 }    
 
-# Test
-Get-ChildItem -Path .\test -Filter *.xproj -Recurse | ForEach-Object { Test-Projects $_.DirectoryName }
+$revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
 
-# Test again
-Get-ChildItem -Path .\test -Filter *.xproj -Recurse | ForEach-Object { Test-Projects $_.DirectoryName }
+& dotnet pack .\src\HtmlTags -c Release -o .\artifacts --version-suffix=$revision
+if($LASTEXITCODE -ne 0) { exit 1 }    
 
-Pop-Location
+& dotnet test .\test\HtmlTags.Testing -c Release
+if($LASTEXITCODE -ne 0) { exit 2 }
+
+
