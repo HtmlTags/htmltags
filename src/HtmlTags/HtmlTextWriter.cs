@@ -3,7 +3,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
 using System.Text.Encodings.Web;
 #else
 using System.Web;
@@ -384,7 +384,7 @@ namespace HtmlTags
             }
         }
 
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
         public HtmlEncoder Encoder { get; set; } = HtmlEncoder.Default;
 #endif
 
@@ -911,7 +911,7 @@ namespace HtmlTags
             if (!fEncode)
                 return value;
 
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
             return Encoder.Encode(value);
 #else
             return HttpUtility.HtmlAttributeEncode(value);
@@ -933,7 +933,7 @@ namespace HtmlTags
         // This does minimal URL encoding by converting spaces in the url to "%20".
         protected string EncodeUrl(string url)
         {
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
             return UrlEncoder.Default.Encode(url);
 #else
             return HttpUtility.UrlPathEncode(url);
@@ -1357,7 +1357,7 @@ namespace HtmlTags
                 if (nbsp < 0)
                 {
                     var value = pos == 0 ? text : text.Substring(pos, length - pos);
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
                     Encoder.Encode(this, value);
 #else
                     HttpUtility.HtmlEncode(value, this);
@@ -1368,7 +1368,7 @@ namespace HtmlTags
                     if (nbsp > pos)
                     {
                         var value = text.Substring(pos, nbsp - pos);
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
                         Encoder.Encode(this, value);
 #else
                         HttpUtility.HtmlEncode(text.Substring(pos, nbsp - pos), this);
@@ -1382,7 +1382,7 @@ namespace HtmlTags
 
         internal void WriteHtmlAttributeEncode(string s)
         {
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
             Encoder.Encode(writer, s);
 #else
             HttpUtility.HtmlAttributeEncode(s, writer);

@@ -5,8 +5,8 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-#if DNXCORE50 || DNX451
-using Microsoft.AspNet.Html;
+#if NETSTANDARD1_5
+using Microsoft.AspNetCore.Html;
 using System.Text.Encodings.Web;
 #endif
 
@@ -14,7 +14,7 @@ namespace HtmlTags
 {
 
     public class HtmlTag : ITagSource
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
         , IHtmlContent
 #endif
     {
@@ -398,7 +398,7 @@ namespace HtmlTags
 
         public bool WillBeRendered() => _shouldRender && _isAuthorized;
 
-#if DNXCORE50 || DNX451
+#if NETSTANDARD1_5
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
             var html = new HtmlTextWriter(writer) { Encoder = encoder };
