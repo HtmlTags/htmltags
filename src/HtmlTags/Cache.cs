@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace HtmlTags
 {
-#if !NETSTANDARD1_5
+#if !NETSTANDARD1_6
     [Serializable]
 #endif
     internal class Cache<TKey, TValue> : IEnumerable<TValue> where TValue : class
