@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-#if NETSTANDARD1_5
+#if NETSTANDARD1_6
 using Microsoft.AspNetCore.Html;
 using System.Text.Encodings.Web;
 #endif
@@ -14,7 +14,7 @@ namespace HtmlTags
 {
 
     public class HtmlTag : ITagSource
-#if NETSTANDARD1_5
+#if NETSTANDARD1_6
         , IHtmlContent
 #endif
     {
@@ -398,7 +398,7 @@ namespace HtmlTags
 
         public bool WillBeRendered() => _shouldRender && _isAuthorized;
 
-#if NETSTANDARD1_5
+#if NETSTANDARD1_6
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
             var html = new HtmlTextWriter(writer) { Encoder = encoder };

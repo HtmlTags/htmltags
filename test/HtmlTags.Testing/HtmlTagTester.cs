@@ -191,7 +191,7 @@ namespace HtmlTags.Testing
         public void attributes_are_encoded_by_default()
         {
             const string options = "options: availableMeals, optionsText: 'mealName'";
-#if NETSTANDARD1_5
+#if NETSTANDARD1_6
             var expectedAfterEncodingText = options.Replace("'", "&#x27;");
 #else
             var expectedAfterEncodingText = options.Replace("'", "&#39;");
