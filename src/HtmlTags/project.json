@@ -1,5 +1,5 @@
 {
-  "version": "4.0.2-alpha-*",
+  "version": "4.0.2",
   "authors": [ "Jeremy D. Miller", "Joshua Flanagan", "Josh Arnold" ],
   "packOptions": {
     "owners": [ "Jeremy D. Miller", "Jimmy Bogard" ],
