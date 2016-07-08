@@ -14,23 +14,6 @@
         "Microsoft.NETCore.Platforms": "1.0.1",
         "Moq": "4.2.1510.2205"
       }
-    },
-    "netcoreapp1.0": {
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "type": "platform",
-          "version": "1.0.0"
-        },
-        "moq.netcore": "4.4.0-beta8",
-        "System.Diagnostics.TraceSource": "4.0.0"
-      },
-      "buildOptions": {
-        "define": ["NETSTANDARD1_6"]
-      },
-      "imports": [
-        "dnxcore50",
-        "portable-net45+win8"
-      ]
     }
   }
 }

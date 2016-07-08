@@ -1,10 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3FCD9D5F-200F-4FDC-A1DC-CC6474D0CCFE}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
 		Build.ps1 = Build.ps1
 		global.json = global.json
 		NuGet.config = NuGet.config
@@ -14,6 +17,10 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HtmlTags", "src\HtmlTags\HtmlTags.xproj", "{7315F16E-1B02-4593-8A9D-F053A4429CB7}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HtmlTags.Testing", "test\HtmlTags.Testing\HtmlTags.Testing.xproj", "{2576F9D6-A18B-484B-8FC3-FD2746FBB357}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HtmlTags.AspNetCore", "src\HtmlTags.AspNetCore\HtmlTags.AspNetCore.xproj", "{26DC614B-378B-4023-A366-0BAD79699A86}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HtmlTags.AspNetCore.Testing", "test\HtmlTags.AspNetCore.Testing\HtmlTags.AspNetCore.Testing.xproj", "{768EA12F-08D7-415F-90F1-C256ABD86A5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +36,14 @@ Global
 		{2576F9D6-A18B-484B-8FC3-FD2746FBB357}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2576F9D6-A18B-484B-8FC3-FD2746FBB357}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2576F9D6-A18B-484B-8FC3-FD2746FBB357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26DC614B-378B-4023-A366-0BAD79699A86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26DC614B-378B-4023-A366-0BAD79699A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26DC614B-378B-4023-A366-0BAD79699A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26DC614B-378B-4023-A366-0BAD79699A86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{768EA12F-08D7-415F-90F1-C256ABD86A5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{768EA12F-08D7-415F-90F1-C256ABD86A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{768EA12F-08D7-415F-90F1-C256ABD86A5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{768EA12F-08D7-415F-90F1-C256ABD86A5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

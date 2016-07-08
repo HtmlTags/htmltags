@@ -1,6 +1,6 @@
 namespace HtmlTags
 {
-#if NETSTANDARD1_6
+#if ASPNETCORE
     using Microsoft.AspNetCore.Html;
 #else
     using System.Web.UI;

@@ -5,17 +5,21 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-#if NETSTANDARD1_6
+#if ASPNETCORE
 using Microsoft.AspNetCore.Html;
 using System.Text.Encodings.Web;
+#else
+using System.Web;
 #endif
 
 namespace HtmlTags
 {
 
     public class HtmlTag : ITagSource
-#if NETSTANDARD1_6
+#if ASPNETCORE
         , IHtmlContent
+#else
+        , IHtmlString
 #endif
     {
         public static HtmlTag Empty() => new HtmlTag("span").Render(false);
@@ -398,7 +402,7 @@ namespace HtmlTags
 
         public bool WillBeRendered() => _shouldRender && _isAuthorized;
 
-#if NETSTANDARD1_6
+#if ASPNETCORE
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
             var html = new HtmlTextWriter(writer) { Encoder = encoder };

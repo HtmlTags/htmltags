@@ -1,5 +1,5 @@
-{
-  "version": "4.0.2-alpha-*",
+﻿{
+  "version": "1.0.0-alpha-*",
   "authors": [ "Jeremy D. Miller", "Joshua Flanagan", "Josh Arnold" ],
   "packOptions": {
     "owners": [ "Jeremy D. Miller", "Jimmy Bogard" ],
@@ -11,13 +11,27 @@
   "description": "Easy generation of html with a jquery inspired object model",
   "copyright": "Copyright 2008-2016 Jeremy D. Miller, Josh Arnold, Joshua Flanagan, et al. All rights reserved.",
   "dependencies": {
-    "Newtonsoft.Json": "9.0.1"
+    "Newtonsoft.Json": "9.0.1",
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0",
+    "Microsoft.AspNetCore.Mvc.Razor": "1.0.0"
+  },
+  "buildOptions": {
+    "compile": {
+      "include": "../HtmlTags/**/*.cs",
+      "exclude": "../HtmlTags/obj/**/*.cs"
+    },
+    "define": [ "ASPNETCORE" ]
   },
   "frameworks": {
-    "net45": {
-      "frameworkAssemblies": {
-        "System.Web": "4.0.0.0",
-        "System.Web.Extensions": "4.0.0.0"
+    "net451": {
+    },
+    "netstandard1.6": {
+      "imports": [
+        "dnxcore50",
+        "net45"
+      ],
+      "dependencies": {
+        "System.Diagnostics.Process": "4.1.0"
       }
     }
   }
