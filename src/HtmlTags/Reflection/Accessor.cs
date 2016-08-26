@@ -8,8 +8,6 @@ namespace HtmlTags.Reflection
 {
     public interface Accessor
     {
-        string FieldName { get; }
-
         Type PropertyType { get; }
         PropertyInfo InnerProperty { get; }
         Type DeclaringType { get; }

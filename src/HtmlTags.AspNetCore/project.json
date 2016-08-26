@@ -1,5 +1,5 @@
 ﻿{
-  "version": "4.1.0",
+  "version": "4.2.0",
   "authors": [ "Jeremy D. Miller", "Joshua Flanagan", "Josh Arnold" ],
   "packOptions": {
     "owners": [ "Jeremy D. Miller", "Jimmy Bogard" ],
@@ -13,7 +13,8 @@
   "dependencies": {
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0",
-    "Microsoft.AspNetCore.Mvc.Razor": "1.0.0"
+    "Microsoft.AspNetCore.Mvc.Razor": "1.0.0",
+    "Microsoft.AspNetCore.Mvc.TagHelpers": "1.0.0"
   },
   "buildOptions": {
     "compile": {

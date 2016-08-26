@@ -23,6 +23,9 @@ namespace HtmlTags.Conventions
 
         public void Modifier<T>() where T : IElementModifier, new() => Add(new T());
 
+        public void NamingConvention(IElementNamingConvention elementNamingConvention)
+            => _set.NamingConvention(elementNamingConvention);
+
         public ElementActionExpression Always => new ElementActionExpression(_set, req => true, "Always");
 
         public ElementActionExpression If(Func<ElementRequest, bool> matches, string description = null) 

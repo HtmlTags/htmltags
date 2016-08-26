@@ -42,6 +42,7 @@ namespace HtmlTags.Conventions
         {
             _policies.AddRange(other._policies);
             _modifiers.AddRange(other._modifiers);
+            _elementNamingConvention = other._elementNamingConvention;
         }
 
         public void InsertFirst(ITagBuilderPolicy policy) => _policies.Insert(0, policy);

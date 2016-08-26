@@ -1,5 +1,6 @@
 namespace HtmlTags.Conventions
 {
+    using Elements;
     using Elements.Builders;
 
     public static class HtmlConventionRegistryExtensions
@@ -12,9 +13,15 @@ namespace HtmlTags.Conventions
 
             registry.Editors.Modifier<AddNameModifier>();
 
+            registry.Editors.Modifier<AddIdModifier>();
+
+            registry.Editors.NamingConvention(new DotNotationElementNamingConvention());
+
             registry.Displays.Always.BuildBy<SpanDisplayBuilder>();
 
             registry.Labels.Always.BuildBy<DefaultLabelBuilder>();
+
+
         }
     }
 }

@@ -25,9 +25,9 @@
         {
             var registry = new HtmlConventionRegistry();
 
-            registry.Defaults();
-
             config(registry);
+
+            registry.Defaults();
 
             services.AddHtmlTags(registry);
         }
