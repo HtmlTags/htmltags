@@ -11,13 +11,13 @@
   "dependencies": {
     "HtmlTags.AspNetCore": { "target": "project" },
     "xunit": "2.2.0-beta2-build3300",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "moq": "4.6.38-alpha"
   },
   "frameworks": {
     "net451": {
       "dependencies": {
-        "Microsoft.NETCore.Platforms": "1.0.1",
-        "Moq": "4.2.1510.2205"
+        "Microsoft.NETCore.Platforms": "1.0.1"
       }
     },
     "netcoreapp1.0": {
@@ -26,7 +26,6 @@
           "type": "platform",
           "version": "1.0.0"
         },
-        "moq.netcore": "4.4.0-beta8",
         "System.Diagnostics.TraceSource": "4.0.0"
       },
       "imports": [
