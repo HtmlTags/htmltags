@@ -1,8 +1,8 @@
 # ![HtmlTags](https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_32.png) HtmlTags 
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7h0p16ld5dqikglj?svg=true)](https://ci.appveyor.com/project/jbogard/htmltags)
-[![NuGet Version](http://img.shields.io/nuget/dt/HtmlTags.svg?style=flat)](https://www.nuget.org/packages/HtmlTags/)
 [![NuGet Version](http://img.shields.io/nuget/v/HtmlTags.svg?style=flat)](https://www.nuget.org/packages/HtmlTags/)
+[![ASP.NET Core NuGet Version](http://img.shields.io/nuget/v/HtmlTags.svg?style=flat)](https://www.nuget.org/packages/HtmlTags.AspNetCore/)
 [![MyGet CI Version](https://img.shields.io/myget/htmltags-ci/v/HtmlTags.svg)](http://myget.org/gallery/htmltags-ci)
 
  .NET objects for generating HTML
@@ -11,6 +11,10 @@
 Install via [nuget](http://www.nuget.org/):
 
     PM> Install-Package HtmlTags
+
+Or for ASP.NET Core:
+
+    PM> Install-Package HtmlTags.AspNetCore
 
 ## When should I use HtmlTags?
 
