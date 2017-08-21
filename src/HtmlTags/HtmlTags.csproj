@@ -1,175 +1,28 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F01C84F2-6E41-404C-AC8D-BF189A9EC05B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HtmlTags</RootNamespace>
+    <Description>Easy generation of html with a jquery inspired object model</Description>
+    <Copyright>Copyright 2008-2016 Jeremy D. Miller, Josh Arnold, Joshua Flanagan, et al. All rights reserved.</Copyright>
+    <VersionPrefix>5.0.0</VersionPrefix>
+    <Authors>Jeremy D. Miller;Joshua Flanagan;Josh Arnold;Jimmy Bogard</Authors>
+    <TargetFramework>net45</TargetFramework>
     <AssemblyName>HtmlTags</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <PackageId>HtmlTags</PackageId>
+    <PackageTags>html;ASP.NET MVC</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_256.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/HtmlTags/htmltags</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/HtmlTags/htmltags/raw/master/license.txt</PackageLicenseUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <DocumentationFile>bin\Debug\HtmlTags.xml</DocumentationFile>
-    <NoWarn>1591;0419;1580</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <DocumentationFile>bin\Release\HtmlTags.xml</DocumentationFile>
-    <NoWarn>1591;0419;1580</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="BrTag.cs" />
-    <Compile Include="Cache.cs" />
-    <Compile Include="CheckboxTag.cs" />
-    <Compile Include="Conventions\BuilderSet.cs" />
-    <Compile Include="Conventions\CategoryExpression.cs" />
-    <Compile Include="Conventions\DefaultHtmlConventions.cs" />
-    <Compile Include="Conventions\ElementCategoryExpression.cs" />
-    <Compile Include="Conventions\ElementGenerator.cs" />
-    <Compile Include="Conventions\ElementRequest.cs" />
-    <Compile Include="Conventions\Elements\AccessorDef.cs" />
-    <Compile Include="Conventions\Elements\AccessorOverrideElementBuilderPolicy.cs" />
-    <Compile Include="Conventions\Elements\AccessorOverridesClasses.cs" />
-    <Compile Include="Conventions\Elements\Builders\AddClassForAttributeModifier.cs" />
-    <Compile Include="Conventions\Elements\Builders\AddClassModifier.cs" />
-    <Compile Include="Conventions\Elements\Builders\AddNameModifier.cs" />
-    <Compile Include="Conventions\Elements\Builders\CheckboxBuilder.cs" />
-    <Compile Include="Conventions\Elements\Builders\ConditionalElementBuilder.cs" />
-    <Compile Include="Conventions\Elements\Builders\ConditionalElementModifier.cs" />
-    <Compile Include="Conventions\Elements\Builders\DefaultLabelBuilder.cs" />
-    <Compile Include="Conventions\Elements\Builders\LambdaElementBuilder.cs" />
-    <Compile Include="Conventions\Elements\Builders\LambdaElementModifier.cs" />
-    <Compile Include="Conventions\Elements\Builders\SpanDisplayBuilder.cs" />
-    <Compile Include="Conventions\Elements\Builders\TextboxBuilder.cs" />
-    <Compile Include="Conventions\Elements\DefaultElementNamingConvention.cs" />
-    <Compile Include="Conventions\Elements\DotNotationElementNamingConvention.cs" />
-    <Compile Include="Conventions\Elements\ElementConstants.cs" />
-    <Compile Include="Conventions\Elements\IElementBuilder.cs" />
-    <Compile Include="Conventions\Elements\IElementGenerator.cs" />
-    <Compile Include="Conventions\Elements\IElementModifier.cs" />
-    <Compile Include="Conventions\Elements\IElementNamingConvention.cs" />
-    <Compile Include="Conventions\Elements\IElementTagOverride.cs" />
-    <Compile Include="Conventions\Formatting\DisplayConversionRegistry.cs" />
-    <Compile Include="Conventions\Formatting\DisplayFormatter.cs" />
-    <Compile Include="Conventions\Formatting\DisplayFormatterExtensions.cs" />
-    <Compile Include="Conventions\Formatting\GetStringRequest.cs" />
-    <Compile Include="Conventions\Formatting\IDisplayFormatter.cs" />
-    <Compile Include="Conventions\Formatting\Stringifier.cs" />
-    <Compile Include="Conventions\Formatting\StringifierStrategy.cs" />
-    <Compile Include="Conventions\HtmlConventionLibrary.cs" />
-    <Compile Include="Conventions\HtmlConventionRegistry.cs" />
-    <Compile Include="Conventions\ITagBuilder.cs" />
-    <Compile Include="Conventions\ITagBuildingExpression.cs" />
-    <Compile Include="Conventions\ITagGenerator.cs" />
-    <Compile Include="Conventions\ITagModifier.cs" />
-    <Compile Include="Conventions\LambdaTagBuilder.cs" />
-    <Compile Include="Conventions\LambdaTagModifier.cs" />
-    <Compile Include="Conventions\ProfileExpression.cs" />
-    <Compile Include="Conventions\ServiceBuilder.cs" />
-    <Compile Include="Conventions\TagCategory.cs" />
-    <Compile Include="Conventions\TagConstants.cs" />
-    <Compile Include="Conventions\TagGenerator.cs" />
-    <Compile Include="Conventions\TagLibrary.cs" />
-    <Compile Include="Conventions\TagPlan.cs" />
-    <Compile Include="Conventions\TagSubject.cs" />
-    <Compile Include="CssClassNameValidator.cs" />
-    <Compile Include="DivTag.cs" />
-    <Compile Include="DLTag.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="Extended\TagBuilderExtensions.cs" />
-    <Compile Include="FormTag.cs" />
-    <Compile Include="HiddenTag.cs" />
-    <Compile Include="HtmlDocument.cs" />
-    <Compile Include="HtmlTag.cs" />
-    <Compile Include="Extended\AttributesExtensions.cs" />
-    <Compile Include="HtmlTagExtensions.cs" />
-    <Compile Include="ITagSource.cs" />
-    <Compile Include="JsonUtil.cs" />
-    <Compile Include="LinkTag.cs" />
-    <Compile Include="LiteralTag.cs" />
-    <Compile Include="NoTag.cs" />
-    <Compile Include="Reflection\Accessor.cs" />
-    <Compile Include="Reflection\AccessorRules.cs" />
-    <Compile Include="Reflection\ArrayIndexer.cs" />
-    <Compile Include="Reflection\Expressions\BinaryComparisonPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\CaseInsensitiveStringMethodPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\EqualsPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\ExpressionClasses.cs" />
-    <Compile Include="Reflection\Expressions\GreaterThanOrEqualPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\GreaterThanPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\IPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\LessThanOrEqualPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\LessThanPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\LinqExpressionExtensions.cs" />
-    <Compile Include="Reflection\Expressions\NotEqualPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\OrOperation.cs" />
-    <Compile Include="Reflection\Expressions\StringDoesNotEndWithPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\StringDoesNotStartWithPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\StringEndsWithPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\StringEqualsPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\StringNotEqualPropertyOperation.cs" />
-    <Compile Include="Reflection\Expressions\StringStartsWithPropertyOperation.cs" />
-    <Compile Include="Reflection\IndexerValueGetter.cs" />
-    <Compile Include="Reflection\IValueGetter.cs" />
-    <Compile Include="Reflection\MethodValueGetter.cs" />
-    <Compile Include="Reflection\PropertyChain.cs" />
-    <Compile Include="Reflection\PropertyValueGetter.cs" />
-    <Compile Include="Reflection\ReflectionExtensions.cs" />
-    <Compile Include="Reflection\ReflectionHelper.cs" />
-    <Compile Include="Reflection\SingleMethod.cs" />
-    <Compile Include="Reflection\SingleProperty.cs" />
-    <Compile Include="Reflection\TypeDescriptorCache.cs" />
-    <Compile Include="SelectTag.cs" />
-    <Compile Include="SharedExtensions.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="TableTag.cs" />
-    <Compile Include="TagList.cs" />
-    <Compile Include="TextboxTag.cs" />
-    <Compile Include="TypeExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

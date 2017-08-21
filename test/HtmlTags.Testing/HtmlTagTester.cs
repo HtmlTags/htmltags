@@ -381,7 +381,8 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("input").BooleanAttr("required");
             tag.ToString().ShouldEqual("<input required />");
 		}
-		
+
+        [Fact]
         public void set_an_attribute_to_empty_string_should_not_remove_the_attribute() {
             var tag = new HtmlTag("div");
             tag.Attr("name", "bill");
@@ -485,6 +486,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void do_not_allow_special_characters_in_class_names()
         {
+            CssClassNameValidator.AllowInvalidCssClassNames = false;
             var tag = new HtmlTag("div").Text("text");
             typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("$test@@"); });
         }
@@ -492,6 +494,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void do_not_allow_start_with_number_in_class_names()
         {
+            CssClassNameValidator.AllowInvalidCssClassNames = false;
             var tag = new HtmlTag("div").Text("text");
             typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("4test"); });
         }
@@ -499,6 +502,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void do_not_allow_first_double_dashes_in_class_names()
         {
+            CssClassNameValidator.AllowInvalidCssClassNames = false;
             var tag = new HtmlTag("div").Text("text");
             typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("--test"); });
         }
@@ -506,6 +510,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void class_name_must_have_at_least_two_chars_if_starts_with_dash()
         {
+            CssClassNameValidator.AllowInvalidCssClassNames = false;
             var tag = new HtmlTag("div").Text("text");
             typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("-"); });
         }

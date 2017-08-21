@@ -17,3 +17,5 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("768ea12f-08d7-415f-90f1-c256abd86a5c")]
+
+[assembly: Xunit.CollectionBehavior(DisableTestParallelization = true)]
