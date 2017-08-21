@@ -6,15 +6,12 @@ namespace HtmlTags.Conventions
 {
     public class TagCategory : ITagBuildingExpression
     {
-        private readonly Cache<TagSubject, TagPlan> _plans = new Cache<TagSubject, TagPlan>();
-
         private readonly Cache<string, BuilderSet> _profiles =
             new Cache<string, BuilderSet>(name => new BuilderSet());
 
         public TagCategory()
         {
             _profiles[TagConstants.Default] = Defaults;
-            _plans.OnMissing = BuildPlan;
         }
 
         public BuilderSet Defaults { get; } = new BuilderSet();
@@ -24,7 +21,7 @@ namespace HtmlTags.Conventions
         public TagPlan PlanFor(ElementRequest request, string profile = null)
         {
             var subject = new TagSubject(profile, request);
-            return _plans[subject];
+            return BuildPlan(subject);
         }
 
         private TagPlan BuildPlan(TagSubject subject)
@@ -54,8 +51,6 @@ namespace HtmlTags.Conventions
 
             yield return Defaults;
         }
-
-        public void ClearPlans() => _plans.ClearAll();
 
         public void Add(Func<ElementRequest, bool> filter, ITagBuilder builder) => Add(new ConditionalTagBuilderPolicy(filter, builder));
 

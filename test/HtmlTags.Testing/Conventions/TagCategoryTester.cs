@@ -234,7 +234,7 @@ namespace HtmlTags.Testing.Conventions
         }
 
         [Fact]
-        public void tag_plan_is_memoized_by_profile_and_subject()
+        public void tag_plan_is_not_memoized_by_profile_and_subject()
         {
             var subject1 = new FakeSubject { Name = "Jeremy", Level = 10 };
             var subject2 = new FakeSubject { Name = "Jeremy", Level = 10 };
@@ -247,9 +247,9 @@ namespace HtmlTags.Testing.Conventions
 
 
 
-            theCategory.PlanFor(subject1).ShouldBeSameAs(theCategory.PlanFor(subject2));
-            theCategory.PlanFor(subject1, "a").ShouldBeSameAs(theCategory.PlanFor(subject2, "a"));
-            theCategory.PlanFor(subject1, "b").ShouldBeSameAs(theCategory.PlanFor(subject2, "b"));
+            theCategory.PlanFor(subject1).ShouldNotBeSameAs(theCategory.PlanFor(subject2));
+            theCategory.PlanFor(subject1, "a").ShouldNotBeSameAs(theCategory.PlanFor(subject2, "a"));
+            theCategory.PlanFor(subject1, "b").ShouldNotBeSameAs(theCategory.PlanFor(subject2, "b"));
 
             theCategory.PlanFor(subject1, "a").ShouldNotBeSameAs(theCategory.PlanFor(subject2, "b"));
             theCategory.PlanFor(subject1, "b").ShouldNotBeSameAs(theCategory.PlanFor(subject2, "a"));
