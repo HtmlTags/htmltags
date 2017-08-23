@@ -10,7 +10,9 @@ namespace HtmlTags
 
     public abstract class HtmlTagTagHelper : TagHelper
     {
-        [HtmlAttributeName(nameof(For))]
+        public const string ForAttributeName = "for";
+
+        [HtmlAttributeName(ForAttributeName)]
         public ModelExpression For { get; set; }
 
         [ViewContext]
