@@ -1,4 +1,6 @@
-﻿namespace HtmlTags
+﻿using System;
+
+namespace HtmlTags
 {
     using Conventions;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,7 +10,7 @@
 
     public abstract class HtmlTagTagHelper : TagHelper
     {
-        [HtmlAttributeName("for")]
+        [HtmlAttributeName(nameof(For))]
         public ModelExpression For { get; set; }
 
         [ViewContext]
@@ -19,6 +21,10 @@
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            if (For == null)
+                throw new InvalidOperationException(
+                    "Missing or invalid 'for' attribute value. Specify a valid model expression for the 'for' attribute value.");
+
             var request = new ElementRequest(new ModelMetadataAccessor(For))
             {
                 Model = For.Model
