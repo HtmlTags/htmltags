@@ -103,7 +103,13 @@
         @Html.Display(m => m.Value)
         <label-tag for="Value"></label-tag>
         @Html.Label(m => m.Value)
-            
+        
+        @{
+            var tag = new HtmlTag("a");
+            tag.Attr("href", "#name");
+            tag.Text("blargasdofijasodifjdfs");
+        }
+        @tag
 
         <ul>
             <li><a href="http://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>

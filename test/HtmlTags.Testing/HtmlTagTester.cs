@@ -614,6 +614,15 @@ namespace HtmlTags.Testing
             tag.Style("padding-left", "20px");
             tag.HasAttr("style").ShouldBeTrue();
         }
+
+        [Fact]
+        public void attr_should_not_encode()
+        {
+            var tag = new HtmlTag("a");
+            tag.Attr("href", "#name");
+
+            tag.ToString().ShouldBe("<a href=\"#name\"></a>");
+        }
     }
 
     
