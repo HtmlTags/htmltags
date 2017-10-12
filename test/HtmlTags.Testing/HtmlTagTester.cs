@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Should;
+using Shouldly;
 using Xunit;
 using System.Text;
 
@@ -15,14 +15,14 @@ namespace HtmlTags.Testing
         public void render_a_tag()
         {
             var tag = new HtmlTag("p");
-            tag.ToString().ShouldEqual("<p></p>");
+            tag.ToString().ShouldBe("<p></p>");
         }
 
         [Fact]
         public void render_a_tag_with_inner_text()
         {
             var tag = new HtmlTag("p").Text("some text");
-            tag.ToString().ShouldEqual("<p>some text</p>");
+            tag.ToString().ShouldBe("<p>some text</p>");
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div");
             tag.Text("<b>Hi</b>");
-            tag.ToString().ShouldEqual("<div>&lt;b&gt;Hi&lt;/b&gt;</div>");
+            tag.ToString().ShouldBe("<div>&lt;b&gt;Hi&lt;/b&gt;</div>");
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace HtmlTags.Testing
             tag.Text("<b>Hi</b>");
             tag.Encoded(false);
 
-            tag.ToString().ShouldEqual("<div><b>Hi</b></div>");
+            tag.ToString().ShouldBe("<div><b>Hi</b></div>");
         }
 
         [Fact]
@@ -48,14 +48,14 @@ namespace HtmlTags.Testing
         {
             var tag = new NonEncodedTag("div");
             tag.Text("<b>Hi</b>");
-            tag.ToString().ShouldEqual("<div><b>Hi</b></div>");
+            tag.ToString().ShouldBe("<div><b>Hi</b></div>");
         }
 
         [Fact]
         public void implements_to_html_string_for_aspnet_4_compatibility()
         {
             var tag = new HtmlTag("p");
-            tag.ToHtmlString().ShouldEqual("<p></p>");
+            tag.ToHtmlString().ShouldBe("<p></p>");
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace HtmlTags.Testing
             expected.AppendLine(@"  <p id=""intro"">Once upon a midnight...</p>");
             expected.Append("</div>");
 			
-            tag.ToPrettyString().ShouldEqual(expected.ToString());
+            tag.ToPrettyString().ShouldBe(expected.ToString());
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void renders_closing_tag_by_default()
         {
-            new HtmlTag("div").ToString().ShouldEqual("<div></div>");
+            new HtmlTag("div").ToString().ShouldBe("<div></div>");
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("span").Id("id");
             tag.NoClosingTag();
 
-            tag.ToString().ShouldEqual("<span id=\"id\">");
+            tag.ToString().ShouldBe("<span id=\"id\">");
         }
 
         [Fact]
@@ -103,7 +103,7 @@ namespace HtmlTags.Testing
 		public void when_no_tag_do_not_write_opening_or_closing_tag()
 		{
 			new HtmlTag("div").NoTag().AppendHtml("Hello")
-				.ToString().ShouldEqual("Hello");
+				.ToString().ShouldBe("Hello");
 		}
 
 		[Fact]
@@ -123,7 +123,7 @@ namespace HtmlTags.Testing
         {
 
             HtmlTag.Placeholder().AppendHtml("Hello")
-                .ToString().ShouldEqual("Hello");
+                .ToString().ShouldBe("Hello");
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace HtmlTags.Testing
             var wrapper = new HtmlTag("div");
             var tag = new HtmlTag("input").NoClosingTag();
             wrapper.Append(tag);
-            wrapper.ToString().ShouldEqual("<div><input /></div>");
+            wrapper.ToString().ShouldBe("<div><input /></div>");
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace HtmlTags.Testing
                 x.Attr("title", "tooltip");
             });
 
-            tag.ToString().ShouldEqual("<div id=\"me\" title=\"tooltip\"></div>");
+            tag.ToString().ShouldBe("<div id=\"me\" title=\"tooltip\"></div>");
         }
 
         [Fact]
@@ -177,14 +177,14 @@ namespace HtmlTags.Testing
         public void render_a_single_attribute()
         {
             var tag = new HtmlTag("table").Attr("cellPadding", 2);
-            tag.ToString().ShouldEqual("<table cellPadding=\"2\"></table>");
+            tag.ToString().ShouldBe("<table cellPadding=\"2\"></table>");
         }
 
         [Fact]
         public void render_multiple_attributes()
         {
             var tag = new HtmlTag("table").Attr("cellPadding", "2").Attr("cellSpacing", "3");
-            tag.ToString().ShouldEqual("<table cellPadding=\"2\" cellSpacing=\"3\"></table>");
+            tag.ToString().ShouldBe("<table cellPadding=\"2\" cellSpacing=\"3\"></table>");
         }
 
         [Fact]
@@ -224,28 +224,28 @@ namespace HtmlTags.Testing
         public void render_id()
         {
             var tag = new HtmlTag("div").Id("theDiv");
-            tag.ToString().ShouldEqual("<div id=\"theDiv\"></div>");
+            tag.ToString().ShouldBe("<div id=\"theDiv\"></div>");
         }
 
         [Fact]
         public void retrieve_a_set_id()
         {
             var tag = new HtmlTag("div").Id("the-div");
-            tag.Id().ShouldEqual("the-div");
+            tag.Id().ShouldBe("the-div");
         }
 
         [Fact]
         public void set_the_title_attribute()
         {
             var tag = new HtmlTag("div").Title("My Title");
-            tag.ToString().ShouldEqual("<div title=\"My Title\"></div>");
+            tag.ToString().ShouldBe("<div title=\"My Title\"></div>");
         }
 
         [Fact]
         public void retrieve_the_title()
         {
             var tag = new HtmlTag("div").Title("My Title");
-            tag.Title().ShouldEqual("My Title");
+            tag.Title().ShouldBe("My Title");
         }
 
         [Fact]
@@ -285,7 +285,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div").Text("text");
             tag.AddClass("a b c a c");
 
-            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"a b c\">text</div>");
         }
 
         [Fact]
@@ -294,7 +294,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div").Text("text");
             tag.AddClass("a b c");
 
-            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"a b c\">text</div>");
         }
 
         [Fact]
@@ -303,7 +303,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div").Text("text");
             tag.AddClass("a    b  c d  e   ");
 
-            tag.ToString().ShouldEqual("<div class=\"a b c d e\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"a b c d e\">text</div>");
         }
 
         [Fact]
@@ -312,7 +312,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("table")
                 .Attr("cellPadding", 2)
                 .Attr("cellPadding", 5);
-            tag.ToString().ShouldEqual("<table cellPadding=\"5\"></table>");
+            tag.ToString().ShouldBe("<table cellPadding=\"5\"></table>");
         }
 
         [Fact]
@@ -332,7 +332,7 @@ namespace HtmlTags.Testing
             tag.AddClass("first");
             tag.AddClass("second");
             tag.Attr("class", null);
-            tag.ToString().ShouldEqual("<div></div>");
+            tag.ToString().ShouldBe("<div></div>");
         }
 
         [Fact]
@@ -342,7 +342,7 @@ namespace HtmlTags.Testing
             tag.AddClass("first");
             tag.AddClass("second");
             tag.Attr("class", string.Empty);
-            tag.ToString().ShouldEqual("<div></div>");
+            tag.ToString().ShouldBe("<div></div>");
         }
 
         [Fact]
@@ -352,7 +352,7 @@ namespace HtmlTags.Testing
             tag.AddClass("first");
             tag.AddClass("second");
             tag.RemoveAttr("class");
-            tag.ToString().ShouldEqual("<div></div>");
+            tag.ToString().ShouldBe("<div></div>");
         }
 
         [Fact]
@@ -367,7 +367,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void retrieve_a_non_existing_attr_should_return_an_empty_string()
         {
-            new HtmlTag("div").Attr("new").ShouldEqual(string.Empty);
+            new HtmlTag("div").Attr("new").ShouldBe(string.Empty);
         }
 
         [Fact]
@@ -379,7 +379,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void render_boolean_attr() {
             var tag = new HtmlTag("input").BooleanAttr("required");
-            tag.ToString().ShouldEqual("<input required />");
+            tag.ToString().ShouldBe("<input required />");
 		}
 
         [Fact]
@@ -395,13 +395,13 @@ namespace HtmlTags.Testing
         public void retrieve_an_empty_attr_should_return_an_empty_string() {
             var tag = new HtmlTag("option");
             tag.Attr("value", string.Empty);
-            tag.Attr("value").ShouldEqual(string.Empty);
+            tag.Attr("value").ShouldBe(string.Empty);
         }
 
         [Fact]
         public void render_empty_attr() {
             var tag = new HtmlTag("option").Attr("value", string.Empty);
-            tag.ToString().ShouldEqual("<option value=\"\"></option>");
+            tag.ToString().ShouldBe("<option value=\"\"></option>");
         }
 
         //
@@ -414,7 +414,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div");
             tag.AddClass("a");
 
-            tag.ToString().ShouldEqual("<div class=\"a\"></div>");
+            tag.ToString().ShouldBe("<div class=\"a\"></div>");
         }
 
         [Fact]
@@ -425,7 +425,7 @@ namespace HtmlTags.Testing
             tag.AddClass("b");
             tag.AddClass("c");
 
-            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"a b c\">text</div>");
         }
 
         [Fact]
@@ -434,7 +434,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div").Text("text");
             tag.AddClasses("a", "b", "c");
 
-            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"a b c\">text</div>");
         }
 
         [Fact]
@@ -444,7 +444,7 @@ namespace HtmlTags.Testing
             var sequenceOfClasses = new List<string>{"a", "b", "c"};
             tag.AddClasses(sequenceOfClasses);
 
-            tag.ToString().ShouldEqual("<div class=\"a b c\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"a b c\">text</div>");
         }
 
         [Fact]
@@ -452,7 +452,7 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div").AddClasses("a", "b", "c");
             tag.RemoveClass("b");
-            tag.ToString().ShouldEqual("<div class=\"a c\"></div>");
+            tag.ToString().ShouldBe("<div class=\"a c\"></div>");
         }
 
         [Fact]
@@ -461,11 +461,11 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div").Text("text");
             tag.AddClass("a");
 
-            tag.ToString().ShouldEqual("<div class=\"a\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"a\">text</div>");
 
             tag.AddClass("a");
 
-            tag.ToString().ShouldEqual("<div class=\"a\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"a\">text</div>");
         }
 
         [Fact]
@@ -488,7 +488,7 @@ namespace HtmlTags.Testing
         {
             CssClassNameValidator.AllowInvalidCssClassNames = false;
             var tag = new HtmlTag("div").Text("text");
-            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("$test@@"); });
+            Exception<ArgumentException>.ShouldBeThrownBy(() => { tag.AddClass("$test@@"); });
         }
 
         [Fact]
@@ -496,7 +496,7 @@ namespace HtmlTags.Testing
         {
             CssClassNameValidator.AllowInvalidCssClassNames = false;
             var tag = new HtmlTag("div").Text("text");
-            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("4test"); });
+            Exception<ArgumentException>.ShouldBeThrownBy(() => { tag.AddClass("4test"); });
         }
 
         [Fact]
@@ -504,7 +504,7 @@ namespace HtmlTags.Testing
         {
             CssClassNameValidator.AllowInvalidCssClassNames = false;
             var tag = new HtmlTag("div").Text("text");
-            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("--test"); });
+            Exception<ArgumentException>.ShouldBeThrownBy(() => { tag.AddClass("--test"); });
         }
 
         [Fact]
@@ -512,7 +512,7 @@ namespace HtmlTags.Testing
         {
             CssClassNameValidator.AllowInvalidCssClassNames = false;
             var tag = new HtmlTag("div").Text("text");
-            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("-"); });
+            Exception<ArgumentException>.ShouldBeThrownBy(() => { tag.AddClass("-"); });
         }
 
         [Fact]
@@ -521,19 +521,19 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div").Text("text");
             tag.AddClass("-test");
 
-            tag.ToString().ShouldEqual("<div class=\"-test\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"-test\">text</div>");
 
             tag.AddClass("_test");
 
-            tag.ToString().ShouldEqual("<div class=\"-test _test\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"-test _test\">text</div>");
 
             tag.AddClass("TEST_2-test");
 
-            tag.ToString().ShouldEqual("<div class=\"-test _test TEST_2-test\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"-test _test TEST_2-test\">text</div>");
 
             tag.AddClass("-just-4-test");
 
-            tag.ToString().ShouldEqual("<div class=\"-test _test TEST_2-test -just-4-test\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"-test _test TEST_2-test -just-4-test\">text</div>");
         }
 
         [Fact]
@@ -550,8 +550,8 @@ namespace HtmlTags.Testing
         public void class_name_with_wrong_json()
         {
             var tag = new HtmlTag("div");
-            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("[1,2,3}"); });
-            typeof(ArgumentException).ShouldBeThrownBy(() => { tag.AddClass("{a:1, a:2]"); });
+            Exception<ArgumentException>.ShouldBeThrownBy(() => { tag.AddClass("[1,2,3}"); });
+            Exception<ArgumentException>.ShouldBeThrownBy(() => { tag.AddClass("{a:1, a:2]"); });
         }
 
         //
@@ -565,7 +565,7 @@ namespace HtmlTags.Testing
                 .Style("padding-left", "20px")
                 .Style("padding-right", "30px")
                 .ToString()
-                .ShouldEqual("<div style=\"padding-left:20px;padding-right:30px\"></div>");
+                .ShouldBe("<div style=\"padding-left:20px;padding-right:30px\"></div>");
         }
 
         [Fact]
@@ -628,7 +628,7 @@ namespace HtmlTags.Testing
         public void add_a_child_tag()
         {
             var tag = new HtmlTag("div").Append(new HtmlTag("span").Text("something"));
-            tag.ToString().ShouldEqual("<div><span>something</span></div>");
+            tag.ToString().ShouldBe("<div><span>something</span></div>");
         }
 
         [Fact]
@@ -637,7 +637,7 @@ namespace HtmlTags.Testing
             var existing = new HtmlTag("div");
             var newTag = new HtmlTag("span", existing);
             newTag.Text("something");
-            existing.ToString().ShouldEqual("<div><span>something</span></div>");
+            existing.ToString().ShouldBe("<div><span>something</span></div>");
         }
 
         [Fact]
@@ -646,7 +646,7 @@ namespace HtmlTags.Testing
             var parent = new HtmlTag("div");
             var resultOfAppend = parent.Append("p");
             resultOfAppend.ShouldBeSameAs(parent);
-            parent.ToString().ShouldEqual("<div><p></p></div>");
+            parent.ToString().ShouldBe("<div><p></p></div>");
         }
 
         [Fact]
@@ -654,7 +654,7 @@ namespace HtmlTags.Testing
         {
             var parent = new HtmlTag("div");
             parent.Append("p > span");
-            parent.ToString().ShouldEqual("<div><p><span></span></p></div>");
+            parent.ToString().ShouldBe("<div><p><span></span></p></div>");
         }
 
 
@@ -664,7 +664,7 @@ namespace HtmlTags.Testing
             var tagSource = new TagList(new[]{new HtmlTag("br"), new HtmlTag("hr")  });
             var parent = new HtmlTag("div");
             parent.Append(tagSource);
-            parent.ToString().ShouldEqual("<div><br /><hr /></div>");
+            parent.ToString().ShouldBe("<div><br /><hr /></div>");
         }
 
         [Fact]
@@ -674,7 +674,7 @@ namespace HtmlTags.Testing
             var tagSource = new TagList(new[] { new HtmlTag("br"), new HtmlTag("hr") });
             var parent = new HtmlTag("div");
             parent.Append(tagSource);
-            parent.ToString().ShouldEqual("<div><br /><hr /></div>");
+            parent.ToString().ShouldBe("<div><br /><hr /></div>");
             
         }
 
@@ -684,14 +684,14 @@ namespace HtmlTags.Testing
             var sequence = new[] { new HtmlTag("br"), new HtmlTag("hr") };
             var parent = new HtmlTag("div");
             parent.Append(sequence);
-            parent.ToString().ShouldEqual("<div><br /><hr /></div>");
+            parent.ToString().ShouldBe("<div><br /><hr /></div>");
         }
 
         [Fact]
         public void append_and_modify_the_innermost_child()
         {
             var tag = new HtmlTag("body").Append("div > form > input", child => child.Id("first-name"));
-            tag.ToString().ShouldEqual("<body><div><form><input id=\"first-name\" /></form></div></body>");
+            tag.ToString().ShouldBe("<body><div><form><input id=\"first-name\" /></form></div></body>");
         }
 
         [Fact]
@@ -701,7 +701,7 @@ namespace HtmlTags.Testing
             tag.Append("span");
             tag.InsertFirst(new HtmlTag("p"));
 
-            tag.ToString().ShouldEqual("<div><p></p><span></span></div>");
+            tag.ToString().ShouldBe("<div><p></p><span></span></div>");
         }
 
         [Fact]
@@ -709,8 +709,8 @@ namespace HtmlTags.Testing
         {
             var original = new HtmlTag("div");
             var child = original.Add("span");
-            child.ToString().ShouldEqual("<span></span>");
-            original.ToString().ShouldEqual("<div><span></span></div>");
+            child.ToString().ShouldBe("<span></span>");
+            original.ToString().ShouldBe("<div><span></span></div>");
         }
 
         [Fact]
@@ -718,8 +718,8 @@ namespace HtmlTags.Testing
         {
             var original = new HtmlTag("div");
             var child = original.Add<HiddenTag>();
-            child.ToString().ShouldEqual("<input type=\"hidden\" />");
-            original.ToString().ShouldEqual("<div><input type=\"hidden\" /></div>");
+            child.ToString().ShouldBe("<input type=\"hidden\" />");
+            original.ToString().ShouldBe("<div><input type=\"hidden\" /></div>");
         }
 
         [Fact]
@@ -729,7 +729,7 @@ namespace HtmlTags.Testing
             tag.Add("tbody/tr/td").Text("some text");
 
             tag.ToString()
-                .ShouldEqual("<table><tbody><tr><td>some text</td></tr></tbody></table>");
+                .ShouldBe("<table><tbody><tr><td>some text</td></tr></tbody></table>");
         }
 
         [Fact]
@@ -739,7 +739,7 @@ namespace HtmlTags.Testing
             tag.Add("tbody > tr > td").Text("some text");
 
             tag.ToString()
-                .ShouldEqual("<table><tbody><tr><td>some text</td></tr></tbody></table>");
+                .ShouldBe("<table><tbody><tr><td>some text</td></tr></tbody></table>");
         }
 
         [Fact]
@@ -756,7 +756,7 @@ namespace HtmlTags.Testing
                 x.Add("body/div").Text("inner text of div");
             });
 
-            tag.ToString().ShouldEqual(
+            tag.ToString().ShouldBe(
                 "<html><head><title>The title</title><style>the style</style></head><body><div>inner text of div</div></body></html>");
         }
 
@@ -767,7 +767,7 @@ namespace HtmlTags.Testing
             tag.Children.ShouldHaveCount(2);
             tag.ReplaceChildren(new HtmlTag("hr"));
             tag.Children.ShouldHaveCount(1);
-            tag.ToString().ShouldEqual("<div><hr /></div>");
+            tag.ToString().ShouldBe("<div><hr /></div>");
         }
 
         [Fact]
@@ -792,7 +792,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("span").Text("something");
             tag.Next = new HtmlTag("span").Text("next");
 
-            tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
+            tag.ToString().ShouldBe("<span>something</span><span>next</span>");
         }
 
         [Fact]
@@ -801,7 +801,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("span").Text("something");
             tag.Next = new HtmlTag("span").Text("next");
             tag.Next = new HtmlTag("span").Text("brother");
-            tag.ToString().ShouldEqual("<span>something</span><span>brother</span>");
+            tag.ToString().ShouldBe("<span>something</span><span>brother</span>");
         }
 
 
@@ -811,7 +811,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("span").Text("something");
             tag.After(new HtmlTag("span").Text("next"));
 
-            tag.ToString().ShouldEqual("<span>something</span><span>next</span>");
+            tag.ToString().ShouldBe("<span>something</span><span>next</span>");
         }
 
         [Fact]
@@ -820,7 +820,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("span").Text("something");
             tag.After(new HtmlTag("span").Text("first brother"));
             tag.After(new HtmlTag("span").Text("second brother"));
-            tag.ToString().ShouldEqual("<span>something</span><span>second brother</span><span>first brother</span>");
+            tag.ToString().ShouldBe("<span>something</span><span>second brother</span><span>first brother</span>");
         }
 
         [Fact]
@@ -851,7 +851,7 @@ namespace HtmlTags.Testing
         public void hide_renders_the_tag_but_sets_style_to_display_none()
         {
             var tag = new HtmlTag("div").Hide();
-            tag.Style("display").ShouldEqual("none");
+            tag.Style("display").ShouldBe("none");
         }
 
         [Fact]
@@ -860,13 +860,13 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div");
 
             tag.Render().ShouldBeTrue();
-            tag.ToString().ShouldEqual("<div></div>");
+            tag.ToString().ShouldBe("<div></div>");
         }
 
         [Fact]
         public void render_set_to_false_always_returns_an_empty_string()
         {
-            new HtmlTag("div").Render(false).ToString().ShouldEqual("");
+            new HtmlTag("div").Render(false).ToString().ShouldBe("");
         }
 
         [Fact]
@@ -895,7 +895,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void rendering_a_NoTag_should_not_render_anything()
         {
-            new NoTag().AddClass("important").Text("foo").ToString().ShouldEqual("");
+            new NoTag().AddClass("important").Text("foo").ToString().ShouldBe("");
         }
     }
 
@@ -909,7 +909,7 @@ namespace HtmlTags.Testing
             var wrapped = tag.WrapWith("span");
 
             wrapped.ShouldNotBeSameAs(tag);
-            wrapped.TagName().ShouldEqual("span");
+            wrapped.TagName().ShouldBe("span");
             wrapped.FirstChild().ShouldBeSameAs(tag);
         }
 
@@ -966,7 +966,7 @@ namespace HtmlTags.Testing
             tag.Data("string", "b-value");
             tag.Data("bool", true);
             tag.Data("setting", new ListValue {Value = "RED", Display = "Red"});
-            tag.ToString().ShouldEqual("<div data-integer=\"1\" data-string=\"b-value\" data-bool=\"true\" data-setting=\"{&quot;Display&quot;:&quot;Red&quot;,&quot;Value&quot;:&quot;RED&quot;}\"></div>");
+            tag.ToString().ShouldBe("<div data-integer=\"1\" data-string=\"b-value\" data-bool=\"true\" data-setting=\"{&quot;Display&quot;:&quot;Red&quot;,&quot;Value&quot;:&quot;RED&quot;}\"></div>");
         }
 
         [Fact]
@@ -974,7 +974,7 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div");
             tag.Data("age", 42);
-            tag.Data("age").ShouldEqual(42);
+            tag.Data("age").ShouldBe(42);
         }
 
         [Fact]
@@ -999,8 +999,8 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div");
             tag.Data("name", "");
             tag.HasAttr("data-name").ShouldBeTrue();
-            tag.Data("name").ShouldEqual("");
-            tag.ToString().ShouldEqual("<div data-name=\"\"></div>");
+            tag.Data("name").ShouldBe("");
+            tag.ToString().ShouldBe("<div data-name=\"\"></div>");
         }
 
         [Fact]
@@ -1009,7 +1009,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div");
             tag.Data("error", new ListValue {Display = "Original"});
             tag.Data<ListValue>("error", val => val.Display = "Changed");
-            ((ListValue)tag.Data("error")).Display.ShouldEqual("Changed");
+            ((ListValue)tag.Data("error")).Display.ShouldBe("Changed");
         }
 
         [Fact]
@@ -1031,12 +1031,12 @@ namespace HtmlTags.Testing
             tag.MetaData("a", 1);
             tag.MetaData("b", "b-value");
 
-            tag.ToString().ShouldEqual("<div data-__=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
+            tag.ToString().ShouldBe("<div data-__=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
 
             // now with another class
             tag.AddClass("class1");
 
-            tag.ToString().ShouldEqual("<div class=\"class1\" data-__=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
+            tag.ToString().ShouldBe("<div class=\"class1\" data-__=\"{&quot;a&quot;:1,&quot;b&quot;:&quot;b-value&quot;}\">text</div>");
         }
 
         [Fact]
@@ -1044,7 +1044,7 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div");
             tag.MetaData("name", "joe");
-            tag.MetaData("name").ShouldEqual("joe");
+            tag.MetaData("name").ShouldBe("joe");
         }
 
         [Fact]
@@ -1060,7 +1060,7 @@ namespace HtmlTags.Testing
             var tag = new HtmlTag("div");
             tag.MetaData("error", new ListValue {Display = "Original"});
             tag.MetaData<ListValue>("error", val => val.Display = "Changed");
-            ((ListValue)tag.MetaData("error")).Display.ShouldEqual("Changed");
+            ((ListValue)tag.MetaData("error")).Display.ShouldBe("Changed");
         }
 
         [Fact]
@@ -1111,7 +1111,7 @@ namespace HtmlTags.Testing
                 {
                     Display = "a",
                     Value = "1"
-                }).ToString().ShouldEqual("<div data-__=\"{&quot;listValue&quot;:{&quot;Display&quot;:&quot;a&quot;,&quot;Value&quot;:&quot;1&quot;}}\"></div>");
+                }).ToString().ShouldBe("<div data-__=\"{&quot;listValue&quot;:{&quot;Display&quot;:&quot;a&quot;,&quot;Value&quot;:&quot;1&quot;}}\"></div>");
         }
 
         [Fact]
@@ -1121,7 +1121,7 @@ namespace HtmlTags.Testing
             tag.AppendHtml("<span>Hello</span>").ShouldBeSameAs(tag);
             tag.AppendHtml(" Hey!");
 
-            tag.ToString().ShouldEqual("<div><span>Hello</span> Hey!</div>");
+            tag.ToString().ShouldBe("<div><span>Hello</span> Hey!</div>");
         }
     }
 
@@ -1136,14 +1136,14 @@ namespace HtmlTags.Testing
         [Fact]
         public void metadataattribute_value_ends_with_a_colon_char_by_default()
         {
-            HtmlTag.MetadataAttribute.ShouldEqual("data-__");
+            HtmlTag.MetadataAttribute.ShouldBe("data-__");
         }
 
         [Fact]
         public void metadataattribute_value_ends_with_the_metadatasuffix_char()
         {
             HtmlTag.UseMetadataSuffix("*");
-            HtmlTag.MetadataAttribute.ShouldEqual("data-*");
+            HtmlTag.MetadataAttribute.ShouldBe("data-*");
         }
 
     }

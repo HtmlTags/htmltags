@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using HtmlTags.Reflection;
 using HtmlTags.Conventions;
 using HtmlTags.Conventions.Elements.Builders;
-using Should;
+using Shouldly;
 using Xunit;
 
 namespace HtmlTags.Testing
@@ -15,15 +15,15 @@ namespace HtmlTags.Testing
         public void basic_construction()
         {
             var tag = new CheckboxTag(true);
-            tag.TagName().ShouldEqual("input");
-            tag.Attr("type").ShouldEqual("checkbox");
+            tag.TagName().ShouldBe("input");
+            tag.Attr("type").ShouldBe("checkbox");
         }
 
         [Fact]
         public void create_checkbox_that_is_checked()
         {
             var tag = new CheckboxTag(true);
-            tag.Attr("checked").ShouldEqual("true");
+            tag.Attr("checked").ShouldBe("true");
         }
 
         [Fact]
@@ -40,8 +40,8 @@ namespace HtmlTags.Testing
             Expression<Func<Model, object>> m = _ => _.Toggle;
             var accessor = m.ToAccessor();
             var tag = builder.Build(new ElementRequest(accessor));
-            tag.TagName().ShouldEqual("input");
-            tag.Attr("type").ShouldEqual("checkbox");
+            tag.TagName().ShouldBe("input");
+            tag.Attr("type").ShouldBe("checkbox");
             tag.HasAttr("checked").ShouldBeFalse();
         }
 

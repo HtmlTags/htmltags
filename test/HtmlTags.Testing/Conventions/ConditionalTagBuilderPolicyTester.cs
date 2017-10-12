@@ -1,4 +1,4 @@
-using Should;
+using Shouldly;
 using HtmlTags.Conventions;
 using Xunit;
 
@@ -27,7 +27,7 @@ namespace HtmlTags.Testing.Conventions
             };
             builder.BuilderFor(subject).Build(subject)
                 .ToString()
-                .ShouldEqual("<div>Max</div>");
+                .ShouldBe("<div>Max</div>");
         }
     }
 }

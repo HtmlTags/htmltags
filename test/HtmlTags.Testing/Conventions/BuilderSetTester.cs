@@ -1,7 +1,7 @@
 using HtmlTags.Conventions;
 using Moq;
 using Xunit;
-using Should;
+using Shouldly;
 
 namespace HtmlTags.Testing.Conventions
 {

@@ -1,6 +1,6 @@
 using HtmlTags.Conventions;
 using Xunit;
-using Should;
+using Shouldly;
 
 namespace HtmlTags.Testing.Conventions
 {
@@ -26,12 +26,12 @@ namespace HtmlTags.Testing.Conventions
                 Level = int.MaxValue
             };
 
-            subject1.ShouldNotEqual(subject2);
+            subject1.ShouldNotBe(subject2);
 
-            new TagSubject("a", subject1).ShouldEqual(new TagSubject("a", subject1));
-            new TagSubject("a", subject2).ShouldEqual(new TagSubject("a", subject2));
-            new TagSubject("a", subject1).ShouldNotEqual(new TagSubject("a", subject2));
-            new TagSubject("a", subject2).ShouldNotEqual(new TagSubject("b", subject2));
+            new TagSubject("a", subject1).ShouldBe(new TagSubject("a", subject1));
+            new TagSubject("a", subject2).ShouldBe(new TagSubject("a", subject2));
+            new TagSubject("a", subject1).ShouldNotBe(new TagSubject("a", subject2));
+            new TagSubject("a", subject2).ShouldNotBe(new TagSubject("b", subject2));
         }
 
         [Fact]
@@ -49,12 +49,12 @@ namespace HtmlTags.Testing.Conventions
                 Level = int.MaxValue
             };
 
-            subject1.ShouldNotEqual(subject2);
+            subject1.ShouldNotBe(subject2);
 
-            new TagSubject("a", subject1).GetHashCode().ShouldEqual(new TagSubject("a", subject1).GetHashCode());
-            new TagSubject("a", subject2).GetHashCode().ShouldEqual(new TagSubject("a", subject2).GetHashCode());
-            new TagSubject("a", subject1).GetHashCode().ShouldNotEqual(new TagSubject("a", subject2).GetHashCode());
-            new TagSubject("a", subject2).GetHashCode().ShouldNotEqual(new TagSubject("b", subject2).GetHashCode());
+            new TagSubject("a", subject1).GetHashCode().ShouldBe(new TagSubject("a", subject1).GetHashCode());
+            new TagSubject("a", subject2).GetHashCode().ShouldBe(new TagSubject("a", subject2).GetHashCode());
+            new TagSubject("a", subject1).GetHashCode().ShouldNotBe(new TagSubject("a", subject2).GetHashCode());
+            new TagSubject("a", subject2).GetHashCode().ShouldNotBe(new TagSubject("b", subject2).GetHashCode());
         }
     }
 }

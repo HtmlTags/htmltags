@@ -1,4 +1,4 @@
-using Should;
+using Shouldly;
 using HtmlTags.Extended;
 using HtmlTags.Extended.Attributes;
 using Xunit;
@@ -12,35 +12,35 @@ namespace HtmlTags.Testing
         public void value_ext_method()
         {
             new HtmlTag("input").Value("the value")
-                .ToString().ShouldEqual("<input value=\"the value\" />");
+                .ToString().ShouldBe("<input value=\"the value\" />");
         }
 
         [Fact]
         public void name_ext_method()
         {
             new HtmlTag("input").Name("the name")
-                .Attr("name").ShouldEqual("the name");
+                .Attr("name").ShouldBe("the name");
         }
 
         [Fact]
         public void autocomplete_ext_method()
         {
             new HtmlTag("div").NoAutoComplete()
-                .Attr("autocomplete").ShouldEqual("off");
+                .Attr("autocomplete").ShouldBe("off");
         }
 
         [Fact]
         public void password_mode_ext_method()
         {
             new HtmlTag("a").Name("password").PasswordMode().ToString()
-                .ShouldEqual("<input name=\"password\" type=\"password\" autocomplete=\"off\" />");
+                .ShouldBe("<input name=\"password\" type=\"password\" autocomplete=\"off\" />");
         }
 
         [Fact]
         public void file_upload_mode_ext_method()
         {
             new HtmlTag("input").FileUploadMode().ToString()
-                .ShouldEqual("<input type=\"file\" />");
+                .ShouldBe("<input type=\"file\" />");
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void hide_unless_positive_case()
         {
-            new HtmlTag("div").HideUnless(false).Style("display").ShouldEqual("none");
+            new HtmlTag("div").HideUnless(false).Style("display").ShouldBe("none");
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div").Text("<img />").UnEncoded();
             tag.Encoded().ShouldBeFalse();
-            tag.ToString().ShouldEqual("<div><img /></div>");
+            tag.ToString().ShouldBe("<div><img /></div>");
         }
     }
 
@@ -86,13 +86,13 @@ namespace HtmlTags.Testing
         [Fact]
         public void the_previous_value_should_be_moved_to_the_text_attribute()
         {
-            theTag.Text().ShouldEqual(theOriginalValue);
+            theTag.Text().ShouldBe(theOriginalValue);
         }
 
         [Fact]
         public void the_tag_name_should_be_changed_to_textarea()
         {
-            theTag.TagName().ShouldEqual("textarea");
+            theTag.TagName().ShouldBe("textarea");
         }
     }
 
@@ -109,7 +109,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void the_tag_name_should_be_changed_to_textarea()
         {
-            theTag.TagName().ShouldEqual("textarea");
+            theTag.TagName().ShouldBe("textarea");
         }
     }
 }

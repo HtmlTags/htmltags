@@ -1,4 +1,4 @@
-using Should;
+using Shouldly;
 using Xunit;
 using System.Linq;
 
@@ -18,7 +18,7 @@ namespace HtmlTags.Testing
             tag.SelectByValue("2");
 
             tag.Children[0].HasAttr("selected").ShouldBeFalse();
-            tag.Children[1].Attr("selected").ShouldEqual("selected");
+            tag.Children[1].Attr("selected").ShouldBe("selected");
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
 
@@ -33,7 +33,7 @@ namespace HtmlTags.Testing
             tag.SelectByValue(2);
 
             tag.Children[0].HasAttr("selected").ShouldBeFalse();
-            tag.Children[1].Attr("selected").ShouldEqual("selected");
+            tag.Children[1].Attr("selected").ShouldBe("selected");
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
 
@@ -61,7 +61,7 @@ namespace HtmlTags.Testing
             tag.SelectByValue("2");
             tag.SelectByValue("1");
 
-            tag.Children[0].Attr("selected").ShouldEqual("selected");
+            tag.Children[0].Attr("selected").ShouldBe("selected");
             tag.Children[1].HasAttr("selected").ShouldBeFalse();
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
@@ -76,7 +76,7 @@ namespace HtmlTags.Testing
             tag.SelectByValue("1");
             tag.SelectByValue("abcd");
 
-            tag.Children[0].Attr("selected").ShouldEqual("selected");
+            tag.Children[0].Attr("selected").ShouldBe("selected");
             tag.Children[1].HasAttr("selected").ShouldBeFalse();
         }
 
@@ -89,7 +89,7 @@ namespace HtmlTags.Testing
 
             tag.DefaultOption("bar");
 
-            tag.Children[0].Text().ShouldEqual("bar");
+            tag.Children[0].Text().ShouldBe("bar");
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace HtmlTags.Testing
 
             tag.DefaultOption("bar");
 
-            tag.Children[0].Attr("selected").ShouldEqual("selected");
+            tag.Children[0].Attr("selected").ShouldBe("selected");
             tag.Children[1].HasAttr("selected").ShouldBeFalse();
             tag.Children[2].HasAttr("selected").ShouldBeFalse();
         }
@@ -114,8 +114,8 @@ namespace HtmlTags.Testing
 
             tag.TopOption("_", "0");
 
-            tag.Children[0].Text().ShouldEqual("_");
-            tag.Children[1].Text().ShouldEqual("a");
+            tag.Children[0].Text().ShouldBe("_");
+            tag.Children[1].Text().ShouldBe("a");
         }
     }
 }

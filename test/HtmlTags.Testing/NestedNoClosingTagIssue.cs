@@ -1,4 +1,4 @@
-using Should;
+using Shouldly;
 using Xunit;
 
 namespace HtmlTags.Testing
@@ -16,7 +16,7 @@ namespace HtmlTags.Testing
             wrapper.Append(tag);
 
             wrapper.ToString()
-                .ShouldEqual("<div><input /></div>");
+                .ShouldBe("<div><input /></div>");
             // actually renders "<div><input />")
         }
     }

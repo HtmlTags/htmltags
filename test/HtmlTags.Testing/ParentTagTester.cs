@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Should;
+using Shouldly;
 using Xunit;
 
 namespace HtmlTags.Testing
@@ -15,8 +15,8 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div");
             var child = tag.Add("span");
-            tag.ShouldEqual(child.Parent);
-            tag.Children[0].ShouldEqual(child);
+            tag.ShouldBe(child.Parent);
+            tag.Children[0].ShouldBe(child);
         }
 
         [Fact]
@@ -24,8 +24,8 @@ namespace HtmlTags.Testing
         {
             var child = new HtmlTag("span");
             var tag = new HtmlTag("div").Append(child);
-            tag.ShouldEqual(child.Parent);
-            tag.Children[0].ShouldEqual(child);
+            tag.ShouldBe(child.Parent);
+            tag.Children[0].ShouldBe(child);
         }
 
         [Fact]
@@ -34,10 +34,10 @@ namespace HtmlTags.Testing
             var child = new HtmlTag("span");
             var child1 = new HtmlTag("span");
             var tag = new HtmlTag("div").Append(new List<HtmlTag>() { child, child1 });
-            tag.ShouldEqual(child.Parent);
-            tag.ShouldEqual(child1.Parent);
-            tag.Children[0].ShouldEqual(child);
-            tag.Children[1].ShouldEqual(child1);
+            tag.ShouldBe(child.Parent);
+            tag.ShouldBe(child1.Parent);
+            tag.Children[0].ShouldBe(child);
+            tag.Children[1].ShouldBe(child1);
         }
 
         [Fact]
@@ -46,8 +46,8 @@ namespace HtmlTags.Testing
             var child = new HtmlTag("span");
             var tag = new HtmlTag("div");
             tag.InsertFirst(child);
-            tag.ShouldEqual(child.Parent);
-            tag.Children[0].ShouldEqual(child);
+            tag.ShouldBe(child.Parent);
+            tag.Children[0].ShouldBe(child);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div");
             var child = tag.Add("span").Text("hi");
-            child.ToString().ShouldEqual("<span>hi</span>");
+            child.ToString().ShouldBe("<span>hi</span>");
         }
     
         [Fact]
@@ -63,7 +63,7 @@ namespace HtmlTags.Testing
         {
             var tag = new HtmlTag("div");
             var child = tag.Add("span").RenderFromTop().Text("hi");
-            child.ToString().ShouldEqual("<div><span>hi</span></div>");
+            child.ToString().ShouldBe("<div><span>hi</span></div>");
         }
     }
 }

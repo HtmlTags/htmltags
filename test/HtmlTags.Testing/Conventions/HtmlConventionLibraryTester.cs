@@ -1,7 +1,7 @@
 using System;
 using HtmlTags.Conventions;
 using Xunit;
-using Should;
+using Shouldly;
 using Moq;
 
 namespace HtmlTags.Testing.Conventions
@@ -50,8 +50,8 @@ namespace HtmlTags.Testing.Conventions
 
             builder2.FillInto(builder1);
 
-            builder1.Build<string>().ShouldEqual("blue"); // not replaced
-            builder1.Build<int>().ShouldEqual(1); // was filled in
+            builder1.Build<string>().ShouldBe("blue"); // not replaced
+            builder1.Build<int>().ShouldBe(1); // was filled in
         }
 
         [Fact]
@@ -65,8 +65,8 @@ namespace HtmlTags.Testing.Conventions
 
             library1.Import(library2);
 
-            library1.Get<IFoo>().ShouldBeType<LittleFoo>();
-            library1.Get<IFoo>("different").ShouldBeType<BigFoo>();
+            library1.Get<IFoo>().ShouldBeOfType<LittleFoo>();
+            library1.Get<IFoo>("different").ShouldBeOfType<BigFoo>();
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace HtmlTags.Testing.Conventions
 
             library1.Import(library2);
 
-            library1.Get<IFoo>().ShouldBeType<LittleFoo>();
+            library1.Get<IFoo>().ShouldBeOfType<LittleFoo>();
         }
 
 
@@ -98,7 +98,7 @@ namespace HtmlTags.Testing.Conventions
             var library = new HtmlConventionLibrary();
             library.RegisterService<IFoo, Foo>();
 
-            library.Get<IFoo>().ShouldBeType<Foo>();
+            library.Get<IFoo>().ShouldBeOfType<Foo>();
         }
 
         [Fact]
@@ -107,8 +107,8 @@ namespace HtmlTags.Testing.Conventions
             var library = new HtmlConventionLibrary();
             library.RegisterService<IFoo>(() => new ColoredFoo{Color = "Red"});
 
-            library.Get<IFoo>().ShouldBeType<ColoredFoo>()
-                .Color.ShouldEqual("Red");
+            library.Get<IFoo>().ShouldBeOfType<ColoredFoo>()
+                .Color.ShouldBe("Red");
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace HtmlTags.Testing.Conventions
             var library = new HtmlConventionLibrary();
             library.RegisterService<IFoo, Foo>(TagConstants.Default);
 
-            library.Get<IFoo>().ShouldBeType<Foo>();
+            library.Get<IFoo>().ShouldBeOfType<Foo>();
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace HtmlTags.Testing.Conventions
 
             library.RegisterService<IFoo, DifferentFoo>("Profile1");
 
-            library.Get<IFoo>("Profile1").ShouldBeType<DifferentFoo>();
+            library.Get<IFoo>("Profile1").ShouldBeOfType<DifferentFoo>();
         }
 
         [Fact]
@@ -137,7 +137,7 @@ namespace HtmlTags.Testing.Conventions
             var library = new HtmlConventionLibrary();
             library.RegisterService<IFoo, Foo>(TagConstants.Default);
 
-            library.Get<IFoo>("Profile1").ShouldBeType<Foo>();
+            library.Get<IFoo>("Profile1").ShouldBeOfType<Foo>();
         }
     }
 

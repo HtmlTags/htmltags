@@ -1,4 +1,4 @@
-using Should;
+using Shouldly;
 using HtmlTags.Conventions;
 using Xunit;
 
@@ -19,7 +19,7 @@ namespace HtmlTags.Testing.Conventions
             plan.Build(new FakeSubject{
                 Name = "Malcolm Reynolds"
             })
-                .ToString().ShouldEqual("<div id=\"Malcolm Reynolds\" class=\"a b\"></div>");
+                .ToString().ShouldBe("<div id=\"Malcolm Reynolds\" class=\"a b\"></div>");
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace HtmlTags.Testing.Conventions
             {
                 Name = "Malcolm Reynolds"
             })
-                .ToString().ShouldEqual("<div class=\"wrapper\"><div id=\"Malcolm Reynolds\" class=\"a b\"></div></div>");
+                .ToString().ShouldBe("<div class=\"wrapper\"><div id=\"Malcolm Reynolds\" class=\"a b\"></div></div>");
         }
     }
 

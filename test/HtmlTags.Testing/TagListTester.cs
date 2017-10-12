@@ -1,4 +1,4 @@
-using Should;
+using Shouldly;
 using Xunit;
 
 namespace HtmlTags.Testing
@@ -11,7 +11,7 @@ namespace HtmlTags.Testing
         {
             var tags = new[]{ new HtmlTag("div"), new HtmlTag("p"), new HtmlTag("div")};
             var list = new TagList(tags);
-            list.ToString().ShouldEqual("<div></div>\n<p></p>\n<div></div>");
+            list.ToString().ShouldBe("<div></div>\n<p></p>\n<div></div>");
         }
 
         [Fact]

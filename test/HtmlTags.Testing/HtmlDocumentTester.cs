@@ -1,5 +1,5 @@
 using System;
-using Should;
+using Shouldly;
 using Xunit;
 
 namespace HtmlTags.Testing
@@ -26,23 +26,23 @@ namespace HtmlTags.Testing
         public void add_does_not_push_onto_stack()
         {
             document.Add("div/a").Text("hello");
-            document.Current.TagName().ShouldEqual("body");
+            document.Current.TagName().ShouldBe("body");
         }
 
         [Fact]
         public void add_a_tag_by_tag_name()
         {
             HtmlTag element = document.Add("div/a").Text("hello");
-            element.TagName().ShouldEqual("a");
+            element.TagName().ShouldBe("a");
         }
 
         [Fact]
         public void add_an_htmlTag()
         {
             document.Add(new HtmlTag("p"));
-            document.Last.TagName().ShouldEqual("p");
-            document.Current.TagName().ShouldEqual("body");
-            document.Current.FirstChild().TagName().ShouldEqual("p");
+            document.Last.TagName().ShouldBe("p");
+            document.Current.TagName().ShouldBe("body");
+            document.Current.FirstChild().TagName().ShouldBe("p");
         }
 
         [Fact]
@@ -57,8 +57,8 @@ namespace HtmlTags.Testing
                     });
             document.Add(tagList);
             document.Body.Children.ShouldHaveCount(3);
-            document.Current.TagName().ShouldEqual("body");
-            document.Last.TagName().ShouldEqual("p");
+            document.Current.TagName().ShouldBe("body");
+            document.Last.TagName().ShouldBe("p");
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void check_the_basic_structure_with_title_body_and_head()
         {
-            document.ToString().ShouldEqual("<!DOCTYPE html>" + Environment.NewLine +
+            document.ToString().ShouldBe("<!DOCTYPE html>" + Environment.NewLine +
                 "<html><head><title>the title</title></head><body></body></html>");
         }
 
@@ -110,7 +110,7 @@ namespace HtmlTags.Testing
                 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
             document.RootTag.Attr("xmlns", "http://www.w3.org/1999/xhtml");
 
-            document.ToString().ShouldEqual("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + Environment.NewLine +
+            document.ToString().ShouldBe("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + Environment.NewLine +
                "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>the title</title></head><body></body></html>");
         }
 
@@ -176,7 +176,7 @@ namespace HtmlTags.Testing
             document.Push("div/span");
             document.Pop();
 
-            document.Current.TagName().ShouldEqual("body");
+            document.Current.TagName().ShouldBe("body");
         }
 
         [Fact]
@@ -210,19 +210,19 @@ namespace HtmlTags.Testing
         [Fact]
         public void the_current_element_is_the_body_by_default()
         {
-            document.Current.TagName().ShouldEqual("body");
+            document.Current.TagName().ShouldBe("body");
         }
 
         [Fact]
         public void the_last_property()
         {
-            document.Last.TagName().ShouldEqual("body");
+            document.Last.TagName().ShouldBe("body");
             document.Add("table/tr/td");
-            document.Last.TagName().ShouldEqual("td");
+            document.Last.TagName().ShouldBe("td");
 
             document.Push("p");
 
-            document.Last.TagName().ShouldEqual("p");
+            document.Last.TagName().ShouldBe("p");
         }
 
         [Fact]
@@ -231,10 +231,10 @@ namespace HtmlTags.Testing
             document.Add("p");
             
             document.AddStyle("font-weight: bold;");
-            document.Last.TagName().ShouldEqual("p");
+            document.Last.TagName().ShouldBe("p");
 
             document.ReferenceStyle("my.css");
-            document.Last.TagName().ShouldEqual("p");
+            document.Last.TagName().ShouldBe("p");
         }
 
         [Fact]
@@ -243,10 +243,10 @@ namespace HtmlTags.Testing
             document.Add("p");
 
             document.AddJavaScript("alert('hi');");
-            document.Last.TagName().ShouldEqual("p");
+            document.Last.TagName().ShouldBe("p");
 
             document.ReferenceJavaScriptFile("my.js");
-            document.Last.TagName().ShouldEqual("p");
+            document.Last.TagName().ShouldBe("p");
         }
 
         [Fact]
@@ -281,7 +281,7 @@ namespace HtmlTags.Testing
             
             document.OpenInBrowser();
 
-            actualPath.ShouldEqual(actualTempFileName);
+            actualPath.ShouldBe(actualTempFileName);
             actualContent.ShouldStartWith("<!DOCTYPE");
         }
 

@@ -1,6 +1,6 @@
 ﻿using HtmlTags.Conventions;
 using Xunit;
-using Should;
+using Shouldly;
 
 namespace HtmlTags.Testing.Conventions
 {
@@ -19,7 +19,7 @@ namespace HtmlTags.Testing.Conventions
 
             services2.FillInto(services1);
 
-            services1.Build<IChrome>().ShouldBeType<AChrome>();
+            services1.Build<IChrome>().ShouldBeOfType<AChrome>();
         }
     }
 

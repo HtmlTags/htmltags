@@ -1,6 +1,6 @@
 using System.Security.Principal;
 using System.Threading;
-using Should;
+using Shouldly;
 using Xunit;
 
 namespace HtmlTags.Testing

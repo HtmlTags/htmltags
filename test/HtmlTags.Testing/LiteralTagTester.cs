@@ -1,5 +1,5 @@
 using Xunit;
-using Should;
+using Shouldly;
 
 namespace HtmlTags.Testing
 {
@@ -12,7 +12,7 @@ namespace HtmlTags.Testing
             var html = "<div>I did this</div>";
             var tag = new LiteralTag(html);
 
-            tag.ToString().ShouldEqual(html);
+            tag.ToString().ShouldBe(html);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace HtmlTags.Testing
             var tag = new LiteralTag(html);
 
             new HtmlTag("body").Append(tag)
-                .ToString().ShouldEqual("<body>" + html + "</body>");
+                .ToString().ShouldBe("<body>" + html + "</body>");
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace HtmlTags.Testing
             var html = "<div>I did this</div>";
 
             new HtmlTag("body").AppendHtml(html)
-                .ToString().ShouldEqual("<body>" + html + "</body>");
+                .ToString().ShouldBe("<body>" + html + "</body>");
         }
     }
 }

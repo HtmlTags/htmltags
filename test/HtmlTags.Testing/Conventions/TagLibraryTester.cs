@@ -1,6 +1,6 @@
 using HtmlTags.Conventions;
 using Xunit;
-using Should;
+using Shouldly;
 using Moq;
 
 namespace HtmlTags.Testing.Conventions
@@ -33,11 +33,11 @@ namespace HtmlTags.Testing.Conventions
 
             var subject = new FakeSubject { Name = "Lindsey" };
 
-            build(subject).ToString().ShouldEqual("<div>Lindsey</div>");
-            build(subject, category:"a").ToString().ShouldEqual("<a>Lindsey</a>");
-            build(subject, category:"a", profile:"a-1").ToString().ShouldEqual("<a class=\"a-1\">Lindsey</a>");
-            build(subject, category:"b").ToString().ShouldEqual("<b>Lindsey</b>");
-            build(subject, profile:"profile1").ToString().ShouldEqual("<p>Lindsey</p>");
+            build(subject).ToString().ShouldBe("<div>Lindsey</div>");
+            build(subject, category:"a").ToString().ShouldBe("<a>Lindsey</a>");
+            build(subject, category:"a", profile:"a-1").ToString().ShouldBe("<a class=\"a-1\">Lindsey</a>");
+            build(subject, category:"b").ToString().ShouldBe("<b>Lindsey</b>");
+            build(subject, profile:"profile1").ToString().ShouldBe("<p>Lindsey</p>");
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using Should;
+﻿using Shouldly;
 using Xunit;
 
 namespace HtmlTags.Testing
@@ -83,56 +83,56 @@ namespace HtmlTags.Testing
         [Fact]
         public void do_nothing_if_already_valid_class_name()
         {
-            CssClassNameValidator.SanitizeClassName("asdf").ShouldEqual("asdf");
-            CssClassNameValidator.SanitizeClassName("-test").ShouldEqual("-test");
-            CssClassNameValidator.SanitizeClassName("-_test").ShouldEqual("-_test");
-            CssClassNameValidator.SanitizeClassName("TEST_2-test").ShouldEqual("TEST_2-test");
-            CssClassNameValidator.SanitizeClassName("-just-4-test").ShouldEqual("-just-4-test");
+            CssClassNameValidator.SanitizeClassName("asdf").ShouldBe("asdf");
+            CssClassNameValidator.SanitizeClassName("-test").ShouldBe("-test");
+            CssClassNameValidator.SanitizeClassName("-_test").ShouldBe("-_test");
+            CssClassNameValidator.SanitizeClassName("TEST_2-test").ShouldBe("TEST_2-test");
+            CssClassNameValidator.SanitizeClassName("-just-4-test").ShouldBe("-just-4-test");
         }
 
         [Fact]
         public void remove_leading_numbers()
         {
-            CssClassNameValidator.SanitizeClassName("9asdf").ShouldEqual("asdf");
+            CssClassNameValidator.SanitizeClassName("9asdf").ShouldBe("asdf");
         }
 
         [Fact]
         public void should_handle_different_combos_of_leading_invalid_characters()
         {
-            CssClassNameValidator.SanitizeClassName("9-9asdf").ShouldEqual("asdf");
-            CssClassNameValidator.SanitizeClassName("-99asdf").ShouldEqual("asdf");
-            CssClassNameValidator.SanitizeClassName("@-99asdf").ShouldEqual("asdf");
-            CssClassNameValidator.SanitizeClassName("@-99@asdf").ShouldEqual("asdf");
+            CssClassNameValidator.SanitizeClassName("9-9asdf").ShouldBe("asdf");
+            CssClassNameValidator.SanitizeClassName("-99asdf").ShouldBe("asdf");
+            CssClassNameValidator.SanitizeClassName("@-99asdf").ShouldBe("asdf");
+            CssClassNameValidator.SanitizeClassName("@-99@asdf").ShouldBe("asdf");
         }
 
         [Fact]
         public void remove_leading_hyphen_and_numbers_if_not_followed_by_an_underscore_or_alpha_char()
         {
-            CssClassNameValidator.SanitizeClassName("-9asdf").ShouldEqual("asdf");
+            CssClassNameValidator.SanitizeClassName("-9asdf").ShouldBe("asdf");
         }
 
         [Fact]
         public void remove_bogus_characters()
         {
-            CssClassNameValidator.SanitizeClassName("a!@#$%^&*()`=':;?><|{}[]~sdf").ShouldEqual("asdf");
+            CssClassNameValidator.SanitizeClassName("a!@#$%^&*()`=':;?><|{}[]~sdf").ShouldBe("asdf");
         }
 
         [Fact]
         public void return_default_if_null_input()
         {
-            CssClassNameValidator.SanitizeClassName(null).ShouldEqual(CssClassNameValidator.DefaultClass);
+            CssClassNameValidator.SanitizeClassName(null).ShouldBe(CssClassNameValidator.DefaultClass);
         }
 
         [Fact]
         public void return_default_if_empty_input()
         {
-            CssClassNameValidator.SanitizeClassName("").ShouldEqual(CssClassNameValidator.DefaultClass);
+            CssClassNameValidator.SanitizeClassName("").ShouldBe(CssClassNameValidator.DefaultClass);
         }
 
         [Fact]
         public void return_default_if_completely_invalid_input()
         {
-            CssClassNameValidator.SanitizeClassName("-99").ShouldEqual(CssClassNameValidator.DefaultClass);
+            CssClassNameValidator.SanitizeClassName("-99").ShouldBe(CssClassNameValidator.DefaultClass);
         }
     }
 }

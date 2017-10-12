@@ -35,8 +35,23 @@ exec { & dotnet restore }
 
 exec { & dotnet build -c Release --version-suffix=$buildSuffix -v q /nologo }
 
-exec { & dotnet test .\test\HtmlTags.Testing -c Release --no-build }
-exec { & dotnet test .\test\HtmlTags.AspNetCore.Testing -c Release --no-build }
+Push-Location -Path .\test\HtmlTags.Testing
+
+try {
+	exec { & dotnet xunit -configuration Release -nobuild }
+}
+finally {
+	Pop-Location
+}
+
+Push-Location -Path .\test\HtmlTags.AspNetCore.Testing
+
+try {
+	exec { & dotnet xunit -configuration Release -nobuild }
+}
+finally {
+	Pop-Location
+}
 
 exec { & dotnet pack .\src\HtmlTags -c Release --no-build -o ..\..\artifacts --include-symbols $versionSuffix }
 exec { & dotnet pack .\src\HtmlTags.AspNetCore -c Release --no-build -o ..\..\artifacts --include-symbols $versionSuffix }

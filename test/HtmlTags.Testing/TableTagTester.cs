@@ -1,4 +1,4 @@
-using Should;
+using Shouldly;
 using Xunit;
 using System.Linq;
 
@@ -11,7 +11,7 @@ namespace HtmlTags.Testing
         public void should_create_an_empty_table()
         {
             var expected = getExpectedHtml(null, null, null);
-            new TableTag().ToString().ShouldEqual(expected);
+            new TableTag().ToString().ShouldBe(expected);
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace HtmlTags.Testing
             var headerRow = tag.AddHeaderRow();
             headerRow.Header().Text("Heading 1");
             headerRow.Header("Heading 2");
-            tag.ToString().ShouldEqual(expected);
+            tag.ToString().ShouldBe(expected);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace HtmlTags.Testing
                                       h.Header("Heading 1");
                                       h.Header("Heading 2");
                                   }).ToString()
-                .ShouldEqual(expected);
+                .ShouldBe(expected);
         }
 
         [Fact]
@@ -45,22 +45,22 @@ namespace HtmlTags.Testing
             var tag = new TableTag();
             tag.CaptionText("some caption");
 
-            tag.Children[0].Text().ShouldEqual("some caption");
-            tag.Children[0].TagName().ShouldEqual("caption");
+            tag.Children[0].Text().ShouldBe("some caption");
+            tag.Children[0].TagName().ShouldBe("caption");
 
 
-            tag.CaptionText().ShouldEqual("some caption");
+            tag.CaptionText().ShouldBe("some caption");
 
             tag.CaptionText("other caption");
-            tag.CaptionText().ShouldEqual("other caption");
+            tag.CaptionText().ShouldBe("other caption");
 
-            tag.Children.Count(x => x.TagName() == "caption").ShouldEqual(1);
+            tag.Children.Count(x => x.TagName() == "caption").ShouldBe(1);
         }
 
         [Fact]
         public void caption_is_empty_string_if_hasnt_been_set()
         {
-            new TableTag().CaptionText().ShouldEqual(string.Empty);
+            new TableTag().CaptionText().ShouldBe(string.Empty);
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace HtmlTags.Testing
             var bodyRow2 = tag.AddBodyRow();
             bodyRow2.Cell("cell 3");
             bodyRow2.Cell("cell 4");
-            tag.ToString().ShouldEqual(expected);
+            tag.ToString().ShouldBe(expected);
         }
 
         [Fact]
@@ -97,14 +97,14 @@ namespace HtmlTags.Testing
                                     b.Cell("cell 3");
                                     b.Cell("cell 4");
                                 }).ToString()
-                .ShouldEqual(expected);
+                .ShouldBe(expected);
         }
 
         [Fact]
         public void should_add_a_footer_to_the_tfoot()
         {
             var expected = getExpectedHtml(null, null, "<tfoot><tr><td>footer</td></tr></tfoot>");
-            new TableTag().AddFooterRow(f => f.Cell("footer")).ToString().ShouldEqual(expected);
+            new TableTag().AddFooterRow(f => f.Cell("footer")).ToString().ShouldBe(expected);
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace HtmlTags.Testing
                                     b.Cell("cell 2.2");
                                 })
                 .Caption("the caption").ToString()
-                .ShouldEqual(expected);
+                .ShouldBe(expected);
         }
 
         [Fact]
@@ -146,7 +146,7 @@ namespace HtmlTags.Testing
             new TableTag()
                 .AddHeaderRow(h => h.Header("heading"))
                 .AddHeaderRow(h => h.Cell("explanation")).ToString()
-                .ShouldEqual(expected);
+                .ShouldBe(expected);
         }
 
         [Fact]
@@ -163,7 +163,7 @@ namespace HtmlTags.Testing
                                     b.Cell("cell 3");
                                 })
                 .AddBodyRow(b => b.Cell("spanning cell").Attr("rowspan", 2)).ToString()
-                .ShouldEqual(expected);
+                .ShouldBe(expected);
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace HtmlTags.Testing
             table.TFoot.AddClass("footer").Render(true);
 
             System.Diagnostics.Trace.TraceInformation(table.ToString());
-            table.ToString().ShouldEqual(expected);
+            table.ToString().ShouldBe(expected);
         }
 
         private static string getExpectedHtml(string theadContents, string tbodyContents, string tfoot)
