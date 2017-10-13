@@ -75,7 +75,7 @@ namespace HtmlTags
 
         public HtmlTag(string tag) : this()
         {
-            _tag = tag.ToLower();
+            _tag = tag;
             _ignoreClosingTag = _voidElementTags.Contains(_tag);
         }
 

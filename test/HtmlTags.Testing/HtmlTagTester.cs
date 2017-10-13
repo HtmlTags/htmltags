@@ -19,6 +19,20 @@ namespace HtmlTags.Testing
         }
 
         [Fact]
+        public void render_original_case()
+        {
+            var tag = new HtmlTag("tAbLe");
+            tag.ToString().ShouldBe("<tAbLe></tAbLe>");
+        }
+
+        [Fact]
+        public void render_original_case_for_void_tags()
+        {
+            var tag = new HtmlTag("INPUT");
+            tag.ToString().ShouldBe("<INPUT>");
+        }
+
+        [Fact]
         public void render_a_tag_with_inner_text()
         {
             var tag = new HtmlTag("p").Text("some text");
