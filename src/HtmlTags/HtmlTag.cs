@@ -366,6 +366,12 @@ namespace HtmlTags
 
         public string Text() => _innerText;
 
+        public HtmlTag AppendText(string text)
+        {
+            _innerText += text;
+            return this;
+        }
+
 
         public HtmlTag Modify(Action<HtmlTag> action)
         {
