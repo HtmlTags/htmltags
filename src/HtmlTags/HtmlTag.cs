@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 #if ASPNETCORE
 using Microsoft.AspNetCore.Html;
-using System.Text.Encodings.Web;
 #else
 using System.Web;
 #endif
@@ -30,6 +30,23 @@ namespace HtmlTags
         private const string CssStyleAttribute = "style";
         private const string DataPrefix = "data-";
         private static string _metadataSuffix = "__";
+        private static readonly HashSet<string> _voidElementTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "area",
+            "base",
+            "br",
+            "col",
+            "hr",
+            "img",
+            "input",
+            "link",
+            "meta",
+            "param",
+            "command",
+            "keygen",
+            "source",
+        };
+
 
         public static void UseMetadataSuffix(string suffix)
         {
@@ -59,6 +76,7 @@ namespace HtmlTags
         public HtmlTag(string tag) : this()
         {
             _tag = tag.ToLower();
+            _ignoreClosingTag = _voidElementTags.Contains(_tag);
         }
 
         public HtmlTag(string tag, Action<HtmlTag> configure)
@@ -116,6 +134,7 @@ namespace HtmlTags
         public HtmlTag TagName(string tag)
         {
             _tag = tag.ToLower();
+            _ignoreClosingTag = _voidElementTags.Contains(_tag);
             return this;
         }
 
@@ -362,37 +381,33 @@ namespace HtmlTags
 
         public bool Authorized() => _isAuthorized;
 
-
-        public override string ToString()
-        {
-            return WillBeRendered()
-                ? ToString(new HtmlTextWriter(new StringWriter(), string.Empty) {NewLine = string.Empty})
-                : string.Empty;
-        }
-
-        public string ToHtmlString() => ToString();
-
-        public string ToPrettyString()
-        {
-            return WillBeRendered()
-                ? ToString(new HtmlTextWriter(new StringWriter(), "  ") { NewLine = Environment.NewLine })
-                : String.Empty;
-        }
-
-
-        public string ToString(HtmlTextWriter html)
-        {
-            var tag = _renderFromTop ? WalkToTop(this) : this;
-            tag.WriteHtml(html);
-            return html.InnerWriter.ToString();
-        }
-
         private bool _renderFromTop;
 
         public HtmlTag RenderFromTop()
         {
             _renderFromTop = true;
             return this;
+        }
+
+        public void WriteTo(TextWriter writer, HtmlEncoder encoder)
+        {
+            WriteHtml(writer, encoder);
+        }
+
+        public override string ToString()
+        {
+            return WillBeRendered()
+                ? ToString(new StringWriter(), HtmlEncoder.Default)
+                : string.Empty;
+        }
+
+        public string ToHtmlString() => ToString();
+
+        public string ToString(TextWriter html, HtmlEncoder encoder)
+        {
+            var tag = _renderFromTop ? WalkToTop(this) : this;
+            tag.WriteHtml(html, encoder);
+            return html.ToString();
         }
 
         private static HtmlTag WalkToTop(HtmlTag htmlTag)
@@ -402,59 +417,55 @@ namespace HtmlTags
 
         public bool WillBeRendered() => _shouldRender && _isAuthorized;
 
-#if ASPNETCORE
-        public void WriteTo(TextWriter writer, HtmlEncoder encoder)
-        {
-            var html = new HtmlTextWriter(writer) { Encoder = encoder };
-            WriteHtml(html);
-        }
-#endif
-
-
-        protected virtual void WriteHtml(HtmlTextWriter html)
+        protected virtual void WriteHtml(TextWriter html, HtmlEncoder encoder)
         {
             if (!WillBeRendered()) return;
 
-            WriteBeginTag(html);
+            WriteBeginTag(html, encoder);
 
-            WriteContent(html);
+            WriteContent(html, encoder);
 
             WriteEndTag(html);
 
-            Next?.WriteHtml(html);
+            Next?.WriteHtml(html, encoder);
         }
 
-        protected void WriteBeginTag(HtmlTextWriter html)
+        protected void WriteBeginTag(TextWriter html, HtmlEncoder encoder)
         {
             if (!HasTag()) return;
 
-            _htmlAttributes.Each((key, attribute) =>
+            html.Write("<");
+            html.Write(_tag);
+
+            if (_htmlAttributes.Count > 0)
             {
-                if (attribute != null)
+                _htmlAttributes.Each((key, attribute) =>
                 {
-                    var value = attribute.Value;
-                    var stringValue = !(value is string) && key.StartsWith(DataPrefix)
-                        ? JsonConvert.SerializeObject(value)
-                        : value.ToString();
-                    html.AddAttribute(key, stringValue, attribute.IsEncoded);
-                }
-                else
-                {
-                    // HtmlTextWriter treats a null value as an attribute with no value (e.g., <input required />).
-                    html.AddAttribute(key, null, false);
-                }
-            });
+                    if (attribute != null)
+                    {
+                        var value = attribute.Value;
+                        var stringValue = !(value is string) && key.StartsWith(DataPrefix)
+                            ? JsonConvert.SerializeObject(value)
+                            : value.ToString();
+                        RenderAttribute(html, encoder, key, stringValue, attribute.IsEncoded);
+                    }
+                    else
+                    {
+                        RenderAttribute(html, encoder, key, null, true);
+                    }
+                });
+            }
 
             if (_cssClasses.Count > 0)
             {
                 var classValue = _cssClasses.Join(" ");
-                html.AddAttribute(CssClassAttribute, classValue);
+                RenderAttribute(html, encoder, CssClassAttribute, classValue, true);
             }
 
             if (_metaData.Count > 0)
             {
                 var metadataValue = JsonConvert.SerializeObject(_metaData.Inner);
-                html.AddAttribute(MetadataAttribute, metadataValue);
+                RenderAttribute(html, encoder, MetadataAttribute, metadataValue, true);
             }
 
             if (_customStyles.Count > 0)
@@ -463,19 +474,39 @@ namespace HtmlTags
                     .Select(x => x.Key + ":" + x.Value)
                     .ToArray().Join(";");
 
-                html.AddAttribute(CssStyleAttribute, attValue);
+                RenderAttribute(html, encoder, CssStyleAttribute, attValue, true);
             }
 
-            html.RenderBeginTag(_tag);
+
+            html.Write(">");
         }
 
-        private void WriteContent(HtmlTextWriter html)
+        private void RenderAttribute(TextWriter html, HtmlEncoder encoder, string key, string value, bool attributeIsEncoded)
+        {
+            html.Write(" ");
+            html.Write(key);
+            html.Write("=\"");
+            if (value != null)
+            {
+                if (!attributeIsEncoded)
+                {
+                    html.Write(value);
+                }
+                else
+                {
+                    encoder.Encode(html, value);
+                }
+            }
+            html.Write("\"");
+        }
+
+        private void WriteContent(TextWriter html, HtmlEncoder encoder)
         {
             if (_innerText != null)
             {
                 if (_encodeInnerText)
                 {
-                    html.WriteEncodedText(_innerText);
+                    encoder.Encode(html, _innerText);
                 }
                 else
                 {
@@ -483,25 +514,18 @@ namespace HtmlTags
                 }
             }
 
-            _children.Each(x => x.WriteHtml(html));
+            _children.Each(x => x.WriteHtml(html, encoder));
         }
 
-        private void WriteEndTag(HtmlTextWriter html)
+        private void WriteEndTag(TextWriter html)
         {
-            if (HasClosingTag())
-            {
-                html.RenderEndTag();
-            }
-            else
-            {
-                var currentInner = html.InnerWriter;
-                html.InnerWriter = new StringWriter();
-                if (!HasTag())
-                    html.RenderBeginTag("");
-                html.RenderEndTag();
-                html.InnerWriter = currentInner;
-            }
+            if (!HasClosingTag()) return;
+
+            html.Write("</");
+            html.Write(_tag);
+            html.Write(">");
         }
+
 
         public HtmlTag Attr(string attribute, object value) => BuildAttr(attribute, value);
 
@@ -771,3 +795,4 @@ namespace HtmlTags
         public HtmlTag Value(string value) => Attr("value", value);
     }
 }
+

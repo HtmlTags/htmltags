@@ -16,7 +16,7 @@ namespace HtmlTags.Testing
             wrapper.Append(tag);
 
             wrapper.ToString()
-                .ShouldBe("<div><input /></div>");
+                .ShouldBe("<div><input></div>");
             // actually renders "<div><input />")
         }
     }

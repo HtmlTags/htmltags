@@ -59,20 +59,6 @@ namespace HtmlTags.Testing
         }
 
         [Fact]
-        public void pretty_string_is_more_suitable_for_human_viewing()
-        {
-            var tag = new HtmlTag("div");
-            new HtmlTag("p", tag).Id("intro").Text("Once upon a midnight...");
-            
-            var expected = new StringBuilder();
-            expected.AppendLine("<div>");
-            expected.AppendLine(@"  <p id=""intro"">Once upon a midnight...</p>");
-            expected.Append("</div>");
-			
-            tag.ToPrettyString().ShouldBe(expected.ToString());
-        }
-
-        [Fact]
         public void has_closing_tag_by_default()
         {
             new HtmlTag("div").HasClosingTag().ShouldBeTrue();
@@ -144,7 +130,7 @@ namespace HtmlTags.Testing
             var wrapper = new HtmlTag("div");
             var tag = new HtmlTag("input").NoClosingTag();
             wrapper.Append(tag);
-            wrapper.ToString().ShouldBe("<div><input /></div>");
+            wrapper.ToString().ShouldBe("<div><input></div>");
         }
 
         [Fact]
@@ -191,11 +177,7 @@ namespace HtmlTags.Testing
         public void attributes_are_encoded_by_default()
         {
             const string options = "options: availableMeals, optionsText: 'mealName'";
-#if ASPNETCORE
             var expectedAfterEncodingText = options.Replace("'", "&#x27;");
-#else
-            var expectedAfterEncodingText = options.Replace("'", "&#39;");
-#endif
 
             var tag = new HtmlTag("div").Attr("data-bind", options);
             tag.ToString().ShouldContain(expectedAfterEncodingText);
@@ -379,7 +361,7 @@ namespace HtmlTags.Testing
         [Fact]
         public void render_boolean_attr() {
             var tag = new HtmlTag("input").BooleanAttr("required");
-            tag.ToString().ShouldBe("<input required />");
+            tag.ToString().ShouldBe("<input required=\"\">");
 		}
 
         [Fact]
@@ -626,13 +608,8 @@ namespace HtmlTags.Testing
     }
 
     
-    public class children_tests : IDisposable
+    public class children_tests
     {
-        public void Dispose()
-        {
-            BrTag.ComplianceMode = BrTag.ComplianceModes.AspNet;
-        }
-
         [Fact]
         public void add_a_child_tag()
         {
@@ -673,17 +650,16 @@ namespace HtmlTags.Testing
             var tagSource = new TagList(new[]{new HtmlTag("br"), new HtmlTag("hr")  });
             var parent = new HtmlTag("div");
             parent.Append(tagSource);
-            parent.ToString().ShouldBe("<div><br /><hr /></div>");
+            parent.ToString().ShouldBe("<div><br><hr></div>");
         }
 
         [Fact]
         public void can_control_br_tag_behavior_even_if_using_regular_html_tag()
         {
-            BrTag.ComplianceMode = BrTag.ComplianceModes.Xhtml;
             var tagSource = new TagList(new[] { new HtmlTag("br"), new HtmlTag("hr") });
             var parent = new HtmlTag("div");
             parent.Append(tagSource);
-            parent.ToString().ShouldBe("<div><br /><hr /></div>");
+            parent.ToString().ShouldBe("<div><br><hr></div>");
             
         }
 
@@ -693,14 +669,14 @@ namespace HtmlTags.Testing
             var sequence = new[] { new HtmlTag("br"), new HtmlTag("hr") };
             var parent = new HtmlTag("div");
             parent.Append(sequence);
-            parent.ToString().ShouldBe("<div><br /><hr /></div>");
+            parent.ToString().ShouldBe("<div><br><hr></div>");
         }
 
         [Fact]
         public void append_and_modify_the_innermost_child()
         {
             var tag = new HtmlTag("body").Append("div > form > input", child => child.Id("first-name"));
-            tag.ToString().ShouldBe("<body><div><form><input id=\"first-name\" /></form></div></body>");
+            tag.ToString().ShouldBe("<body><div><form><input id=\"first-name\"></form></div></body>");
         }
 
         [Fact]
@@ -727,8 +703,8 @@ namespace HtmlTags.Testing
         {
             var original = new HtmlTag("div");
             var child = original.Add<HiddenTag>();
-            child.ToString().ShouldBe("<input type=\"hidden\" />");
-            original.ToString().ShouldBe("<div><input type=\"hidden\" /></div>");
+            child.ToString().ShouldBe("<input type=\"hidden\">");
+            original.ToString().ShouldBe("<div><input type=\"hidden\"></div>");
         }
 
         [Fact]
@@ -776,7 +752,7 @@ namespace HtmlTags.Testing
             tag.Children.ShouldHaveCount(2);
             tag.ReplaceChildren(new HtmlTag("hr"));
             tag.Children.ShouldHaveCount(1);
-            tag.ToString().ShouldBe("<div><hr /></div>");
+            tag.ToString().ShouldBe("<div><hr></div>");
         }
 
         [Fact]

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Easy generation of html with a jquery inspired object model</Description>
     <Copyright>Copyright 2008-2016 Jeremy D. Miller, Josh Arnold, Joshua Flanagan, et al. All rights reserved.</Copyright>
-    <VersionPrefix>5.1.0</VersionPrefix>
+    <VersionPrefix>6.0.0</VersionPrefix>
     <Authors>Jeremy D. Miller;Joshua Flanagan;Josh Arnold;Jimmy Bogard</Authors>
     <TargetFramework>net45</TargetFramework>
     <AssemblyName>HtmlTags</AssemblyName>
@@ -16,11 +16,11 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>

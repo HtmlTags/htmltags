@@ -21,20 +21,20 @@ namespace HtmlTags.Testing
         [Fact]
         public void create_a_hidden_input()
         {
-            new HiddenTag().ToString().ShouldBe("<input type=\"hidden\" />");
+            new HiddenTag().ToString().ShouldBe("<input type=\"hidden\">");
         }
 
         [Fact]
         public void create_a_text_input()
         {
-            new TextboxTag().ToString().ShouldBe("<input type=\"text\" />");
+            new TextboxTag().ToString().ShouldBe("<input type=\"text\">");
         }
 
         [Fact]
         public void create_a_text_input_with_name_and_value()
         {
             var tag = new TextboxTag("firstname", "Lucas");
-            tag.ToString().ShouldBe("<input type=\"text\" name=\"firstname\" value=\"Lucas\" />");
+            tag.ToString().ShouldBe("<input type=\"text\" name=\"firstname\" value=\"Lucas\">");
         }
     }
 
@@ -86,29 +86,9 @@ namespace HtmlTags.Testing
     
     public class BrTagTester
     {
-        public BrTagTester()
-        {
-            BrTag.ComplianceMode = BrTag.ComplianceModes.AspNet;
-        }
         [Fact]
         public void default_renders_with_self_closing_tags()
         {
-            var tag = new BrTag();
-            tag.ToString().ShouldBe("<br />");
-        }
-
-        [Fact]
-        public void xhtml_mode_renders_with_self_closing_tag()
-        {
-            BrTag.ComplianceMode = BrTag.ComplianceModes.Xhtml;
-            var tag = new BrTag();
-            tag.ToString().ShouldBe("<br />");
-        }
-
-        [Fact]
-        public void html5_mode_renders_with_single_tag()
-        {
-            BrTag.ComplianceMode = BrTag.ComplianceModes.Html5;
             var tag = new BrTag();
             tag.ToString().ShouldBe("<br>");
         }

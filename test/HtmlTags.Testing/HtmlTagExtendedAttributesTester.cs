@@ -12,7 +12,7 @@ namespace HtmlTags.Testing
         public void value_ext_method()
         {
             new HtmlTag("input").Value("the value")
-                .ToString().ShouldBe("<input value=\"the value\" />");
+                .ToString().ShouldBe("<input value=\"the value\">");
         }
 
         [Fact]
@@ -33,14 +33,14 @@ namespace HtmlTags.Testing
         public void password_mode_ext_method()
         {
             new HtmlTag("a").Name("password").PasswordMode().ToString()
-                .ShouldBe("<input name=\"password\" type=\"password\" autocomplete=\"off\" />");
+                .ShouldBe("<input name=\"password\" type=\"password\" autocomplete=\"off\">");
         }
 
         [Fact]
         public void file_upload_mode_ext_method()
         {
             new HtmlTag("input").FileUploadMode().ToString()
-                .ShouldBe("<input type=\"file\" />");
+                .ShouldBe("<input type=\"file\">");
         }
 
         [Fact]
@@ -58,9 +58,9 @@ namespace HtmlTags.Testing
         [Fact]
         public void unencoded_turns_off_inner_text_html_encoding()
         {
-            var tag = new HtmlTag("div").Text("<img />").UnEncoded();
+            var tag = new HtmlTag("div").Text("<img>").UnEncoded();
             tag.Encoded().ShouldBeFalse();
-            tag.ToString().ShouldBe("<div><img /></div>");
+            tag.ToString().ShouldBe("<div><img></div>");
         }
     }
 

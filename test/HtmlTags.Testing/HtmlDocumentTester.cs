@@ -80,7 +80,7 @@ namespace HtmlTags.Testing
         {
             var path = "css/site.css";
             document.ReferenceStyle(path);
-            document.ToString().ShouldContain("</title><link media=\"screen\" href=\"css/site.css\" type=\"text/css\" rel=\"stylesheet\" /></head>");
+            document.ToString().ShouldContain("</title><link media=\"screen\" href=\"css/site.css\" type=\"text/css\" rel=\"stylesheet\"></head>");
         }
 
         [Fact]
@@ -91,8 +91,8 @@ namespace HtmlTags.Testing
             document.ToString().ShouldContain(
                 String.Format("{0}{1}{2}{3}",
                               "</title>",
-                              "<link media=\"screen\" href=\"main.css\" type=\"text/css\" rel=\"stylesheet\" />",
-                              "<link media=\"print\" href=\"print.css\" type=\"text/css\" rel=\"stylesheet\" />",
+                              "<link media=\"screen\" href=\"main.css\" type=\"text/css\" rel=\"stylesheet\">",
+                              "<link media=\"print\" href=\"print.css\" type=\"text/css\" rel=\"stylesheet\">",
                               "</head>"));
         }
 
@@ -156,11 +156,7 @@ namespace HtmlTags.Testing
             document.ReferenceJavaScriptFile("nav.js");
             document.ReferenceJavaScriptFile("biz.js").Attr("type", "text/vbscript");
             document.ToString().ShouldContain(
-                String.Format("{0}{1}{2}{3}",
-                "</title>",
-                "<script type=\"text/javascript\" src=\"nav.js\"></script>",
-                "<script type=\"text/vbscript\" src=\"biz.js\"></script>",
-                "</head>"));
+                "</title><script type=\"text/javascript\" src=\"nav.js\"></script><script type=\"text/vbscript\" src=\"biz.js\"></script></head>");
         }
 
         [Fact]

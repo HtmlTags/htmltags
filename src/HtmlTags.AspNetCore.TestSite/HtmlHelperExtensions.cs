@@ -1,4 +1,6 @@
-﻿namespace HtmlTags.AspNetCore.TestSite
+﻿using Microsoft.AspNetCore.Html;
+
+namespace HtmlTags.AspNetCore.TestSite
 {
     using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -32,7 +34,6 @@
                 .AddClasses("btn", "btn-default")
                 .Text(text);
         }
-
 
         public static HtmlTag ButtonGroup(this IHtmlHelper helper, 
             params HtmlTag[] buttons)

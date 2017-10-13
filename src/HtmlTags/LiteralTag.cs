@@ -1,3 +1,6 @@
+using System.IO;
+using System.Text.Encodings.Web;
+
 namespace HtmlTags
 {
     /// <summary>
@@ -12,7 +15,7 @@ namespace HtmlTags
             Encoded(false);
         }
 
-        protected override void WriteHtml(HtmlTextWriter html) => html.Write(Text());
+        protected override void WriteHtml(TextWriter html, HtmlEncoder encoder) => html.Write(Text());
     }
 
     public static class LiteralTagExtensions
