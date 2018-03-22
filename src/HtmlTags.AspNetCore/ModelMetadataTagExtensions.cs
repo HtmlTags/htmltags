@@ -12,6 +12,7 @@ namespace HtmlTags
             registry.Labels.Modifier<DisplayNameElementModifier>();
             registry.Displays.Modifier<DisplayFormatStringElementModifier>();
             registry.Editors.Modifier<EditFormatStringElementModifier>();
+            registry.Editors.Modifier<PlaceholderElementModifier>();
         }
 
         private class DisplayNameElementModifier : IElementModifier
@@ -39,6 +40,15 @@ namespace HtmlTags
 
             public void Modify(ElementRequest request) 
                 => request.CurrentTag.Value(string.Format(CultureInfo.CurrentCulture, request.Get<ModelExplorer>().Metadata.EditFormatString, request.RawValue));
+        }
+
+        private class PlaceholderElementModifier : IElementModifier
+        {
+            public bool Matches(ElementRequest token) 
+                => token.Get<ModelExplorer>()?.Metadata.Placeholder != null;
+
+            public void Modify(ElementRequest request) 
+                => request.CurrentTag.Attr("placeholder", request.Get<ModelExplorer>().Metadata.Placeholder);
         }
     }
 }

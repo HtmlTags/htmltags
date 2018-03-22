@@ -38,7 +38,7 @@ namespace HtmlTags.Testing
     {
         class Subject
         {
-            [Display(Name = "Hello")]
+            [Display(Name = "Hello", Prompt = "Value Here")]
             [DisplayFormat(DataFormatString = "Foo {0} Bar", ApplyFormatInEditMode = true)]
             public string Value { get; set; }
         }
@@ -71,6 +71,16 @@ namespace HtmlTags.Testing
 
             var editor = helper.Input(s => s.Value);
             editor.Value().ShouldBe("Foo Value Bar");
+        }
+
+        [Fact]
+        public void ShouldSetPlaceholderForInput()
+        {
+            var subject = new Subject {Value = "Value"};
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(s => s.Value);
+            editor.Attr("placeholder").ShouldBe("Value Here");
         }
 
         public static HtmlHelper<TModel> GetHtmlHelper<TModel>(TModel model)
