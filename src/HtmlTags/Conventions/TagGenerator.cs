@@ -40,6 +40,8 @@ namespace HtmlTags.Conventions
 
             var token = request.ToToken();
 
+            token.Attach(_serviceLocator);
+
             var plan = _library.PlanFor(token, profile, category);
 
             request.Attach(_serviceLocator);

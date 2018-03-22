@@ -1,4 +1,5 @@
-﻿using HtmlTags.Conventions;
+﻿using System.Globalization;
+using HtmlTags.Conventions;
 using HtmlTags.Conventions.Elements;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -9,21 +10,35 @@ namespace HtmlTags
         public static void ModelMetadata(this HtmlConventionRegistry registry)
         {
             registry.Labels.Modifier<DisplayNameElementModifier>();
+            registry.Displays.Modifier<DisplayFormatStringElementModifier>();
+            registry.Editors.Modifier<EditFormatStringElementModifier>();
         }
 
         private class DisplayNameElementModifier : IElementModifier
         {
-            public bool Matches(ElementRequest token) => true;
+            public bool Matches(ElementRequest token) 
+                => token.Get<ModelExplorer>()?.Metadata.DisplayName != null;
 
             public void Modify(ElementRequest request)
-            {
-                var modelExplorer = request.Get<ModelExplorer>();
+                => request.CurrentTag.Text(request.Get<ModelExplorer>().Metadata.DisplayName);
+        }
 
-                request.CurrentTag.Text(
-                    modelExplorer.Metadata.DisplayName ??
-                    request.CurrentTag.Text()
-                );
-            }
+        private class DisplayFormatStringElementModifier : IElementModifier
+        {
+            public bool Matches(ElementRequest token) 
+                => token.Get<ModelExplorer>()?.Metadata.DisplayFormatString != null;
+
+            public void Modify(ElementRequest request) 
+                => request.CurrentTag.Text(string.Format(CultureInfo.CurrentCulture, request.Get<ModelExplorer>().Metadata.DisplayFormatString, request.RawValue));
+        }
+
+        private class EditFormatStringElementModifier : IElementModifier
+        {
+            public bool Matches(ElementRequest token) 
+                => token.Get<ModelExplorer>()?.Metadata.EditFormatString != null;
+
+            public void Modify(ElementRequest request) 
+                => request.CurrentTag.Value(string.Format(CultureInfo.CurrentCulture, request.Get<ModelExplorer>().Metadata.EditFormatString, request.RawValue));
         }
     }
 }

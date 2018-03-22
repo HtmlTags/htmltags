@@ -39,17 +39,38 @@ namespace HtmlTags.Testing
         class Subject
         {
             [Display(Name = "Hello")]
+            [DisplayFormat(DataFormatString = "Foo {0} Bar", ApplyFormatInEditMode = true)]
             public string Value { get; set; }
         }
 
         [Fact]
-        public void ShouldBuildLabelFromDataAnnotations()
+        public void ShouldBuildLabelFromDisplayAttribute()
         {
             var subject = new Subject {Value = "Value"};
             var helper = GetHtmlHelper(subject);
 
             var label = helper.Label(s => s.Value);
             label.Text().ShouldBe("Hello");
+        }
+
+        [Fact]
+        public void ShouldBuildDisplayFromDisplayFormat()
+        {
+            var subject = new Subject {Value = "Value"};
+            var helper = GetHtmlHelper(subject);
+
+            var display = helper.Display(s => s.Value);
+            display.Text().ShouldBe("Foo Value Bar");
+        }
+
+        [Fact]
+        public void ShouldBuildInputValueFromEditFormat()
+        {
+            var subject = new Subject {Value = "Value"};
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(s => s.Value);
+            editor.Value().ShouldBe("Foo Value Bar");
         }
 
         public static HtmlHelper<TModel> GetHtmlHelper<TModel>(TModel model)
