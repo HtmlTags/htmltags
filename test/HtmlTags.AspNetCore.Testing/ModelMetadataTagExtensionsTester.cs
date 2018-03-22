@@ -39,7 +39,7 @@ namespace HtmlTags.Testing
         class Subject
         {
             [Display(Name = "Hello", Prompt = "Value Here")]
-            [DisplayFormat(DataFormatString = "Foo {0} Bar", ApplyFormatInEditMode = true)]
+            [DisplayFormat(DataFormatString = "Foo {0} Bar", ApplyFormatInEditMode = true, NullDisplayText = "Bunny")]
             public string Value { get; set; }
         }
 
@@ -81,6 +81,26 @@ namespace HtmlTags.Testing
 
             var editor = helper.Input(s => s.Value);
             editor.Attr("placeholder").ShouldBe("Value Here");
+        }
+
+        [Fact]
+        public void ShouldUseNullDisplayTextForDisplay()
+        {
+            var subject = new Subject {Value = null};
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Display(s => s.Value);
+            editor.Text().ShouldBe("Foo Bunny Bar");
+        }
+
+        [Fact]
+        public void ShouldUseNullDisplayTextForEdit()
+        {
+            var subject = new Subject { Value = null };
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(s => s.Value);
+            editor.Value().ShouldBe("Foo Bunny Bar");
         }
 
         public static HtmlHelper<TModel> GetHtmlHelper<TModel>(TModel model)

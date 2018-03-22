@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using HtmlTags.Conventions;
 using HtmlTags.Conventions.Elements;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HtmlTags
@@ -10,8 +12,8 @@ namespace HtmlTags
         public static void ModelMetadata(this HtmlConventionRegistry registry)
         {
             registry.Labels.Modifier<DisplayNameElementModifier>();
-            registry.Displays.Modifier<DisplayFormatStringElementModifier>();
-            registry.Editors.Modifier<EditFormatStringElementModifier>();
+            registry.Displays.Modifier<MetadataModelDisplayModifier>();
+            registry.Editors.Modifier<MetadataModelEditModifier>();
             registry.Editors.Modifier<PlaceholderElementModifier>();
         }
 
@@ -24,22 +26,43 @@ namespace HtmlTags
                 => request.CurrentTag.Text(request.Get<ModelExplorer>().Metadata.DisplayName);
         }
 
-        private class DisplayFormatStringElementModifier : IElementModifier
+        private static object BuildFormattedModelValue(ElementRequest request, Func<ModelMetadata, string> formatStringFinder)
         {
-            public bool Matches(ElementRequest token) 
-                => token.Get<ModelExplorer>()?.Metadata.DisplayFormatString != null;
+            var modelMetadata = request.Get<ModelExplorer>().Metadata;
 
-            public void Modify(ElementRequest request) 
-                => request.CurrentTag.Text(string.Format(CultureInfo.CurrentCulture, request.Get<ModelExplorer>().Metadata.DisplayFormatString, request.RawValue));
+            var formattedModelValue = request.RawValue;
+
+            if (request.RawValue == null)
+            {
+                formattedModelValue = modelMetadata.NullDisplayText;
+            }
+
+            var formatString = formatStringFinder(modelMetadata);
+
+            if (formatString != null && formattedModelValue != null)
+            {
+                formattedModelValue = string.Format(CultureInfo.CurrentCulture, formatString, formattedModelValue);
+            }
+
+            return formattedModelValue;
         }
 
-        private class EditFormatStringElementModifier : IElementModifier
+        private class MetadataModelDisplayModifier : IElementModifier
         {
             public bool Matches(ElementRequest token) 
-                => token.Get<ModelExplorer>()?.Metadata.EditFormatString != null;
+                => token.Get<ModelExplorer>() != null;
 
             public void Modify(ElementRequest request) 
-                => request.CurrentTag.Value(string.Format(CultureInfo.CurrentCulture, request.Get<ModelExplorer>().Metadata.EditFormatString, request.RawValue));
+                => request.CurrentTag.Text(BuildFormattedModelValue(request, m => m.DisplayFormatString)?.ToString());
+        }
+
+        private class MetadataModelEditModifier : IElementModifier
+        {
+            public bool Matches(ElementRequest token)
+                => token.Get<ModelExplorer>() != null;
+
+            public void Modify(ElementRequest request) 
+                => request.CurrentTag.Value(BuildFormattedModelValue(request, m => m.EditFormatString)?.ToString());
         }
 
         private class PlaceholderElementModifier : IElementModifier
