@@ -110,6 +110,8 @@ namespace HtmlTags.Testing
             var subject = new Subject { Value = null };
             var helper = GetHtmlHelper(subject);
 
+            helper.ViewData.ModelState.IsValid.ShouldBeFalse();
+
             var editor = helper.Input(s => s.Value);
             editor.HasClass(HtmlHelper.ValidationInputCssClassName).ShouldBeTrue();
         }
@@ -170,7 +172,7 @@ namespace HtmlTags.Testing
     string idAttributeDotReplacement)
         {
             var httpContext = new DefaultHttpContext();
-            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor(), viewData.ModelState);
 
             var options = new MvcViewOptions();
             if (!string.IsNullOrEmpty(idAttributeDotReplacement))
@@ -189,6 +191,18 @@ namespace HtmlTags.Testing
             optionsAccessor
                 .SetupGet(o => o.Value)
                 .Returns(options);
+
+            var valiatorProviders = new[]
+{
+                new DataAnnotationsModelValidatorProvider(
+                    new ValidationAttributeAdapterProvider(),
+                    new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
+                    stringLocalizerFactory: null),
+            };
+
+            var validator = new DefaultObjectValidator(provider, valiatorProviders);
+
+            validator.Validate(actionContext, validationState: null, prefix: string.Empty, viewData.Model);
 
             var urlHelperFactory = new Mock<IUrlHelperFactory>();
             urlHelperFactory

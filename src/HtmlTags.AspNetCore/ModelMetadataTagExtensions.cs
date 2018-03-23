@@ -85,7 +85,7 @@ namespace HtmlTags
                    && entry.Errors.Count > 0;
 
             public void Modify(ElementRequest request) 
-                => request.CurrentTag.Attr("placeholder", request.Get<ModelExplorer>().Metadata.Placeholder);
+                => request.CurrentTag.AddClass(HtmlHelper.ValidationInputCssClassName);
         }
     }
 }
