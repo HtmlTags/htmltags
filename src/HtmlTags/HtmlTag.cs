@@ -372,6 +372,15 @@ namespace HtmlTags
             return this;
         }
 
+        public HtmlTag MergeAttributes(IDictionary<string, string> attributes)
+        {
+            foreach (var attribute in attributes)
+            {
+                Attr(attribute.Key, attribute.Value);
+            }
+
+            return this;
+        }
 
         public HtmlTag Modify(Action<HtmlTag> action)
         {

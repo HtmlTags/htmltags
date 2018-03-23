@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using HtmlTags.Conventions;
 using HtmlTags.Conventions.Elements;
@@ -17,6 +18,7 @@ namespace HtmlTags
             registry.Editors.Modifier<MetadataModelEditModifier>();
             registry.Editors.Modifier<PlaceholderElementModifier>();
             registry.Editors.Modifier<ModelStateErrorsModifier>();
+            registry.Editors.Modifier<ClientSideValidationModifier>();
         }
 
         private class DisplayNameElementModifier : IElementModifier
@@ -86,6 +88,25 @@ namespace HtmlTags
 
             public void Modify(ElementRequest request) 
                 => request.CurrentTag.AddClass(HtmlHelper.ValidationInputCssClassName);
+        }
+
+        private class ClientSideValidationModifier : IElementModifier
+        {
+            public bool Matches(ElementRequest token) 
+                => token.TryGet(out IHtmlHelper helper)
+                   && helper.ViewContext.ClientValidationEnabled;
+
+            public void Modify(ElementRequest request)
+            {
+                var validationProvider = request.Get<ValidationHtmlAttributeProvider>();
+                var helper = request.Get<IHtmlHelper>();
+                var modelExplorer = request.Get<ModelExplorer>();
+                var attributes = new Dictionary<string, string>();
+
+                validationProvider.AddValidationAttributes(helper.ViewContext, modelExplorer, attributes);
+
+                request.CurrentTag.MergeAttributes(attributes);
+            }
         }
     }
 }

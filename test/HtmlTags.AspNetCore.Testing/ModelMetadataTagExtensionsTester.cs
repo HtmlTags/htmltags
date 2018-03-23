@@ -41,6 +41,7 @@ namespace HtmlTags.Testing
             [Display(Name = "Hello", Prompt = "Value Here")]
             [DisplayFormat(DataFormatString = "Foo {0} Bar", ApplyFormatInEditMode = true, NullDisplayText = "Bunny")]
             [Required]
+            [MaxLength(10)]
             public string Value { get; set; }
         }
 
@@ -114,6 +115,32 @@ namespace HtmlTags.Testing
 
             var editor = helper.Input(s => s.Value);
             editor.HasClass(HtmlHelper.ValidationInputCssClassName).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void ShouldAddClientSideValidationClasses()
+        {
+            var subject = new Subject { Value = "value" };
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(s => s.Value);
+            editor.Attr("data-val").ShouldBe("true");
+            editor.Attr("data-val-maxlength").ShouldNotBeNullOrEmpty();
+            editor.Attr("data-val-maxlength-max").ShouldNotBeNullOrEmpty();
+        }
+
+
+        [Fact]
+        public void ShouldNotAddClientSideValidationClassesWhenNoClientValidationEnabled()
+        {
+            var subject = new Subject { Value = "value" };
+            var helper = GetHtmlHelper(subject);
+            helper.ViewContext.ClientValidationEnabled = false;
+
+            var editor = helper.Input(s => s.Value);
+            editor.Attr("data-val").ShouldBeNullOrEmpty();
+            editor.Attr("data-val-maxlength").ShouldBeNullOrEmpty();
+            editor.Attr("data-val-maxlength-max").ShouldBeNullOrEmpty();
         }
 
         public static HtmlHelper<TModel> GetHtmlHelper<TModel>(TModel model)
@@ -211,12 +238,13 @@ namespace HtmlTags.Testing
 
             var expressionTextCache = new ExpressionTextCache();
 
+            var attributeProvider = new DefaultValidationHtmlAttributeProvider(
+                optionsAccessor.Object,
+                provider,
+                new ClientValidatorCache());
+
             if (htmlGenerator == null)
             {
-                var attributeProvider = new DefaultValidationHtmlAttributeProvider(
-                    optionsAccessor.Object,
-                    provider,
-                    new ClientValidatorCache());
                 htmlGenerator = new DefaultHtmlGenerator(
                     Mock.Of<IAntiforgery>(),
                     optionsAccessor.Object,
@@ -255,6 +283,7 @@ namespace HtmlTags.Testing
                .AddSingleton(Mock.Of<IViewComponentHelper>())
                .AddSingleton(innerHelper)
                .AddSingleton<IViewBufferScope, TestViewBufferScope>()
+               .AddSingleton<ValidationHtmlAttributeProvider>(attributeProvider)
                .AddHtmlTags(library);
             
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -278,7 +307,10 @@ namespace HtmlTags.Testing
                     httpContext,
                     Mock.Of<ITempDataProvider>()),
                 new StringWriter(),
-                options.HtmlHelperOptions);
+                options.HtmlHelperOptions)
+            {
+                ClientValidationEnabled = true
+            };
 
             htmlHelper.Contextualize(viewContext);
 
