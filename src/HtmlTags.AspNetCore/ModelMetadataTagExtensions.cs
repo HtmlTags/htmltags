@@ -81,9 +81,9 @@ namespace HtmlTags
         private class ModelStateErrorsModifier : IElementModifier
         {
             public bool Matches(ElementRequest token) 
-                => token.TryGet(out IHtmlHelper helper)
+                => token.TryGet(out ViewContext viewContext)
                    && token.TryGet(out ElementName elementName)
-                   && helper.ViewData.ModelState.TryGetValue(elementName.Value, out var entry)
+                   && viewContext.ViewData.ModelState.TryGetValue(elementName.Value, out var entry)
                    && entry.Errors.Count > 0;
 
             public void Modify(ElementRequest request) 
@@ -93,17 +93,17 @@ namespace HtmlTags
         private class ClientSideValidationModifier : IElementModifier
         {
             public bool Matches(ElementRequest token) 
-                => token.TryGet(out IHtmlHelper helper)
-                   && helper.ViewContext.ClientValidationEnabled;
+                => token.TryGet(out ViewContext viewContext)
+                   && viewContext.ClientValidationEnabled;
 
             public void Modify(ElementRequest request)
             {
                 var validationProvider = request.Get<ValidationHtmlAttributeProvider>();
-                var helper = request.Get<IHtmlHelper>();
+                var viewContext = request.Get<ViewContext>();
                 var modelExplorer = request.Get<ModelExplorer>();
                 var attributes = new Dictionary<string, string>();
 
-                validationProvider.AddValidationAttributes(helper.ViewContext, modelExplorer, attributes);
+                validationProvider.AddValidationAttributes(viewContext, modelExplorer, attributes);
 
                 request.CurrentTag.MergeAttributes(attributes);
             }

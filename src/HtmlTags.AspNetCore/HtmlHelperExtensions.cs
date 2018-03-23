@@ -51,7 +51,7 @@ namespace HtmlTags
 
             var elementName = new ElementName(NamingConvention.GetName(typeof(T), expression.ToAccessor()));
 
-            return GetGenerator(helper, modelExplorer, helper, elementName);
+            return GetGenerator(helper, modelExplorer, helper.ViewContext, elementName);
         }
 
         public static IElementGenerator<T> GetGenerator<T>(IHtmlHelper<T> helper, params object[] additionalServices) where T : class
