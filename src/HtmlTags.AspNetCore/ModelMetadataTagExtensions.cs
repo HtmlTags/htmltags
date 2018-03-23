@@ -3,6 +3,7 @@ using System.Globalization;
 using HtmlTags.Conventions;
 using HtmlTags.Conventions.Elements;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HtmlTags
@@ -15,6 +16,7 @@ namespace HtmlTags
             registry.Displays.Modifier<MetadataModelDisplayModifier>();
             registry.Editors.Modifier<MetadataModelEditModifier>();
             registry.Editors.Modifier<PlaceholderElementModifier>();
+            registry.Editors.Modifier<ModelStateErrorsModifier>();
         }
 
         private class DisplayNameElementModifier : IElementModifier
@@ -69,6 +71,18 @@ namespace HtmlTags
         {
             public bool Matches(ElementRequest token) 
                 => token.Get<ModelExplorer>()?.Metadata.Placeholder != null;
+
+            public void Modify(ElementRequest request) 
+                => request.CurrentTag.Attr("placeholder", request.Get<ModelExplorer>().Metadata.Placeholder);
+        }
+
+        private class ModelStateErrorsModifier : IElementModifier
+        {
+            public bool Matches(ElementRequest token) 
+                => token.TryGet(out IHtmlHelper helper)
+                   && token.TryGet(out ElementName elementName)
+                   && helper.ViewData.ModelState.TryGetValue(elementName.Value, out var entry)
+                   && entry.Errors.Count > 0;
 
             public void Modify(ElementRequest request) 
                 => request.CurrentTag.Attr("placeholder", request.Get<ModelExplorer>().Metadata.Placeholder);

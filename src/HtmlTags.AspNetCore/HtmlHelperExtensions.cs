@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using HtmlTags.Reflection;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
@@ -13,6 +14,8 @@ namespace HtmlTags
 
     public static class HtmlHelperExtensions
     {
+        private static readonly DotNotationElementNamingConvention NamingConvention = new DotNotationElementNamingConvention();
+
         public static HtmlTag Input<T, TResult>(this IHtmlHelper<T> helper, Expression<Func<T, TResult>> expression)
             where T : class
         {
@@ -46,7 +49,9 @@ namespace HtmlTags
             var modelExplorer = 
                 ExpressionMetadataProvider.FromLambdaExpression(expression, helper.ViewData, helper.MetadataProvider);
 
-            return GetGenerator(helper, modelExplorer);
+            var elementName = new ElementName(NamingConvention.GetName(typeof(T), expression.ToAccessor()));
+
+            return GetGenerator(helper, modelExplorer, helper, elementName);
         }
 
         public static IElementGenerator<T> GetGenerator<T>(IHtmlHelper<T> helper, params object[] additionalServices) where T : class

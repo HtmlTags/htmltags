@@ -40,6 +40,7 @@ namespace HtmlTags.Testing
         {
             [Display(Name = "Hello", Prompt = "Value Here")]
             [DisplayFormat(DataFormatString = "Foo {0} Bar", ApplyFormatInEditMode = true, NullDisplayText = "Bunny")]
+            [Required]
             public string Value { get; set; }
         }
 
@@ -101,6 +102,16 @@ namespace HtmlTags.Testing
 
             var editor = helper.Input(s => s.Value);
             editor.Value().ShouldBe("Foo Bunny Bar");
+        }
+
+        [Fact]
+        public void ShouldAddValidationClassForInvalidValues()
+        {
+            var subject = new Subject { Value = null };
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(s => s.Value);
+            editor.HasClass(HtmlHelper.ValidationInputCssClassName).ShouldBeTrue();
         }
 
         public static HtmlHelper<TModel> GetHtmlHelper<TModel>(TModel model)

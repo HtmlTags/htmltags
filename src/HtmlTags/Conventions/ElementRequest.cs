@@ -59,6 +59,8 @@ namespace HtmlTags.Conventions
 
         public T Get<T>() => (T)_services(typeof(T));
 
+        public bool TryGet<T>(out T service) => (service = (T) _services(typeof(T))) != null;
+
         // virtual for mocking
         public virtual HtmlTag BuildForCategory(string category, string profile = null) => Get<ITagGenerator>().Build(this, category, profile);
 
