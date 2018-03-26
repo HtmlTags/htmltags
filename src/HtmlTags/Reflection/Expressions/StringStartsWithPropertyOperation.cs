@@ -17,10 +17,7 @@ namespace HtmlTags.Reflection.Expressions
         {
         }
 
-        public override string Text
-        {
-            get { return "starts with"; }
-        }
+        public override string Text => "starts with";
     }
 
     public class CollectionContainsPropertyOperation : IPropertyOperation

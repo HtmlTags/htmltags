@@ -23,6 +23,13 @@ namespace HtmlTags
             return generator.InputFor(expression);
         }
 
+        public static HtmlTag ValidationMessage<T, TResult>(this IHtmlHelper<T> helper, Expression<Func<T, TResult>> expression)
+            where T : class
+        {
+            var generator = GetGenerator(helper, expression);
+            return generator.ValidationMessageFor(expression);
+        }
+
         public static HtmlTag Label<T, TResult>(this IHtmlHelper<T> helper, Expression<Func<T, TResult>> expression)
             where T : class
         {

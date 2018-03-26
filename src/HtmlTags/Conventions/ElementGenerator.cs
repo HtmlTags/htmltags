@@ -17,7 +17,7 @@ namespace HtmlTags.Conventions
 
         public static ElementGenerator<T> For(HtmlConventionLibrary library, Func<Type, object> serviceLocator = null, T model = null)
         {
-            serviceLocator = serviceLocator ?? (Activator.CreateInstance);
+            serviceLocator = serviceLocator ?? Activator.CreateInstance;
 
             var tags = new TagGenerator(library.TagLibrary, new ActiveProfile(), serviceLocator);
 
@@ -33,6 +33,9 @@ namespace HtmlTags.Conventions
         public HtmlTag InputFor<TResult>(Expression<Func<T, TResult>> expression, string profile = null, T model = null) 
             => Build(expression, ElementConstants.Editor, profile, model);
 
+        public HtmlTag ValidationMessageFor<TResult>(Expression<Func<T, TResult>> expression, string profile = null, T model = null) 
+            => Build(expression, ElementConstants.ValidationMessage, profile, model);
+
         public HtmlTag DisplayFor<TResult>(Expression<Func<T, TResult>> expression, string profile = null, T model = null) 
             => Build(expression, ElementConstants.Display, profile, model);
 
@@ -41,8 +44,8 @@ namespace HtmlTags.Conventions
 
         public T Model
         {
-            get { return _model.Value; }
-            set { _model = new Lazy<T>(() => value); }
+            get => _model.Value;
+            set => _model = new Lazy<T>(() => value);
         }
 
         public ElementRequest GetRequest<TResult>(Expression<Func<T, TResult>> expression, T model = null)
@@ -69,6 +72,8 @@ namespace HtmlTags.Conventions
         public HtmlTag LabelFor(ElementRequest request, string profile = null, T model = null) => Build(request, ElementConstants.Label, profile, model);
 
         public HtmlTag InputFor(ElementRequest request, string profile = null, T model = null) => Build(request, ElementConstants.Editor, profile, model);
+
+        public HtmlTag ValidationMessageFor(ElementRequest request, string profile = null, T model = null) => Build(request, ElementConstants.ValidationMessage, profile, model);
 
         public HtmlTag DisplayFor(ElementRequest request, string profile = null, T model = null) => Build(request, ElementConstants.Display, profile, model);
 

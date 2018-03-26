@@ -73,7 +73,7 @@ namespace HtmlTags.Conventions.Formatting
 
                 return _propertyType;
             }
-            set { _propertyType = value; }
+            set => _propertyType = value;
         }
 
         public PropertyInfo Property { get; }

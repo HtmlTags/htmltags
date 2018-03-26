@@ -11,7 +11,7 @@ namespace HtmlTags
 {
     public static class ModelMetadataTagExtensions
     {
-        public static void ModelMetadata(this HtmlConventionRegistry registry)
+        public static HtmlConventionRegistry ModelMetadata(this HtmlConventionRegistry registry)
         {
             registry.Labels.Modifier<DisplayNameElementModifier>();
             registry.Displays.Modifier<MetadataModelDisplayModifier>();
@@ -19,6 +19,8 @@ namespace HtmlTags
             registry.Editors.Modifier<PlaceholderElementModifier>();
             registry.Editors.Modifier<ModelStateErrorsModifier>();
             registry.Editors.Modifier<ClientSideValidationModifier>();
+
+            return registry;
         }
 
         private class DisplayNameElementModifier : IElementModifier

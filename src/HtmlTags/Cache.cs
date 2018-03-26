@@ -42,9 +42,11 @@ namespace HtmlTags
             _values = dictionary;
         }
 
-        public Func<TKey, TValue> OnMissing { set { _onMissing = value; } }
+        public Func<TKey, TValue> OnMissing { set => _onMissing = value; }
 
-        public Func<TValue, TKey> GetKey { get { return _getKey; } set { _getKey = value; } }
+        public Func<TValue, TKey> GetKey { get => _getKey;
+            set => _getKey = value;
+        }
 
         public int Count => _values.Count;
 
