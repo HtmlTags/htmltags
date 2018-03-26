@@ -27,7 +27,9 @@ namespace HtmlTags
         public HtmlTag RootTag { get; }
         public HtmlTag Head { get; }
         public HtmlTag Body { get; }
-        public string Title { get { return _title.Text(); } set { _title.Text(value); } }
+        public string Title { get => _title.Text();
+            set => _title.Text(value);
+        }
 
         public HtmlTag Current => _currentStack.Any() ? _currentStack.Peek() : Body;
         public HtmlTag Last { get; private set; }

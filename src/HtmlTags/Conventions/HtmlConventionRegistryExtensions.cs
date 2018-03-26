@@ -5,7 +5,7 @@ namespace HtmlTags.Conventions
 
     public static class HtmlConventionRegistryExtensions
     {
-        public static void Defaults(this HtmlConventionRegistry registry)
+        public static HtmlConventionRegistry Defaults(this HtmlConventionRegistry registry)
         {
             registry.Editors.BuilderPolicy<CheckboxBuilder>();
 
@@ -21,7 +21,7 @@ namespace HtmlTags.Conventions
 
             registry.Labels.Always.BuildBy<DefaultLabelBuilder>();
 
-
+            return registry;
         }
     }
 }

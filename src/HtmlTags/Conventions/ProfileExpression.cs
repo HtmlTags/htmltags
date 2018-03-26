@@ -21,6 +21,8 @@ namespace HtmlTags.Conventions
 
         public ElementCategoryExpression Editors => new ElementCategoryExpression(BuildersFor(ElementConstants.Editor));
 
+        public ElementCategoryExpression ValidationMessages => new ElementCategoryExpression(BuildersFor(ElementConstants.ValidationMessage));
+
         public void Apply(HtmlConventionLibrary library) => library.Import(Library);
     }
 }

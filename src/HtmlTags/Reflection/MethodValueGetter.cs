@@ -34,20 +34,11 @@ namespace HtmlTags.Reflection
             }
         }
 
-        public Type DeclaringType
-        {
-            get { return _methodInfo.DeclaringType; }
-        }
+        public Type DeclaringType => _methodInfo.DeclaringType;
 
-        public Type ValueType
-        {
-            get { return _methodInfo.ReturnType; }
-        }
+        public Type ValueType => _methodInfo.ReturnType;
 
-        public Type ReturnType
-        {
-            get { return _methodInfo.ReturnType; }
-        }
+        public Type ReturnType => _methodInfo.ReturnType;
 
         public Expression ChainExpression(Expression body)
         {

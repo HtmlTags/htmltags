@@ -129,6 +129,16 @@ namespace HtmlTags.Testing
             editor.Attr("data-val-maxlength-max").ShouldNotBeNullOrEmpty();
         }
 
+        [Fact]
+        public void ShouldBuildValidationMessage()
+        {
+            var subject = new Subject { Value = null };
+            var helper = GetHtmlHelper(subject);
+
+            var validationMessage = helper.ValidationMessage(s => s.Value);
+
+            validationMessage.Text().ShouldNotBeEmpty();
+        }
 
         [Fact]
         public void ShouldNotAddClientSideValidationClassesWhenNoClientValidationEnabled()
@@ -268,13 +278,6 @@ namespace HtmlTags.Testing
                 innerHelper = innerHelperWrapper(innerHelper);
             }
 
-            var registry = new HtmlConventionRegistry();
-            registry.ModelMetadata();
-            registry.Defaults();
-
-            var library = new HtmlConventionLibrary();
-            registry.Apply(library);
-
             var serviceCollection = new ServiceCollection();
 
             serviceCollection
@@ -284,7 +287,7 @@ namespace HtmlTags.Testing
                .AddSingleton(innerHelper)
                .AddSingleton<IViewBufferScope, TestViewBufferScope>()
                .AddSingleton<ValidationHtmlAttributeProvider>(attributeProvider)
-               .AddHtmlTags(library);
+               .AddHtmlTags();
             
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
