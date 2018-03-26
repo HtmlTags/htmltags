@@ -91,30 +91,34 @@
                     Html.LinkButton("Cancel", nameof(HomeController.Index))))
 
         Input Tag value:
-        <input-tag for="Value" class="foo"></input-tag>
+        <input-tag for="Value" class="foo" />
         Editor for value:
         @Html.EditorFor(m => m.Value)
         Input tag blarg:
-        <input-tag for="Blarg"></input-tag>
+        <input-tag for="Blarg" />
         Editor for blarg:
         @Html.EditorFor(m => m.Blarg)
         Input tag blorg.blorg:
-        <input-tag for="Blorg.Blorg"></input-tag>
+        <input-tag for="Blorg.Blorg" />
         Editor for blorg.blorg:
         @Html.EditorFor(m => m.Blorg.Blorg)
         Input tag Blorgs[0].Blarg:
-        <input-tag for="Blorgs[0].Blorg"></input-tag>
+        <input-tag for="Blorgs[0].Blorg" />
         Editor for Blorgs[0].Blarg:
         @Html.EditorFor(m => m.Blorgs[0].Blorg)
         @Html.Input(m => m.Value).AddClass("foo")
         Display tag for Value:
-        <display-tag for="Value"></display-tag>
+        <display-tag for="Value" />
         Display for Vlaue:
         @Html.Display(m => m.Value)
         Label tag for Value:
-        <label-tag for="Value"></label-tag>
+        <label-tag for="Value" />
         Label for Value:
         @Html.Label(m => m.Value)
+        Valiidator tag for Value:
+        <validation-message-tag for="Value" />
+        Validation for Value:
+        @Html.ValidationMessage(m => m.Value)
 
         @{
         var tag = new HtmlTag("canvas");
