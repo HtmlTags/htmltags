@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace HtmlTags
 {
@@ -34,7 +35,16 @@ namespace HtmlTags
 
             var library = ViewContext.HttpContext.RequestServices.GetService<HtmlConventionLibrary>();
 
-            var tagGenerator = new TagGenerator(library.TagLibrary, new ActiveProfile(), t => ViewContext.HttpContext.RequestServices.GetService(t));
+            var additionalServices = new object[]
+            {
+                For.ModelExplorer,
+                ViewContext,
+                new ElementName(For.Name)
+            };
+
+            object ServiceLocator(Type t) => additionalServices.FirstOrDefault(t.IsInstanceOfType) ?? ViewContext.HttpContext.RequestServices.GetService(t);
+
+            var tagGenerator = new TagGenerator(library.TagLibrary, new ActiveProfile(), ServiceLocator);
 
             var tag = tagGenerator.Build(request, Category);
 

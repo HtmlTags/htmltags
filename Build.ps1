@@ -38,7 +38,7 @@ exec { & dotnet build -c Release --version-suffix=$buildSuffix -v q /nologo }
 Push-Location -Path .\test\HtmlTags.Testing
 
 try {
-	exec { & dotnet xunit -configuration Release -nobuild }
+	exec { & dotnet xunit -configuration Release -nobuild -fxversion 2.0.0 }
 }
 finally {
 	Pop-Location
@@ -47,7 +47,7 @@ finally {
 Push-Location -Path .\test\HtmlTags.AspNetCore.Testing
 
 try {
-	exec { & dotnet xunit -configuration Release -nobuild }
+	exec { & dotnet xunit -configuration Release -nobuild -fxversion 2.0.0 }
 }
 finally {
 	Pop-Location

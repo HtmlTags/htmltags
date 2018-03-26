@@ -1,8 +1,6 @@
 namespace HtmlTags.Conventions
 {
     using System;
-    using System.Linq.Expressions;
-    using System.Reflection;
     using Elements;
     using Formatting;
     using Reflection;
@@ -12,24 +10,6 @@ namespace HtmlTags.Conventions
         private bool _hasFetched;
         private object _rawValue;
         private Func<Type, object> _services;
-
-        public static ElementRequest For(object model, PropertyInfo property)
-        {
-            return new ElementRequest(new SingleProperty(property))
-            {
-                Model = model
-            };
-        }
-
-        public static ElementRequest For<T>(Expression<Func<T, object>> expression) => new ElementRequest(expression.ToAccessor());
-
-        public static ElementRequest For<T>(T model, Expression<Func<T, object>> expression)
-        {
-            return new ElementRequest(expression.ToAccessor())
-            {
-                Model = model
-            };
-        }
 
         public ElementRequest(Accessor accessor)
         {
@@ -78,6 +58,8 @@ namespace HtmlTags.Conventions
         public Type HolderType() => Model == null ? Accessor.DeclaringType : Model?.GetType();
 
         public T Get<T>() => (T)_services(typeof(T));
+
+        public bool TryGet<T>(out T service) => (service = (T) _services(typeof(T))) != null;
 
         // virtual for mocking
         public virtual HtmlTag BuildForCategory(string category, string profile = null) => Get<ITagGenerator>().Build(this, category, profile);

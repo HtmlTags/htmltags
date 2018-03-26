@@ -37,7 +37,7 @@ namespace HtmlTags.Reflection
 
         public static bool HasAttribute<T>(this Accessor provider) where T : Attribute => provider.InnerProperty.GetCustomAttribute<T>() != null;
 
-        public static Accessor ToAccessor<T>(this Expression<Func<T, object>> expression) => ReflectionHelper.GetAccessor(expression);
+        public static Accessor ToAccessor<T, TResult>(this Expression<Func<T, TResult>> expression) => ReflectionHelper.GetAccessor(expression);
 
         public static string GetName<T>(this Expression<Func<T, object>> expression) => ReflectionHelper.GetAccessor(expression).Name;
 

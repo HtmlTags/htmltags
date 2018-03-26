@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -19,8 +20,12 @@ namespace HtmlTags.AspNetCore.TestSite.Controllers
         }
         public class BlargModel
         {
+            [Required]
+            [MinLength(10)]
             public string Blorg { get; set; }
         }
+        [Required]
+        [MaxLength(20)]
         public string Value { get; set; }
         public Blarg Blarg { get; set; }
 

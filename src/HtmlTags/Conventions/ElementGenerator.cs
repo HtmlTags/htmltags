@@ -27,16 +27,16 @@ namespace HtmlTags.Conventions
             };
         }
 
-        public HtmlTag LabelFor(Expression<Func<T, object>> expression, string profile = null, T model = null) 
+        public HtmlTag LabelFor<TResult>(Expression<Func<T, TResult>> expression, string profile = null, T model = null) 
             => Build(expression, ElementConstants.Label, profile, model);
 
-        public HtmlTag InputFor(Expression<Func<T, object>> expression, string profile = null, T model = null) 
+        public HtmlTag InputFor<TResult>(Expression<Func<T, TResult>> expression, string profile = null, T model = null) 
             => Build(expression, ElementConstants.Editor, profile, model);
 
-        public HtmlTag DisplayFor(Expression<Func<T, object>> expression, string profile = null, T model = null) 
+        public HtmlTag DisplayFor<TResult>(Expression<Func<T, TResult>> expression, string profile = null, T model = null) 
             => Build(expression, ElementConstants.Display, profile, model);
 
-        public HtmlTag TagFor(Expression<Func<T, object>> expression, string category, string profile = null, T model = null) 
+        public HtmlTag TagFor<TResult>(Expression<Func<T, TResult>> expression, string category, string profile = null, T model = null) 
             => Build(expression, category, profile, model);
 
         public T Model
@@ -45,7 +45,7 @@ namespace HtmlTags.Conventions
             set { _model = new Lazy<T>(() => value); }
         }
 
-        public ElementRequest GetRequest(Expression<Func<T, object>> expression, T model = null)
+        public ElementRequest GetRequest<TResult>(Expression<Func<T, TResult>> expression, T model = null)
         {
             return new ElementRequest(expression.ToAccessor())
             {
@@ -53,7 +53,7 @@ namespace HtmlTags.Conventions
             };
         }
 
-        private HtmlTag Build(Expression<Func<T, object>> expression, string category, string profile = null, T model = null)
+        private HtmlTag Build<TResult>(Expression<Func<T, TResult>> expression, string category, string profile = null, T model = null)
         {
             ElementRequest request = GetRequest(expression, model);
             return _tags.Build(request, category, profile);

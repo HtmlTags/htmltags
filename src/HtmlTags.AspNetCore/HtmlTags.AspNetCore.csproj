@@ -1,18 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Easy generation of html with a jquery inspired object model</Description>
-    <Copyright>Copyright 2008-2016 Jeremy D. Miller, Josh Arnold, Joshua Flanagan, et al. All rights reserved.</Copyright>
-    <VersionPrefix>6.0.0</VersionPrefix>
-    <Authors>Jeremy D. Miller;Joshua Flanagan;Josh Arnold</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);ASPNETCORE</DefineConstants>
     <AssemblyName>HtmlTags.AspNetCore</AssemblyName>
+    <RootNamespace>HtmlTags</RootNamespace>
     <PackageId>HtmlTags.AspNetCore</PackageId>
     <PackageTags>html;ASP.NET MVC</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_256.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/HtmlTags/htmltags</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/HtmlTags/htmltags/raw/master/license.txt</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,10 +19,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
 </Project>
