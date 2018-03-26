@@ -137,7 +137,22 @@ namespace HtmlTags.Testing
 
             var validationMessage = helper.ValidationMessage(s => s.Value);
 
+            validationMessage.TagName().ShouldBe("span");
             validationMessage.Text().ShouldNotBeEmpty();
+            validationMessage.HasClass(HtmlHelper.ValidationMessageCssClassName).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void ShouldHaveEmptyValidationTagWhenNotInvalid()
+        {
+            var subject = new Subject { Value = "value" };
+            var helper = GetHtmlHelper(subject);
+
+            var validationMessage = helper.ValidationMessage(s => s.Value);
+
+            validationMessage.TagName().ShouldBe("span");
+            validationMessage.Text().ShouldBeEmpty();
+            validationMessage.HasClass(HtmlHelper.ValidationMessageValidCssClassName).ShouldBeTrue();
         }
 
         [Fact]
