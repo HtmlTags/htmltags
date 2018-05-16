@@ -23,10 +23,6 @@
         public static IServiceCollection AddHtmlTags(this IServiceCollection services, params HtmlConventionRegistry[] registries)
         {
             var library = new HtmlConventionLibrary();
-            foreach (var registry in registries)
-            {
-                registry.Apply(library);
-            }
 
             var defaultRegistry = new HtmlConventionRegistry()
                 .Defaults()
@@ -34,6 +30,11 @@
                 .ModelState();
 
             defaultRegistry.Apply(library);
+
+            foreach (var registry in registries)
+            {
+                registry.Apply(library);
+            }
 
             return services.AddHtmlTags(library);
         }
