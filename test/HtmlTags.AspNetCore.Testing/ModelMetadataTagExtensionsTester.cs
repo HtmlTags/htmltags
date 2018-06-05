@@ -43,6 +43,8 @@ namespace HtmlTags.Testing
             [Required]
             [MaxLength(10)]
             public string Value { get; set; }
+
+            public DateTimeOffset DateValue { get; set; }
         }
 
         [Fact]
@@ -166,6 +168,17 @@ namespace HtmlTags.Testing
             editor.Attr("data-val").ShouldBeNullOrEmpty();
             editor.Attr("data-val-maxlength").ShouldBeNullOrEmpty();
             editor.Attr("data-val-maxlength-max").ShouldBeNullOrEmpty();
+        }
+
+        [Fact]
+        public void ShouldAllowOverridingOfConventions()
+        {
+            var subject = new Subject { DateValue = new DateTimeOffset(2018, 1, 1, 12, 00, 00, TimeSpan.FromHours(-6)) };
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(m => m.DateValue);
+
+            editor.Value().ShouldBe("2018-01-01T12:00");
         }
 
         public static HtmlHelper<TModel> GetHtmlHelper<TModel>(TModel model)
@@ -302,7 +315,12 @@ namespace HtmlTags.Testing
                .AddSingleton(innerHelper)
                .AddSingleton<IViewBufferScope, TestViewBufferScope>()
                .AddSingleton<ValidationHtmlAttributeProvider>(attributeProvider)
-               .AddHtmlTags();
+               .AddHtmlTags(reg =>
+                {
+                    reg.Editors.IfPropertyIs<DateTimeOffset>().ModifyWith(m =>
+                        m.CurrentTag.Attr("type", "datetime-local")
+                            .Value(m.Value<DateTimeOffset?>()?.ToLocalTime().DateTime.ToString("yyyy-MM-ddTHH:mm")));
+                });
             
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
