@@ -173,12 +173,13 @@ namespace HtmlTags.Testing
         [Fact]
         public void ShouldAllowOverridingOfConventions()
         {
-            var subject = new Subject { DateValue = new DateTimeOffset(2018, 1, 1, 12, 00, 00, TimeSpan.FromHours(-6)) };
+            var offset = new DateTimeOffset(2018, 1, 1, 12, 00, 00, TimeSpan.FromHours(-6));
+            var subject = new Subject { DateValue = offset };
             var helper = GetHtmlHelper(subject);
 
             var editor = helper.Input(m => m.DateValue);
 
-            editor.Value().ShouldBe("2018-01-01T12:00");
+            editor.Value().ShouldBe(GetDateValue(offset));
         }
 
         public static HtmlHelper<TModel> GetHtmlHelper<TModel>(TModel model)
@@ -319,7 +320,7 @@ namespace HtmlTags.Testing
                 {
                     reg.Editors.IfPropertyIs<DateTimeOffset>().ModifyWith(m =>
                         m.CurrentTag.Attr("type", "datetime-local")
-                            .Value(m.Value<DateTimeOffset?>()?.ToLocalTime().DateTime.ToString("yyyy-MM-ddTHH:mm")));
+                            .Value(GetDateValue(m.Value<DateTimeOffset?>())));
                 });
             
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -351,6 +352,11 @@ namespace HtmlTags.Testing
             htmlHelper.Contextualize(viewContext);
 
             return htmlHelper;
+        }
+
+        private static string GetDateValue(DateTimeOffset? dateTimeOffset)
+        {
+            return dateTimeOffset?.ToLocalTime().DateTime.ToString("yyyy-MM-ddTHH:mm");
         }
 
         private static ICompositeViewEngine CreateViewEngine()
