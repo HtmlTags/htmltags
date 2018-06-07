@@ -24,9 +24,14 @@
         {
             var library = new HtmlConventionLibrary();
             var defaultRegistry = new HtmlConventionRegistry()
-                .Defaults()
+                .DefaultModifiers()
                 .ModelMetadata()
-                .ModelState();
+                .DefaultNamingConvention()
+                .ModelStateNamingConvention();
+
+            var defaultBuilders = new HtmlConventionRegistry()
+                .DefaultBuilders()
+                .ModelStateBuilders();
 
             defaultRegistry.Apply(library);
 
@@ -34,6 +39,8 @@
             {
                 registry.Apply(library);
             }
+
+            defaultBuilders.Apply(library);
 
             return services.AddHtmlTags(library);
         }
