@@ -45,6 +45,13 @@ namespace HtmlTags.Testing
             public string Value { get; set; }
 
             public DateTimeOffset DateValue { get; set; }
+
+            public Child Child { get; set; }
+        }
+
+        public class Child
+        {
+            public string OtherValue { get; set; }
         }
 
         [Fact]
@@ -75,6 +82,17 @@ namespace HtmlTags.Testing
 
             var editor = helper.Input(s => s.Value);
             editor.Value().ShouldBe("Foo Value Bar");
+        }
+
+        [Fact]
+        public void ShouldApplyNamingConvention()
+        {
+            var subject = new Subject {Child = new Child {OtherValue = "Value"}};
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(s => s.Child.OtherValue);
+            editor.Id().ShouldBe("Child_OtherValue");
+            editor.Attr("name").ShouldBe("Child.OtherValue");
         }
 
         [Fact]

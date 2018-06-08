@@ -25,13 +25,13 @@
             var library = new HtmlConventionLibrary();
             var defaultRegistry = new HtmlConventionRegistry()
                 .DefaultModifiers()
-                .ModelMetadata()
-                .DefaultNamingConvention()
-                .ModelStateNamingConvention();
+                .ModelMetadata();
 
             var defaultBuilders = new HtmlConventionRegistry()
                 .DefaultBuilders()
-                .ModelStateBuilders();
+                .ModelStateBuilders()
+                .DefaultNamingConvention()
+                .ModelStateNamingConvention();
 
             defaultRegistry.Apply(library);
 

@@ -16,7 +16,7 @@ namespace HtmlTags.Conventions.Elements
                     var formatString = IsCollectionIndexer(y)
                                            ? "{0}{1}"
                                            : "{0}.{1}";
-                    return string.Format(formatString, new[] {x, y});
+                    return string.Format(formatString, x, y);
                 });
         }
     }
