@@ -47,6 +47,8 @@ namespace HtmlTags.Testing
             public DateTimeOffset DateValue { get; set; }
 
             public Child Child { get; set; }
+
+            public bool Flag { get; set; }
         }
 
         public class Child
@@ -93,6 +95,9 @@ namespace HtmlTags.Testing
             var editor = helper.Input(s => s.Child.OtherValue);
             editor.Id().ShouldBe("Child_OtherValue");
             editor.Attr("name").ShouldBe("Child.OtherValue");
+
+            var label = helper.Label(s => s.Child.OtherValue);
+            label.Attr("for").ShouldBe("Child_OtherValue");
         }
 
         [Fact]

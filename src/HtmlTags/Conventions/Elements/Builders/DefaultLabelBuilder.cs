@@ -9,7 +9,7 @@ namespace HtmlTags.Conventions.Elements.Builders
 
         public HtmlTag Build(ElementRequest request)
         {
-            return new HtmlTag("label").Attr("for", request.ElementId).Text(BreakUpCamelCase(request.Accessor.Name));   
+            return new HtmlTag("label").Attr("for", DefaultIdBuilder.Build(request)).Text(BreakUpCamelCase(request.Accessor.Name));   
         }
 
         public static string BreakUpCamelCase(string fieldName)
