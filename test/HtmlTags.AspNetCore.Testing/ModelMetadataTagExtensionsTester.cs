@@ -47,6 +47,8 @@ namespace HtmlTags.Testing
             public DateTimeOffset DateValue { get; set; }
 
             public Child Child { get; set; }
+
+            public bool Flag { get; set; }
         }
 
         public class Child
@@ -85,6 +87,16 @@ namespace HtmlTags.Testing
         }
 
         [Fact]
+        public void ShouldApplyCheckboxValueAsTrue()
+        {
+            var subject = new Subject();
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(s => s.Flag);
+            editor.Value().ShouldBe("true");
+        }
+
+        [Fact]
         public void ShouldApplyNamingConvention()
         {
             var subject = new Subject {Child = new Child {OtherValue = "Value"}};
@@ -93,6 +105,9 @@ namespace HtmlTags.Testing
             var editor = helper.Input(s => s.Child.OtherValue);
             editor.Id().ShouldBe("Child_OtherValue");
             editor.Attr("name").ShouldBe("Child.OtherValue");
+
+            var label = helper.Label(s => s.Child.OtherValue);
+            label.Attr("for").ShouldBe("Child_OtherValue");
         }
 
         [Fact]

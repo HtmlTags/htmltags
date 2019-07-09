@@ -14,6 +14,7 @@ namespace HtmlTags.Conventions
         public static HtmlConventionRegistry DefaultNamingConvention(this HtmlConventionRegistry registry)
         {
             registry.Editors.NamingConvention(new DotNotationElementNamingConvention());
+            registry.Labels.NamingConvention(new DotNotationElementNamingConvention());
 
             return registry;
         }
