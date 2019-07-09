@@ -36,6 +36,11 @@ namespace HtmlTags
         {
             var modelMetadata = request.Get<ModelExplorer>().Metadata;
 
+            if (modelMetadata.ModelType == typeof(bool))
+            {
+                return "true";
+            }
+
             var formattedModelValue = request.RawValue;
 
             if (request.RawValue == null)

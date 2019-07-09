@@ -87,6 +87,16 @@ namespace HtmlTags.Testing
         }
 
         [Fact]
+        public void ShouldApplyCheckboxValueAsTrue()
+        {
+            var subject = new Subject();
+            var helper = GetHtmlHelper(subject);
+
+            var editor = helper.Input(s => s.Flag);
+            editor.Value().ShouldBe("true");
+        }
+
+        [Fact]
         public void ShouldApplyNamingConvention()
         {
             var subject = new Subject {Child = new Child {OtherValue = "Value"}};
