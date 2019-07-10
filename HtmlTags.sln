@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3FCD9D5F-200F-4FDC-A1DC-CC6474D0CCFE}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,6 +22,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlTags.AspNetCore.Testing", "test\HtmlTags.AspNetCore.Testing\HtmlTags.AspNetCore.Testing.csproj", "{768EA12F-08D7-415F-90F1-C256ABD86A5C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlTags.AspNetCore.TestSite", "src\HtmlTags.AspNetCore.TestSite\HtmlTags.AspNetCore.TestSite.csproj", "{B84942B7-D1E6-4511-8E3B-FBE1137EED09}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlTags.NetStandard", "src\HtmlTags.NetStandard\HtmlTags.NetStandard.csproj", "{72A42C1A-1AF5-4BD8-B6DA-CFCEFC5B454B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{B84942B7-D1E6-4511-8E3B-FBE1137EED09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B84942B7-D1E6-4511-8E3B-FBE1137EED09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B84942B7-D1E6-4511-8E3B-FBE1137EED09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72A42C1A-1AF5-4BD8-B6DA-CFCEFC5B454B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A42C1A-1AF5-4BD8-B6DA-CFCEFC5B454B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A42C1A-1AF5-4BD8-B6DA-CFCEFC5B454B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A42C1A-1AF5-4BD8-B6DA-CFCEFC5B454B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

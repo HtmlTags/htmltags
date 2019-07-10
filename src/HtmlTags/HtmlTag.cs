@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-#if ASPNETCORE
+#if ASPNETCORE || NETCORE
 using Microsoft.AspNetCore.Html;
 #else
 using System.Web;
@@ -16,7 +16,7 @@ namespace HtmlTags
 {
 
     public class HtmlTag : ITagSource
-#if ASPNETCORE
+#if ASPNETCORE || NETCORE
         , IHtmlContent
 #else
         , IHtmlString
