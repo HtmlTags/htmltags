@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>HtmlTags.Testing</AssemblyName>
     <PackageId>HtmlTags.Testing</PackageId>
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,9 +18,6 @@
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="Moq" Version="4.7.142" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <Reference Include="System" />
-    <Reference Include="System.Web" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
 </Project>

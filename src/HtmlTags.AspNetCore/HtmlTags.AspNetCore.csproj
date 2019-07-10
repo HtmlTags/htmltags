@@ -1,18 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <DefineConstants>$(DefineConstants);ASPNETCORE</DefineConstants>
     <AssemblyName>HtmlTags.AspNetCore</AssemblyName>
     <RootNamespace>HtmlTags</RootNamespace>
     <PackageId>HtmlTags.AspNetCore</PackageId>
     <PackageTags>html;ASP.NET MVC</PackageTags>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="..\HtmlTags\obj\**\*.cs" />
-    <Compile Include="..\HtmlTags\**\*.cs" Exclude="..\HtmlTags\obj\**\*.cs;bin\**;obj\**;**\*.xproj;packages\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.1" />
@@ -21,6 +15,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HtmlTags\HtmlTags.csproj" />
   </ItemGroup>
 
 </Project>

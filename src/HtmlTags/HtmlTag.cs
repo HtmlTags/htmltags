@@ -6,21 +6,12 @@ using System.Security.Principal;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-#if ASPNETCORE
 using Microsoft.AspNetCore.Html;
-#else
-using System.Web;
-#endif
 
 namespace HtmlTags
 {
 
-    public class HtmlTag : ITagSource
-#if ASPNETCORE
-        , IHtmlContent
-#else
-        , IHtmlString
-#endif
+    public class HtmlTag : ITagSource, IHtmlContent
     {
         public static HtmlTag Empty() => new HtmlTag("span").Render(false);
 
