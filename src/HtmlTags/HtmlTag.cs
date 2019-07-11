@@ -416,13 +416,6 @@ namespace HtmlTags
             return html.ToString();
         }
 
-        public string ToPrettyString()
-        {
-            return WillBeRendered()
-                ? ToString(new StringWriter(), HtmlEncoder.Create(new TextEncoderSettings()))
-                : string.Empty;
-        }
-
         private static HtmlTag WalkToTop(HtmlTag htmlTag)
         {
             return htmlTag.Parent == null ? htmlTag : WalkToTop(htmlTag.Parent);
