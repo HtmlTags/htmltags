@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Html;
 
 namespace HtmlTags
@@ -416,6 +416,13 @@ namespace HtmlTags
             return html.ToString();
         }
 
+        public string ToPrettyString()
+        {
+            return WillBeRendered()
+                ? ToString(new StringWriter(), HtmlEncoder.Create(new TextEncoderSettings()))
+                : string.Empty;
+        }
+
         private static HtmlTag WalkToTop(HtmlTag htmlTag)
         {
             return htmlTag.Parent == null ? htmlTag : WalkToTop(htmlTag.Parent);
@@ -451,7 +458,7 @@ namespace HtmlTags
                     {
                         var value = attribute.Value;
                         var stringValue = !(value is string) && key.StartsWith(DataPrefix)
-                            ? JsonConvert.SerializeObject(value)
+                            ? JsonSerializer.ToString(value)
                             : value.ToString();
                         RenderAttribute(html, encoder, key, stringValue, attribute.IsEncoded);
                     }
@@ -470,7 +477,7 @@ namespace HtmlTags
 
             if (_metaData.Count > 0)
             {
-                var metadataValue = JsonConvert.SerializeObject(_metaData.Inner);
+                var metadataValue = JsonSerializer.ToString(_metaData.Inner);
                 RenderAttribute(html, encoder, MetadataAttribute, metadataValue, true);
             }
 
