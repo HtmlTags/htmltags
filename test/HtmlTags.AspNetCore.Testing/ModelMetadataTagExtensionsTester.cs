@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using HtmlTags.Conventions;
+using HtmlTags.Conventions.Elements;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -215,6 +216,18 @@ namespace HtmlTags.Testing
             editor.Value().ShouldBe(GetDateValue(offset));
         }
 
+        [Fact]
+        public void ShouldAllowOverridingOfConventionTextUsingCustomBuilder()
+        {
+            var offset = new DateTimeOffset(2018, 1, 1, 12, 00, 00, TimeSpan.FromHours(-6));
+            var subject = new Subject {DateValue = offset};
+            var helper = GetHtmlHelper(subject);
+
+            var display = helper.Display(m => m.DateValue);
+
+            display.Text().ShouldBe(DateTimeBuilder.Token);
+        }
+
         public static HtmlHelper<TModel> GetHtmlHelper<TModel>(TModel model)
         {
             return GetHtmlHelper(model, CreateViewEngine());
@@ -354,6 +367,8 @@ namespace HtmlTags.Testing
                     reg.Editors.IfPropertyIs<DateTimeOffset>().ModifyWith(m =>
                         m.CurrentTag.Attr("type", "datetime-local")
                             .Value(GetDateValue(m.Value<DateTimeOffset?>())));
+
+                    reg.Displays.IfPropertyIs<DateTimeOffset>().BuildBy<DateTimeBuilder>();
                 });
             
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -432,6 +447,16 @@ namespace HtmlTags.Testing
                 metadata.ModelType == null ? "(null)" : metadata.ModelType.FullName,
                 metadata.PropertyName ?? "(null)",
                 modelExplorer.GetSimpleDisplayText() ?? "(null)");
+        }
+
+        public class DateTimeBuilder : IElementBuilder
+        {
+            public static string Token = "date-time-builder";
+
+            public HtmlTag Build(ElementRequest request)
+            {
+                return new HtmlTag("span").Text(Token);
+            }
         }
 
         public class TestOptionsManager<TOptions> : IOptions<TOptions>
