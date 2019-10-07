@@ -5,6 +5,8 @@
     <AssemblyName>HtmlTags</AssemblyName>
     <PackageId>HtmlTags</PackageId>
     <PackageTags>html;ASP.NET Core</PackageTags>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\HtmlTags.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
