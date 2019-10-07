@@ -9,9 +9,14 @@
     <WarningsAsErrors>true</WarningsAsErrors>
     <NoWarn>$(NoWarn);1701;1702;1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PackageIconUrl>https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_256.png</PackageIconUrl>
+    <PackageIcon>FubuHtml_256.png</PackageIcon>
     <PackageProjectUrl>https://github.com/HtmlTags/htmltags</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/HtmlTags/htmltags/raw/master/license.txt</PackageLicenseUrl>
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\logo\FubuHtml_256.png" Pack="true" PackagePath=""/>
+    <None Include="..\..\license.txt" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
 </Project>
