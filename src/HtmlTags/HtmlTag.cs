@@ -4,23 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-#if ASPNETCORE
 using Microsoft.AspNetCore.Html;
-#else
-using System.Web;
-#endif
 
 namespace HtmlTags
 {
 
-    public class HtmlTag : ITagSource
-#if ASPNETCORE
-        , IHtmlContent
-#else
-        , IHtmlString
-#endif
+    public class HtmlTag : ITagSource, IHtmlContent
     {
         public static HtmlTag Empty() => new HtmlTag("span").Render(false);
 
@@ -460,7 +451,7 @@ namespace HtmlTags
                     {
                         var value = attribute.Value;
                         var stringValue = !(value is string) && key.StartsWith(DataPrefix)
-                            ? JsonConvert.SerializeObject(value)
+                            ? JsonSerializer.Serialize(value)
                             : value.ToString();
                         RenderAttribute(html, encoder, key, stringValue, attribute.IsEncoded);
                     }
@@ -479,7 +470,7 @@ namespace HtmlTags
 
             if (_metaData.Count > 0)
             {
-                var metadataValue = JsonConvert.SerializeObject(_metaData.Inner);
+                var metadataValue = JsonSerializer.Serialize(_metaData.Inner);
                 RenderAttribute(html, encoder, MetadataAttribute, metadataValue, true);
             }
 
@@ -633,7 +624,7 @@ namespace HtmlTags
             {
                 if (!CssClassNameValidator.IsValidClassName(parsedClass))
                 {
-                    throw new ArgumentException(string.Format("CSS class names is not valid. Problem class was '{0}'", new[] {className}), nameof(className));
+                    throw new ArgumentException($"CSS class names is not valid. Problem class was '{className}'", nameof(className));
                 }
 
                 _cssClasses.Add(parsedClass);

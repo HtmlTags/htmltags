@@ -14,15 +14,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
+#if NETCOREAPP2_2
 using Microsoft.AspNetCore.Mvc.DataAnnotations.Internal;
 using Microsoft.AspNetCore.Mvc.Internal;
+#endif
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+#if NETCOREAPP2_2
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
+#else
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
+#endif
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -299,7 +306,9 @@ namespace HtmlTags.Testing
                     stringLocalizerFactory: null),
             };
 
-            var validator = new DefaultObjectValidator(provider, valiatorProviders);
+            var mvcOptions = new MvcOptions();
+
+            var validator = new DefaultObjectValidator(provider, valiatorProviders, mvcOptions);
 
             validator.Validate(actionContext, validationState: null, prefix: string.Empty, viewData.Model);
 
@@ -307,8 +316,6 @@ namespace HtmlTags.Testing
             urlHelperFactory
                 .Setup(f => f.GetUrlHelper(It.IsAny<ActionContext>()))
                 .Returns(urlHelper);
-
-            var expressionTextCache = new ExpressionTextCache();
 
             var attributeProvider = new DefaultValidationHtmlAttributeProvider(
                 optionsAccessor.Object,
@@ -366,8 +373,13 @@ namespace HtmlTags.Testing
                 provider,
                 new TestViewBufferScope(),
                 new HtmlTestEncoder(),
-                UrlEncoder.Default,
-                expressionTextCache);
+                UrlEncoder.Default
+#if NETCOREAPP2_2
+                , new ExpressionTextCache()
+#else
+                , new ModelExpressionProvider(provider)
+#endif
+                );
 
             var viewContext = new ViewContext(
                 actionContext,
@@ -468,10 +480,17 @@ namespace HtmlTags.Testing
                 ReturnedBuffers.Add(segment);
             }
 
+#if NETCOREAPP2_2
             public PagedBufferedTextWriter CreateWriter(TextWriter writer)
             {
                 return new PagedBufferedTextWriter(ArrayPool<char>.Shared, writer);
             }
+#else
+            public TextWriter CreateWriter(TextWriter writer)
+            {
+                return new PagedBufferedTextWriter(ArrayPool<char>.Shared, writer);
+            }
+#endif
         }
 
         public class TestModelMetadataProvider : DefaultModelMetadataProvider
@@ -484,6 +503,9 @@ namespace HtmlTags.Testing
                 new DefaultBindingMetadataProvider(),
                 new DefaultValidationMetadataProvider(),
                 new DataAnnotationsMetadataProvider(
+#if NETCOREAPP3_0
+                    new MvcOptions(),
+#endif
                     new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
                     stringLocalizerFactory),
                 new DataMemberRequiredBindingMetadataProvider(),
@@ -500,6 +522,9 @@ namespace HtmlTags.Testing
                 new DefaultBindingMetadataProvider(),
                 new DefaultValidationMetadataProvider(),
                 new DataAnnotationsMetadataProvider(
+#if NETCOREAPP3_0
+                    new MvcOptions(),
+#endif
                     new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
                     stringLocalizerFactory: null),
                 new DataMemberRequiredBindingMetadataProvider(),
@@ -537,6 +562,9 @@ namespace HtmlTags.Testing
                       new DefaultBindingMetadataProvider(),
                       new DefaultValidationMetadataProvider(),
                       new DataAnnotationsMetadataProvider(
+#if NETCOREAPP3_0
+                          new MvcOptions(),
+#endif
                           new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
                           stringLocalizerFactory: null),
                       detailsProvider

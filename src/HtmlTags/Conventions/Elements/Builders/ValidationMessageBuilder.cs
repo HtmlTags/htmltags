@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
 namespace HtmlTags.Conventions.Elements.Builders
 {
@@ -43,7 +42,7 @@ namespace HtmlTags.Conventions.Elements.Builders
             if (modelError != null)
             {
                 var modelExplorer = request.Get<ModelExplorer>() ?? throw new InvalidOperationException("Validation messages require a ModelExplorer");
-                tag.Text(ValidationHelpers.GetModelErrorMessageOrDefault(modelError, entry, modelExplorer));
+                tag.Text(GetModelErrorMessageOrDefault(modelError, entry, modelExplorer));
             }
 
             if (formContext != null)
@@ -54,6 +53,22 @@ namespace HtmlTags.Conventions.Elements.Builders
             }
 
             return tag;
+        }
+
+        // Generously donated by https://github.com/aspnet/AspNetCore/blob/v3.0.0/src/Mvc/Mvc.ViewFeatures/src/ValidationHelpers.cs#L40
+        private static string GetModelErrorMessageOrDefault(
+            ModelError modelError,
+            ModelStateEntry containingEntry,
+            ModelExplorer modelExplorer)
+        {
+            if (!string.IsNullOrEmpty(modelError.ErrorMessage))
+            {
+                return modelError.ErrorMessage;
+            }
+
+            // Default in the ValidationMessage case is a fallback error message.
+            var attemptedValue = containingEntry.AttemptedValue ?? "null";
+            return modelExplorer.Metadata.ModelBindingMessageProvider.ValueIsInvalidAccessor(attemptedValue);
         }
     }
 }
