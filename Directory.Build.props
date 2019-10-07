@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Easy generation of html with a jquery inspired object model</Description>
     <Copyright>Copyright Jeremy D. Miller, Josh Arnold, Joshua Flanagan, Jimmy Bogard, et al. All rights reserved.</Copyright>
-    <VersionPrefix>7.0.4</VersionPrefix>
+    <VersionPrefix>8.0.0</VersionPrefix>
     <Authors>Jeremy D. Miller;Joshua Flanagan;Josh Arnold;Jimmy Bogard</Authors>
     <LangVersion>latest</LangVersion>
     <WarningsAsErrors>true</WarningsAsErrors>

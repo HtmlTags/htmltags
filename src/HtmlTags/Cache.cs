@@ -5,9 +5,6 @@ using System.Linq;
 
 namespace HtmlTags
 {
-#if !ASPNETCORE
-    [Serializable]
-#endif
     internal class Cache<TKey, TValue> : IEnumerable<TValue> where TValue : class
     {
         private readonly object _locker = new object();
