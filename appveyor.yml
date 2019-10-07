@@ -25,6 +25,7 @@ deploy:
   name: production
   api_key:
     secure: t3blEIQiDIYjjWhOSTTtrcAnzJkmSi+0zYPxC1v4RDzm6oI/gIpD6ZtrOGsYu2jE
+  skip_symbols: true
   on:
     branch: master
     appveyor_repo_tag: true
