@@ -2,7 +2,6 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7h0p16ld5dqikglj?svg=true)](https://ci.appveyor.com/project/jbogard/htmltags)
 [![NuGet Version](http://img.shields.io/nuget/v/HtmlTags.svg?style=flat)](https://www.nuget.org/packages/HtmlTags/)
-[![ASP.NET Core NuGet Version](http://img.shields.io/nuget/v/HtmlTags.svg?style=flat)](https://www.nuget.org/packages/HtmlTags.AspNetCore/)
 [![MyGet CI Version](https://img.shields.io/myget/htmltags-ci/v/HtmlTags.svg)](http://myget.org/gallery/htmltags-ci)
 
  .NET objects for generating HTML
