@@ -8,34 +8,30 @@
  .NET objects for generating HTML
 
 ## Installation
-Install via [nuget](http://www.nuget.org/):
+Install via [nuget](http://www.nuget.org/), for ASP.NET Core:
 
     PM> Install-Package HtmlTags
 
-Or for ASP.NET Core:
-
-    PM> Install-Package HtmlTags.AspNetCore
-
 ## When should I use HtmlTags?
 
-In general, you should avoid building strings of HTML in your applications. There are plenty of template/view engines that are much more suitable for generating dynamic markup. However, there are some situations that require you to build snippets of HTML from code (e.g., view extensions in FubuMVC or HtmlHelper extensions in ASP.NET MVC). HtmlTags is the best way to build those snippets.
+In general, you should avoid building strings of HTML in your applications. There are plenty of template/view engines that are much more suitable for generating dynamic markup. However, there are some situations that require you to build snippets of HTML from code (e.g., view extensions in HtmlHelper extensions in ASP.NET Core). HtmlTags is the best way to build those snippets.
 
 ### The HtmlTags advantage
 
 * Automatic encoding of HTML entities in your attributes and inner text
 * Ensures proper structure (closing tags, etc)
 * Easy to use chaining API with method names modeled after jQuery
-* Compatible with ASP.NET 4's encoded code expressions `<%: %>`
+* Compatible with Razor expressions
 * Methods manipulate an internal model, not a string. The HTML string is not
 generated until ToString() is called.
 
-That last point seems trivial, but it is actually HtmlTag's biggest strength. If your HtmlHelper extensions return an HtmlTag instance, you have the ability to customize the generated tag within your view template. When your HtmlHelpers return a strings (as the helpers included with ASP.NET MVC do), you have no chance to customize the tag (without ugly string manipulation).
+That last point seems trivial, but it is actually HtmlTag's biggest strength. If your HtmlHelper extensions return an HtmlTag instance, you have the ability to customize the generated tag within your view template. When your HtmlHelpers return a strings (as the helpers included with ASP.NET Core do), you have no chance to customize the tag (without ugly string manipulation).
 
 ### HtmlHelpers that return strings
 
-Consider the built-in ASP.NET MVC TextBox() helper:
+Consider the built-in ASP.NET Core TextBox() helper:
 
-    <%: Html.TextBox("FirstName") %>
+    @Html.TextBox("FirstName")
 
 It will generate the following HTML:
 
@@ -44,7 +40,7 @@ It will generate the following HTML:
 What if you wanted to apply a CSS class to that input? Or change the element id?
 You can do it, but it requires a much more verbose overload:
 
-    <%: Html.TextBox("FirstName", "Lucas", new Dictionary<string, object> {{"id", "first-name"}, {"class", "required"}) %>
+    @Html.TextBox("FirstName", "Lucas", new Dictionary<string, object> {{"id", "first-name"}, {"class", "required"})
 
 ### HtmlHelpers that return HtmlTags
 
@@ -59,11 +55,11 @@ Now consider an HtmlHelper extension that returns an HtmlTag:
 
 You can use it just as easily in your view template:
 
-    <%: Html.TextBoxTag("FirstName") %>
+    @Html.TextBoxTag("FirstName")
 
 and it will generate the exact same HTML as above. However, you can also very easily modify the tag produced by the helper:
 
-    <%: Html.TextBoxTag("FirstName").Id("first-name").AddClass("required") %>
+    @Html.TextBoxTag("FirstName").Id("first-name").AddClass("required")
 
 will generate:
 
