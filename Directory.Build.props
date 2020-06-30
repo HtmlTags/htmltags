@@ -3,7 +3,7 @@
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <WarningsAsErrors>true</WarningsAsErrors>
-    <NoWarn>$(NoWarn);1701;1702;1591</NoWarn>
+    <NoWarn>$(NoWarn);1701;1702;1591;0618</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
-#if NETCOREAPP2_2
+#if NETCOREAPP2_1
 using Microsoft.AspNetCore.Mvc.DataAnnotations.Internal;
 using Microsoft.AspNetCore.Mvc.Internal;
 #endif
@@ -25,7 +25,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-#if NETCOREAPP2_2
+#if NETCOREAPP2_1
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 #else
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
@@ -374,7 +374,7 @@ namespace HtmlTags.Testing
                 new TestViewBufferScope(),
                 new HtmlTestEncoder(),
                 UrlEncoder.Default
-#if NETCOREAPP2_2
+#if NETCOREAPP2_1
                 , new ExpressionTextCache()
 #else
                 , new ModelExpressionProvider(provider)
@@ -480,7 +480,7 @@ namespace HtmlTags.Testing
                 ReturnedBuffers.Add(segment);
             }
 
-#if NETCOREAPP2_2
+#if NETCOREAPP2_1
             public PagedBufferedTextWriter CreateWriter(TextWriter writer)
             {
                 return new PagedBufferedTextWriter(ArrayPool<char>.Shared, writer);
@@ -503,7 +503,7 @@ namespace HtmlTags.Testing
                 new DefaultBindingMetadataProvider(),
                 new DefaultValidationMetadataProvider(),
                 new DataAnnotationsMetadataProvider(
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
                     new MvcOptions(),
 #endif
                     new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
@@ -522,7 +522,7 @@ namespace HtmlTags.Testing
                 new DefaultBindingMetadataProvider(),
                 new DefaultValidationMetadataProvider(),
                 new DataAnnotationsMetadataProvider(
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
                     new MvcOptions(),
 #endif
                     new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
@@ -562,7 +562,7 @@ namespace HtmlTags.Testing
                       new DefaultBindingMetadataProvider(),
                       new DefaultValidationMetadataProvider(),
                       new DataAnnotationsMetadataProvider(
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
                           new MvcOptions(),
 #endif
                           new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
