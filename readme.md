@@ -1,6 +1,7 @@
 # ![HtmlTags](https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_32.png) HtmlTags 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/7h0p16ld5dqikglj?svg=true)](https://ci.appveyor.com/project/jbogard/htmltags)
+[![CI](https://github.com/htmltags/htmltags/workflows/CI/badge.svg)](https://github.com/htmltags/htmltags/workflows/CI)
+[![NuGet](https://img.shields.io/nuget/dt/htmltags.svg)](https://www.nuget.org/packages/htmltags) 
 [![NuGet Version](http://img.shields.io/nuget/v/HtmlTags.svg?style=flat)](https://www.nuget.org/packages/HtmlTags/)
 [![MyGet CI Version](https://img.shields.io/myget/htmltags-ci/v/HtmlTags.svg)](http://myget.org/gallery/htmltags-ci)
 
