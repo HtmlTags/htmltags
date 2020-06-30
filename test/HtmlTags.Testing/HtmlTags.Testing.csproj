@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -25,11 +25,11 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.2'">
+  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Xml" Version="2.2.0" />
   </ItemGroup>
