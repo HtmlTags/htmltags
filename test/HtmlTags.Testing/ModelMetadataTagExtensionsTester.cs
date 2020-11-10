@@ -503,7 +503,7 @@ namespace HtmlTags.Testing
                 new DefaultBindingMetadataProvider(),
                 new DefaultValidationMetadataProvider(),
                 new DataAnnotationsMetadataProvider(
-#if NETCOREAPP3_1
+#if INTERNALIZED
                     new MvcOptions(),
 #endif
                     new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
@@ -522,7 +522,7 @@ namespace HtmlTags.Testing
                 new DefaultBindingMetadataProvider(),
                 new DefaultValidationMetadataProvider(),
                 new DataAnnotationsMetadataProvider(
-#if NETCOREAPP3_1
+#if INTERNALIZED
                     new MvcOptions(),
 #endif
                     new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
@@ -562,7 +562,7 @@ namespace HtmlTags.Testing
                       new DefaultBindingMetadataProvider(),
                       new DefaultValidationMetadataProvider(),
                       new DataAnnotationsMetadataProvider(
-#if NETCOREAPP3_1
+#if INTERNALIZED
                           new MvcOptions(),
 #endif
                           new TestOptionsManager<MvcDataAnnotationsLocalizationOptions>(),
