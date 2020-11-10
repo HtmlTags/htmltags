@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <WarningsAsErrors>true</WarningsAsErrors>
-    <NoWarn>$(NoWarn);1701;1702;1591;0618</NoWarn>
+    <NoWarn>$(NoWarn);CS1701;CS1702;CS1591;CS0618</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
