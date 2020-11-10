@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
     <Description>Easy generation of html with a jquery inspired object model</Description>
     <Copyright>Copyright Jeremy D. Miller, Josh Arnold, Joshua Flanagan, Jimmy Bogard, et al. All rights reserved.</Copyright>
     <Authors>Jeremy D. Miller;Joshua Flanagan;Josh Arnold;Jimmy Bogard</Authors>
@@ -27,10 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="4.6.0" />
+    <PackageReference Include="System.Text.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="MinVer" Version="2.3.0" PrivateAssets="All" />
+    <PackageReference Include="MinVer" Version="2.3.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
@@ -41,6 +41,10 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net5.0'">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
