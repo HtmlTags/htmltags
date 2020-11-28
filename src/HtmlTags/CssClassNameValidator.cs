@@ -8,6 +8,9 @@ namespace HtmlTags
         public const string ValidStartRegex = @"^-?[_a-zA-Z]+";
         public const string InvalidStartRegex = @"^-?[^_a-zA-Z]+";
         public const string ValidClassChars = @"_a-zA-Z0-9-";
+        private static readonly Regex RxValidClassName = new Regex($@"{ValidStartRegex}[{ValidClassChars}]*$");
+        private static readonly Regex RxReplaceInvalidChars = new Regex($"[^{ValidClassChars}]");
+        private static readonly Regex RxReplaceLeadingChars = new Regex($"{InvalidStartRegex}(?<rest>.*)$");
 
         public static bool AllowInvalidCssClassNames { get; set; }
 
@@ -19,8 +22,7 @@ namespace HtmlTags
 
         public static bool IsValidClassName(string className)
         {
-            var pattern = $@"{ValidStartRegex}[{ValidClassChars}]*$";
-            return AllowInvalidCssClassNames || IsJsonClassName(className) || Regex.IsMatch(className, pattern);
+            return AllowInvalidCssClassNames || IsJsonClassName(className) || RxValidClassName.IsMatch(className);
         }
 
         public static string SanitizeClassName(string className)
@@ -30,13 +32,11 @@ namespace HtmlTags
             if (IsValidClassName(className)) return className;
 
             // it can't have anything other than _,-,a-z,A-Z, or 0-9
-            var pattern = $"[^{ValidClassChars}]";
-            className = Regex.Replace(className, pattern, "");
+            className = RxReplaceInvalidChars.Replace(className, "");
 
             // Strip invalid leading combinations (i.e. '-9test' -> 'test')
             // if it starts with '-', it must be followed by _, a-z, A-Z
-            var invalidleadingpattern = $"{InvalidStartRegex}(?<rest>.*)$";
-            className = Regex.Replace(className, invalidleadingpattern, @"${rest}");
+            className = RxReplaceLeadingChars.Replace(className, @"${rest}");
 
             // if the whole thing was invalid, we'll end up with an empty string. That's not valid either, so return the default
             return string.IsNullOrEmpty(className) ? DefaultClass : className;

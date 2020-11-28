@@ -17,6 +17,7 @@ namespace HtmlTags
 
         public static HtmlTag Placeholder() => new HtmlTag().NoTag();
 
+        private static readonly Regex RxWhiteSpace = new Regex("[ ]+");
         private const string CssClassAttribute = "class";
         private const string CssStyleAttribute = "style";
         private const string DataPrefix = "data-";
@@ -647,7 +648,7 @@ namespace HtmlTags
             }
             else
             {
-                classes = Regex.Split(className, "[ ]+")
+                classes = RxWhiteSpace.Split(className)
                                .Where(c => !string.IsNullOrWhiteSpace(c));
             }
 

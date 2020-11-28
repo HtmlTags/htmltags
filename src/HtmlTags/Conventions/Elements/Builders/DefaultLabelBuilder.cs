@@ -5,6 +5,13 @@ namespace HtmlTags.Conventions.Elements.Builders
 
     public class DefaultLabelBuilder : IElementBuilder
     {
+        private static readonly Regex[] RxPatterns =
+        {
+            new Regex("([a-z])([A-Z])", RegexOptions.IgnorePatternWhitespace),
+            new Regex("([0-9])([a-zA-Z])", RegexOptions.IgnorePatternWhitespace),
+            new Regex("([a-zA-Z])([0-9])", RegexOptions.IgnorePatternWhitespace)
+        };
+
         public bool Matches(ElementRequest subject) => true;
 
         public HtmlTag Build(ElementRequest request)
@@ -14,14 +21,8 @@ namespace HtmlTags.Conventions.Elements.Builders
 
         public static string BreakUpCamelCase(string fieldName)
         {
-            var patterns = new[]
-                {
-                    "([a-z])([A-Z])",
-                    "([0-9])([a-zA-Z])",
-                    "([a-zA-Z])([0-9])"
-                };
-            var output = patterns.Aggregate(fieldName,
-                (current, pattern) => Regex.Replace(current, pattern, "$1 $2", RegexOptions.IgnorePatternWhitespace));
+            var output = RxPatterns.Aggregate(fieldName,
+                (current, regex) => regex.Replace(current, "$1 $2"));
             return output.Replace('_', ' ');
         }
     }
