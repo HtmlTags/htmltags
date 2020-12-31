@@ -47,6 +47,13 @@ namespace HtmlTags.Testing
         }
 
         [Fact]
+        public void appending_inner_text_with_tags()
+        {
+            var tag = new HtmlTag("p").AppendText("some text").Append("span").AppendText("more text");
+            tag.ToString().ShouldBe("<p>some text<span></span>more text</p>");
+        }
+
+        [Fact]
         public void the_inner_text_is_html_encoded_by_default()
         {
             var tag = new HtmlTag("div");

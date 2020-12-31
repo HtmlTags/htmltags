@@ -52,7 +52,7 @@ namespace HtmlTags.Conventions
             CurrentTag = tag;
         }
 
-        public AccessorDef ToAccessorDef() => new AccessorDef(Accessor, HolderType());
+        public AccessorDef ToAccessorDef() => new(Accessor, HolderType());
 
 
         public Type HolderType() => Model == null ? Accessor.DeclaringType : Model?.GetType();
@@ -79,6 +79,6 @@ namespace HtmlTags.Conventions
 
         public void Attach(Func<Type, object> locator) => _services = locator;
 
-        public ElementRequest ToToken() => new ElementRequest(Accessor);
+        public ElementRequest ToToken() => new(Accessor);
     }
 }

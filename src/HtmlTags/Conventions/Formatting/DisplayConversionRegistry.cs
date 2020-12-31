@@ -21,7 +21,7 @@ namespace HtmlTags.Conventions.Formatting
 
         private MakeDisplayExpression MakeDisplay(Func<GetStringRequest, bool> filter)
         {
-            return new MakeDisplayExpression(func =>
+            return new(func =>
             {
                 _strategies.Add(new StringifierStrategy
                 {
@@ -33,7 +33,7 @@ namespace HtmlTags.Conventions.Formatting
 
         private MakeDisplayExpression<T> MakeDisplay<T>(Func<GetStringRequest, bool> filter)
         {
-            return new MakeDisplayExpression<T>(func =>
+            return new(func =>
             {
                 _strategies.Add(new StringifierStrategy
                 {

@@ -7,7 +7,7 @@ namespace HtmlTags
 {
     internal class Cache<TKey, TValue> : IEnumerable<TValue> where TValue : class
     {
-        private readonly object _locker = new object();
+        private readonly object _locker = new();
         private readonly IDictionary<TKey, TValue> _values;
 
         private Func<TValue, TKey> _getKey = arg => { throw new NotImplementedException(); };

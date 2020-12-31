@@ -5,7 +5,7 @@ namespace HtmlTags.Conventions
 {
     public class ActiveProfile
     {
-        private readonly Stack<string> _profiles = new Stack<string>();
+        private readonly Stack<string> _profiles = new();
 
         public ActiveProfile()
         {

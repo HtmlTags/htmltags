@@ -8,9 +8,9 @@ namespace HtmlTags
         public const string ValidStartRegex = @"^-?[_a-zA-Z]+";
         public const string InvalidStartRegex = @"^-?[^_a-zA-Z]+";
         public const string ValidClassChars = @"_a-zA-Z0-9-";
-        private static readonly Regex RxValidClassName = new Regex($@"{ValidStartRegex}[{ValidClassChars}]*$");
-        private static readonly Regex RxReplaceInvalidChars = new Regex($"[^{ValidClassChars}]");
-        private static readonly Regex RxReplaceLeadingChars = new Regex($"{InvalidStartRegex}(?<rest>.*)$");
+        private static readonly Regex RxValidClassName = new($@"{ValidStartRegex}[{ValidClassChars}]*$");
+        private static readonly Regex RxReplaceInvalidChars = new($"[^{ValidClassChars}]");
+        private static readonly Regex RxReplaceLeadingChars = new($"{InvalidStartRegex}(?<rest>.*)$");
 
         public static bool AllowInvalidCssClassNames { get; set; }
 

@@ -26,10 +26,10 @@ namespace HtmlTags.Conventions
         public void NamingConvention(IElementNamingConvention elementNamingConvention)
             => _set.NamingConvention(elementNamingConvention);
 
-        public ElementActionExpression Always => new ElementActionExpression(_set, req => true, "Always");
+        public ElementActionExpression Always => new(_set, req => true, "Always");
 
         public ElementActionExpression If(Func<ElementRequest, bool> matches, string description = null) 
-            => new ElementActionExpression(_set, matches, description);
+            => new(_set, matches, description);
 
         public ElementActionExpression IfPropertyIs<T>() => If(req => req.Accessor.PropertyType == typeof(T),
             $"Property type is {typeof (T).Name}");

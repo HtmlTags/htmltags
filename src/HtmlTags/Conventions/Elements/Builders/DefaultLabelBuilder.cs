@@ -7,9 +7,9 @@ namespace HtmlTags.Conventions.Elements.Builders
     {
         private static readonly Regex[] RxPatterns =
         {
-            new Regex("([a-z])([A-Z])", RegexOptions.IgnorePatternWhitespace),
-            new Regex("([0-9])([a-zA-Z])", RegexOptions.IgnorePatternWhitespace),
-            new Regex("([a-zA-Z])([0-9])", RegexOptions.IgnorePatternWhitespace)
+            new("([a-z])([A-Z])", RegexOptions.IgnorePatternWhitespace),
+            new("([0-9])([a-zA-Z])", RegexOptions.IgnorePatternWhitespace),
+            new("([a-zA-Z])([0-9])", RegexOptions.IgnorePatternWhitespace)
         };
 
         public bool Matches(ElementRequest subject) => true;

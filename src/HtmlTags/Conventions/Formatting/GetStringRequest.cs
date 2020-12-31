@@ -84,7 +84,7 @@ namespace HtmlTags.Conventions.Formatting
 
         public GetStringRequest GetRequestForNullableType()
         {
-            return new GetStringRequest(OwnerType, Property, RawValue, Format, PropertyType.GetInnerTypeFromNullable())
+            return new(OwnerType, Property, RawValue, Format, PropertyType.GetInnerTypeFromNullable())
             {
                 Locator = Locator
             };
@@ -92,7 +92,7 @@ namespace HtmlTags.Conventions.Formatting
 
         public GetStringRequest GetRequestForElementType()
         {
-            return new GetStringRequest(OwnerType, Property, RawValue, Format, PropertyType.GetElementType())
+            return new(OwnerType, Property, RawValue, Format, PropertyType.GetElementType())
             {
                 Locator = Locator,
             };

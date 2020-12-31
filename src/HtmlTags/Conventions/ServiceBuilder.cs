@@ -4,7 +4,7 @@ namespace HtmlTags.Conventions
 {
     public class ServiceBuilder
     {
-        private readonly Cache<Type, object> _services = new Cache<Type, object>();
+        private readonly Cache<Type, object> _services = new();
 
         public bool Has(Type type) => _services.Has(type);
 

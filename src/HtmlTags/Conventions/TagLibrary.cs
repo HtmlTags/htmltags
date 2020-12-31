@@ -11,7 +11,7 @@ namespace HtmlTags.Conventions
     public class TagLibrary : ITagBuildingExpression, ITagLibrary
     {
         private readonly Cache<string, TagCategory> _categories =
-            new Cache<string, TagCategory>(name => new TagCategory());
+            new(name => new TagCategory());
 
         public ITagPlan PlanFor(ElementRequest subject, string profile = null, string category = null)
         {

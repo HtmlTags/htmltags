@@ -90,10 +90,10 @@ namespace HtmlTags
 
         public HtmlTag Header(string text) => new HtmlTag("th", this).Text(text);
 
-        public HtmlTag Header() => new HtmlTag("th", this);
+        public HtmlTag Header() => new("th", this);
 
         public HtmlTag Cell(string text) => new HtmlTag("td", this).Text(text);
 
-        public HtmlTag Cell() => new HtmlTag("td", this);
+        public HtmlTag Cell() => new("td", this);
     }
 }

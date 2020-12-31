@@ -8,7 +8,7 @@
     public class AccessorRules
     {
         private readonly Cache<Type, Cache<Accessor, IList<object>>> _rules =
-            new Cache<Type, Cache<Accessor, IList<object>>>(
+            new(
                 type => new Cache<Accessor, IList<object>>(a => new List<object>()));
 
         public void Add(Accessor accessor, object rule) 

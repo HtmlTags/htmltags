@@ -45,7 +45,7 @@ namespace HtmlTags
 
         public MemberInfo[] Members { get; }
 
-        public Enumerator GetEnumerator() => new Enumerator(this);
+        public Enumerator GetEnumerator() => new(this);
 
         public struct Enumerator
         {

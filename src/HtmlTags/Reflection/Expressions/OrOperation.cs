@@ -7,7 +7,7 @@ namespace HtmlTags.Reflection.Expressions
 {
     public class ComposableOrOperation
     {
-        private readonly List<Tuple<IPropertyOperation, MemberExpression, object>> _listOfOperations = new List<Tuple<IPropertyOperation, MemberExpression, object>>();
+        private readonly List<Tuple<IPropertyOperation, MemberExpression, object>> _listOfOperations = new();
 
         public void Set<T>(Expression<Func<T, object>> path, object value)
         {

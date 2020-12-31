@@ -11,7 +11,7 @@ namespace HtmlTags.Conventions
 
     public class TagPlan : ITagPlan
     {
-        private readonly List<ITagModifier> _modifiers = new List<ITagModifier>();
+        private readonly List<ITagModifier> _modifiers = new();
 
         public TagPlan(ITagBuilder builder, IEnumerable<ITagModifier> modifiers, IElementNamingConvention elementNamingConvention)
         {

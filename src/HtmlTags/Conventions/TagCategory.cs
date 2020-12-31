@@ -7,14 +7,14 @@ namespace HtmlTags.Conventions
     public class TagCategory : ITagBuildingExpression
     {
         private readonly Cache<string, BuilderSet> _profiles =
-            new Cache<string, BuilderSet>(name => new BuilderSet());
+            new(name => new BuilderSet());
 
         public TagCategory()
         {
             _profiles[TagConstants.Default] = Defaults;
         }
 
-        public BuilderSet Defaults { get; } = new BuilderSet();
+        public BuilderSet Defaults { get; } = new();
 
         public BuilderSet Profile(string name) => _profiles[name];
 

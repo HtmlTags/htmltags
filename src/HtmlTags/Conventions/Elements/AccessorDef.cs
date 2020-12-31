@@ -17,7 +17,7 @@ namespace HtmlTags.Conventions.Elements
 
         public static AccessorDef For<T>(Expression<Func<T, object>> expression)
         {
-            return new AccessorDef(expression.ToAccessor(), typeof(T));
+            return new(expression.ToAccessor(), typeof(T));
         }
 
         public bool Equals(AccessorDef other)
