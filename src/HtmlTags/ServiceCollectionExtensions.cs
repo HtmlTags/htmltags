@@ -1,8 +1,8 @@
-﻿namespace HtmlTags
+﻿namespace Microsoft.Extensions.DependencyInjection
 {
     using System;
-    using Conventions;
-    using Microsoft.Extensions.DependencyInjection;
+    using HtmlTags;
+    using HtmlTags.Conventions;
 
     public static class ServiceCollectionExtensions
     {
