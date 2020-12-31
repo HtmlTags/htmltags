@@ -8,9 +8,9 @@ namespace HtmlTags
 {
     public class HtmlDocument
     {
-        private readonly List<Func<string, string>> _alterations = new List<Func<string, string>>();
+        private readonly List<Func<string, string>> _alterations = new();
 
-        private readonly Stack<HtmlTag> _currentStack = new Stack<HtmlTag>();
+        private readonly Stack<HtmlTag> _currentStack = new();
         private readonly HtmlTag _title;
 
         public HtmlDocument()

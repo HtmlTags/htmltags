@@ -6,7 +6,7 @@ namespace HtmlTags.Conventions
 
     public class HtmlConventionLibrary
     {
-        private readonly Cache<string, ServiceBuilder> _services = new Cache<string, ServiceBuilder>(key => new ServiceBuilder());
+        private readonly Cache<string, ServiceBuilder> _services = new(key => new ServiceBuilder());
         private readonly ServiceBuilder _defaultBuilder;
 
         public HtmlConventionLibrary()

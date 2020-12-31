@@ -7,8 +7,8 @@ namespace HtmlTags.Conventions.Formatting
 
     public class Stringifier
 	{
-        private readonly List<PropertyOverrideStrategy> _overrides = new List<PropertyOverrideStrategy>();
-        private readonly List<StringifierStrategy> _strategies = new List<StringifierStrategy>();
+        private readonly List<PropertyOverrideStrategy> _overrides = new();
+        private readonly List<StringifierStrategy> _strategies = new();
 
         private Func<GetStringRequest, string> findConverter(GetStringRequest request)
         {

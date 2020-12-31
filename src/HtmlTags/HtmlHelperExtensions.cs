@@ -17,7 +17,7 @@ namespace HtmlTags
 
     public static class HtmlHelperExtensions
     {
-        private static readonly DotNotationElementNamingConvention NamingConvention = new DotNotationElementNamingConvention();
+        private static readonly DotNotationElementNamingConvention NamingConvention = new();
 
         public static HtmlTag Input<T, TResult>(this IHtmlHelper<T> helper, Expression<Func<T, TResult>> expression)
             where T : class

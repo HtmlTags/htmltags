@@ -37,13 +37,13 @@ namespace HtmlTags
             private static Func<TModel, object> _identityFunc;
 
             private static readonly ConcurrentDictionary<MemberInfo, Func<TModel, object>> _simpleMemberAccessCache =
-                new ConcurrentDictionary<MemberInfo, Func<TModel, object>>();
+                new();
 
             private static readonly ConcurrentDictionary<MemberExpressionCacheKey, Func<TModel, object>> _chainedMemberAccessCache =
-                new ConcurrentDictionary<MemberExpressionCacheKey, Func<TModel, object>>(MemberExpressionCacheKeyComparer.Instance);
+                new(MemberExpressionCacheKeyComparer.Instance);
 
             private static readonly ConcurrentDictionary<MemberInfo, Func<object, TResult>> _constMemberAccessCache =
-                new ConcurrentDictionary<MemberInfo, Func<object, TResult>>();
+                new();
 
             public static Func<TModel, object> Compile(Expression<Func<TModel, TResult>> expression)
             {

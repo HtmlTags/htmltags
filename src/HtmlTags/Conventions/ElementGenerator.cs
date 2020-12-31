@@ -50,7 +50,7 @@ namespace HtmlTags.Conventions
 
         public ElementRequest GetRequest<TResult>(Expression<Func<T, TResult>> expression, T model = null)
         {
-            return new ElementRequest(expression.ToAccessor())
+            return new(expression.ToAccessor())
             {
                 Model = model ?? Model
             };

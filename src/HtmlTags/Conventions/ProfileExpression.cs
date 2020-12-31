@@ -15,13 +15,13 @@ namespace HtmlTags.Conventions
 
         private BuilderSet BuildersFor(string category) => Library.TagLibrary.Category(category).Profile(_profileName);
 
-        public ElementCategoryExpression Labels => new ElementCategoryExpression(BuildersFor(ElementConstants.Label));
+        public ElementCategoryExpression Labels => new(BuildersFor(ElementConstants.Label));
 
-        public ElementCategoryExpression Displays => new ElementCategoryExpression(BuildersFor(ElementConstants.Display));
+        public ElementCategoryExpression Displays => new(BuildersFor(ElementConstants.Display));
 
-        public ElementCategoryExpression Editors => new ElementCategoryExpression(BuildersFor(ElementConstants.Editor));
+        public ElementCategoryExpression Editors => new(BuildersFor(ElementConstants.Editor));
 
-        public ElementCategoryExpression ValidationMessages => new ElementCategoryExpression(BuildersFor(ElementConstants.ValidationMessage));
+        public ElementCategoryExpression ValidationMessages => new(BuildersFor(ElementConstants.ValidationMessage));
 
         public void Apply(HtmlConventionLibrary library) => library.Import(Library);
     }

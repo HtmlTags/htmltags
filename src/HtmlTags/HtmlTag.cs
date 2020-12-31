@@ -17,12 +17,12 @@ namespace HtmlTags
 
         public static HtmlTag Placeholder() => new HtmlTag().NoTag();
 
-        private static readonly Regex RxWhiteSpace = new Regex("[ ]+");
+        private static readonly Regex RxWhiteSpace = new("[ ]+");
         private const string CssClassAttribute = "class";
         private const string CssStyleAttribute = "style";
         private const string DataPrefix = "data-";
         private static string _metadataSuffix = "__";
-        private static readonly HashSet<string> _voidElementTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly HashSet<string> _voidElementTags = new(StringComparer.OrdinalIgnoreCase)
         {
             "area",
             "base",
@@ -47,13 +47,13 @@ namespace HtmlTags
 
         public static string MetadataAttribute => DataPrefix + _metadataSuffix;
 
-        private readonly List<HtmlTag> _children = new List<HtmlTag>();
-        private readonly HashSet<string> _cssClasses = new HashSet<string>();
+        private readonly List<HtmlTag> _children = new();
+        private readonly HashSet<string> _cssClasses = new();
         private readonly IDictionary<string, string> _customStyles = new Dictionary<string, string>();
 
-        private readonly Cache<string, HtmlAttribute> _htmlAttributes = new Cache<string, HtmlAttribute>(key => null);
+        private readonly Cache<string, HtmlAttribute> _htmlAttributes = new(key => null);
 
-        private readonly Cache<string, object> _metaData = new Cache<string, object>();
+        private readonly Cache<string, object> _metaData = new();
         private string _innerText = String.Empty;
         private bool _shouldRender = true;
         private string _tag;
@@ -360,8 +360,9 @@ namespace HtmlTags
 
         public HtmlTag AppendText(string text)
         {
-            _innerText += text;
-            return this;
+            var textTag = new HtmlTag().NoTag().Text(text);
+
+            return Append(textTag);
         }
 
         public HtmlTag MergeAttributes(IDictionary<string, string> attributes)

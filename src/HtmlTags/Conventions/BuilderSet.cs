@@ -8,8 +8,8 @@ namespace HtmlTags.Conventions
     // Tested through the test for TagCategory and TagLibrary
     public class BuilderSet : ITagBuildingExpression
     {
-        private readonly List<ITagBuilderPolicy> _policies = new List<ITagBuilderPolicy>();
-        private readonly List<ITagModifier> _modifiers = new List<ITagModifier>();
+        private readonly List<ITagBuilderPolicy> _policies = new();
+        private readonly List<ITagModifier> _modifiers = new();
         private IElementNamingConvention _elementNamingConvention;
 
         public BuilderSet()
@@ -34,9 +34,9 @@ namespace HtmlTags.Conventions
         public void NamingConvention(IElementNamingConvention elementNamingConvention) 
             => _elementNamingConvention = elementNamingConvention;
 
-        public CategoryExpression Always => new CategoryExpression(this, x => true);
+        public CategoryExpression Always => new(this, x => true);
 
-        public CategoryExpression If(Func<ElementRequest, bool> matches) => new CategoryExpression(this, matches);
+        public CategoryExpression If(Func<ElementRequest, bool> matches) => new(this, matches);
 
         public void Import(BuilderSet other)
         {
