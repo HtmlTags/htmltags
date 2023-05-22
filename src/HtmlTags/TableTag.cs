@@ -15,8 +15,8 @@ namespace HtmlTags
             : base("table")
         {
             THead = new HtmlTag("thead", this);
-            TFoot = new HtmlTag("tfoot", this).Render(false);
             TBody = new HtmlTag("tbody", this);
+            TFoot = new HtmlTag("tfoot", this).Render(false);
         }
 
         public TableTag CaptionText(string text)
