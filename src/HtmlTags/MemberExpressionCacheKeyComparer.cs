@@ -2,8 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Originally from: https://raw.githubusercontent.com/aspnet/AspNetCore/v3.0.0/src/Mvc/Mvc.ViewFeatures/src/MemberExpressionCacheKeyComparer.cs
 
+using System;
 using System.Collections.Generic;
-using Microsoft.DotNet.PlatformAbstractions;
 
 namespace HtmlTags
 {
@@ -40,15 +40,15 @@ namespace HtmlTags
 
         public int GetHashCode(MemberExpressionCacheKey obj)
         {
-            var hashCodeCombiner = new HashCodeCombiner();
-            hashCodeCombiner.Add(obj.ModelType);
+            var hashCode = new HashCode();
+            hashCode.Add(obj.ModelType);
 
             foreach (var member in obj)
             {
-                hashCodeCombiner.Add(member);
+                hashCode.Add(member);
             }
 
-            return hashCodeCombiner.CombinedHash;
+            return hashCode.ToHashCode();
         }
     }
 }
