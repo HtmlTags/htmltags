@@ -52,8 +52,8 @@ namespace HtmlTags.Reflection
                 var last = _valueGetters.Last();
                 if (last is MethodValueGetter || last is IndexerValueGetter)
                 {
-                    var nextUp = _chain.Reverse().Skip(1).FirstOrDefault() as PropertyValueGetter;
-                    if (nextUp != null)
+                    // https://github.com/dotnet/roslyn/issues/77212
+                    if (Enumerable.Reverse(_chain).Skip(1).FirstOrDefault() is PropertyValueGetter nextUp)
                     {
                         return nextUp.PropertyInfo.PropertyType;
                     }

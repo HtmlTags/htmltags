@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Description>Easy generation of html with a jquery inspired object model</Description>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <Description>Easy generation of HTML with a fluent API</Description>
     <Copyright>Copyright Jeremy D. Miller, Josh Arnold, Joshua Flanagan, Jimmy Bogard, et al. All rights reserved.</Copyright>
     <Authors>Jeremy D. Miller;Joshua Flanagan;Josh Arnold;Jimmy Bogard</Authors>
     <AssemblyName>HtmlTags</AssemblyName>
@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     <PackageReference Include="MinVer" Version="4.3.0" PrivateAssets="All" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
