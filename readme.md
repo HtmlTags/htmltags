@@ -1,4 +1,4 @@
-# ![HtmlTags](https://raw.githubusercontent.com/HtmlTags/htmltags/master/logo/FubuHtml_32.png) HtmlTags 
+# ![HtmlTags](https://raw.githubusercontent.com/HtmlTags/htmltags/main/logo/FubuHtml_32.png) HtmlTags 
 
 [![CI](https://github.com/htmltags/htmltags/workflows/CI/badge.svg)](https://github.com/htmltags/htmltags/workflows/CI)
 [![NuGet](https://img.shields.io/nuget/dt/htmltags.svg)](https://www.nuget.org/packages/htmltags) 
